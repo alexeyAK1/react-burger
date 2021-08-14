@@ -1,24 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
+import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
+import './styles/main.css';
+
+import AppHeader from './components/AppHeader/AppHeader';
+import Header from './layouts/Header/Header';
+import Main from './layouts/Main/Main';
+import MainIndent from './layouts/MainIndent/MainIndent';
+import BurgerIngredients from './components/BurgerIngredients/BurgerIngredients';
+import BurgerConstructor from './components/BurgerConstructor/BurgerConstructor';
+import TwoColumns from './layouts/TwoColumns/TwoColumns';
+import MainMaximumHeight from './layouts/MainMaximumHeight/MainMaximumHeight';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header>
+        <AppHeader />
+      </Header>
+      <Main>
+        <MainIndent>
+          <MainMaximumHeight>
+            <>
+              <h1>Соберите бургер</h1>
+              <TwoColumns style={{ height: '100%' }}>
+                <>
+                  <BurgerIngredients />
+                  <BurgerConstructor />
+                </>
+              </TwoColumns>
+            </>
+          </MainMaximumHeight>
+        </MainIndent>
+      </Main>
     </div>
   );
 }
