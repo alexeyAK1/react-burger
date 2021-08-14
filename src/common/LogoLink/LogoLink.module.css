@@ -1,0 +1,8 @@
+.logo_link {
+    text-decoration: none;
+    display: block;
+    height: 40px;
+}
+.logo_link svg {
+    height: 40px;
+}
