@@ -2,16 +2,16 @@ import React from 'react';
 
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
-import './styles/main.css';
+import '../../styles/main.css';
 
-import AppHeader from './components/AppHeader/AppHeader';
-import Header from './layouts/Header/Header';
-import Main from './layouts/Main/Main';
-import MainIndent from './layouts/MainIndent/MainIndent';
-import BurgerIngredients from './components/BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from './components/BurgerConstructor/BurgerConstructor';
-import TwoColumns from './layouts/TwoColumns/TwoColumns';
-import MainMaximumHeight from './layouts/MainMaximumHeight/MainMaximumHeight';
+import AppHeader from '../AppHeader/AppHeader';
+import Header from '../../layouts/Header/Header';
+import Main from '../../layouts/Main/Main';
+import MainIndent from '../../layouts/MainIndent/MainIndent';
+import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
+import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import TwoColumns from '../../layouts/TwoColumns/TwoColumns';
+import MainMaximumHeight from '../../layouts/MainMaximumHeight/MainMaximumHeight';
 
 function App() {
   return (
