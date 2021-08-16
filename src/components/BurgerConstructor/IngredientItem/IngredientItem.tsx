@@ -40,7 +40,10 @@ export default function IngredientItem({
           alt={`Картинка ${name}`}
         />
         <p className={styles.item_name}>
-          <span>{name}</span>
+          <span>
+            {name} {isTop ? '(верх)' : ''}
+            {isBottom ? '(низ)' : ''}
+          </span>
         </p>
         <p className={`pl-5 pr-6 ${styles.item_price_container}`}>
           <span className="text text_type_digits-default">{price}</span>
