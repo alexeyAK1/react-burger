@@ -1,5 +1,8 @@
 import React, { memo } from 'react';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Counter,
+  CurrencyIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { IItem } from '../BurgerIngredients';
 
@@ -14,9 +17,9 @@ function IngredientCard({ ingredientData, count = 0 }: IProps) {
   return (
     <li className={styles.ingredient_card}>
       {count ? (
-        <p className={styles.ingredient_count}>
-          <span className="text text_type_digits-default">{count}</span>
-        </p>
+        <div className={styles.ingredient_count}>
+          <Counter count={count} size={count < 100 ? 'default' : 'small'} />
+        </div>
       ) : null}
       <img
         className={styles.ingredient_image}
