@@ -1,39 +1,27 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import ApiData from '../../utils/data';
-
 import styles from './BurgerIngredients.module.css';
 import CategoriesSection from './CategoriesSection/CategoriesSection';
 import IngredientCard from './IngredientCard/IngredientCard';
 import ScrollContainer from '../../layouts/ScrollContainer/ScrollContainer';
+import { IIngredientsItem, TCategory } from '../../models/ingredients';
 
-type TCategory = 'bun' | 'sauce' | 'main';
-
-export interface IItem {
-  _id: string;
-  name: string;
-  type: TCategory;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: number;
-}
 const categories = { bun: 'Булки', sauce: 'Соусы', main: 'Начинки' };
 
-export default function BurgerIngredients() {
+interface IProps {
+  ingredients?: IIngredientsItem[];
+}
+
+export default function BurgerIngredients({ ingredients = [] }: IProps) {
   const [currentType, setCurrentType] = useState<string>('bun');
-  const [date, setDate] = useState<IItem[]>([]);
+  const [date, setDate] = useState<IIngredientsItem[]>([]);
   const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setDate(ApiData as IItem[]);
+    setDate(ingredients);
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTabs = (categoryKey: TCategory) => {
