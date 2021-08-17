@@ -1,0 +1,16 @@
+.app_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content_left{
+  width: 41%;
+}
+.content_center{
+  flex: 1;
+}
+.content_right{
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+}

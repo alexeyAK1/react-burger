@@ -1,0 +1,10 @@
+.menu_button {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.menu_button svg {
+    height: 22px;
+    margin-right: 9px;
+}
