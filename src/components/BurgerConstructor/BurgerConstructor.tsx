@@ -5,14 +5,14 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './BurgerConstructor.module.css';
-import { IItem } from '../BurgerIngredients/BurgerIngredients';
 import ScrollContainer from '../../layouts/ScrollContainer/ScrollContainer';
 import IngredientItem from './IngredientItem/IngredientItem';
+import { IIngredientsItem } from '../../models/ingredients';
 
 export default function BurgerConstructor() {
-  const [bun, setBun] = useState<IItem | null>(null);
+  const [bun, setBun] = useState<IIngredientsItem | null>(null);
 
-  const [ingredients, setIngredients] = useState<IItem[]>([]);
+  const [ingredients, setIngredients] = useState<IIngredientsItem[]>([]);
 
   useEffect(() => {
     setBun({

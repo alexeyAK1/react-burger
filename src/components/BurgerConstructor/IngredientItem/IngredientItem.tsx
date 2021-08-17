@@ -1,10 +1,7 @@
 import React from 'react';
 import {
   ConstructorElement,
-  CurrencyIcon,
-  DeleteIcon,
   DragIcon,
-  LockIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './IngredientItem.module.css';

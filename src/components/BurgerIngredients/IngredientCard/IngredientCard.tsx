@@ -4,12 +4,11 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { IItem } from '../BurgerIngredients';
-
 import styles from './IngredientCard.module.css';
+import { IIngredientsItem } from '../../../models/ingredients';
 
 interface IProps {
-  ingredientData: IItem;
+  ingredientData: IIngredientsItem;
   count?: number;
 }
 
