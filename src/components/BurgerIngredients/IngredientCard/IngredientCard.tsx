@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, MouseEvent, useCallback, useState } from 'react';
 import {
   Counter,
   CurrencyIcon,
@@ -6,6 +6,8 @@ import {
 
 import styles from './IngredientCard.module.css';
 import { IIngredientsItem } from '../../../models/ingredients';
+import Modal from '../../common/Modal/Modal';
+import IngredientDetails from '../../IngredientDetails/IngredientDetails';
 
 interface IProps {
   ingredientData: IIngredientsItem;
@@ -13,8 +15,22 @@ interface IProps {
 }
 
 function IngredientCard({ ingredientData, count = 0 }: IProps) {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onCloseModal = useCallback((e?: MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    setIsOpenModal(false);
+  }, []);
+
+  const onOpenModal = () => {
+    setIsOpenModal(true);
+  };
+
   return (
-    <li className={styles.ingredient_card}>
+    <li className={styles.ingredient_card} onClick={onOpenModal}>
       {count ? (
         <div className={styles.ingredient_count}>
           <Counter count={count} size={count < 100 ? 'default' : 'small'} />
@@ -38,6 +54,11 @@ function IngredientCard({ ingredientData, count = 0 }: IProps) {
           {ingredientData.name}
         </span>
       </p>
+      {isOpenModal ? (
+        <Modal header={'Детали ингредиента'} onClose={onCloseModal}>
+          <IngredientDetails ingredient={ingredientData} />
+        </Modal>
+      ) : null}
     </li>
   );
 }
