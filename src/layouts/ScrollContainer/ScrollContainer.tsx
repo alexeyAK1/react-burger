@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import styles from './ScrollContainer.module.css';
 
@@ -10,7 +10,7 @@ interface IProps {
   classNameInner?: string;
 }
 
-export default function ScrollContainer({
+function ScrollContainer({
   children,
   style = {},
   className = '',
@@ -28,3 +28,5 @@ export default function ScrollContainer({
     </div>
   );
 }
+
+export default memo(ScrollContainer);

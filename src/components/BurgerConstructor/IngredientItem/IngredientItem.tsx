@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   ConstructorElement,
   DragIcon,
@@ -14,7 +14,7 @@ interface IProps {
   price: number;
 }
 
-export default function IngredientItem({
+function IngredientItem({
   isTop = false,
   isBottom = false,
   image,
@@ -41,3 +41,5 @@ export default function IngredientItem({
     </div>
   );
 }
+
+export default memo(IngredientItem);

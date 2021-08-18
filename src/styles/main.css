@@ -1,5 +1,6 @@
 :root {
     --height-header: 88px;
+    --background-modal-overlay: rgba(0, 0, 0, 0.6);
 }
 
 body{
