@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  MouseEvent,
+  useCallback,
+  memo,
+} from 'react';
 import {
   Button,
   CurrencyIcon,
@@ -8,13 +14,34 @@ import styles from './BurgerConstructor.module.css';
 import ScrollContainer from '../../layouts/ScrollContainer/ScrollContainer';
 import IngredientItem from './IngredientItem/IngredientItem';
 import { IIngredientsItem } from '../../models/ingredients';
+import Modal from '../common/Modal/Modal';
+import { IOrder } from '../../models/order';
+import OrderDetails from '../OrderDetails/OrderDetails';
 
-export default function BurgerConstructor() {
+function BurgerConstructor() {
   const [bun, setBun] = useState<IIngredientsItem | null>(null);
-
   const [ingredients, setIngredients] = useState<IIngredientsItem[]>([]);
+  const [order, setOrder] = useState<IOrder | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onCloseModal = useCallback((e?: MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    setIsOpenModal(false);
+  }, []);
+
+  const onOpenModal = useCallback(() => {
+    setIsOpenModal(true);
+  }, []);
 
   useEffect(() => {
+    setOrder({
+      _id: '034536',
+      status: 'check',
+      status_text: 'Ваш заказ начали готовить',
+    });
     setBun({
       _id: '60666c42cc7b410027a1a9b1',
       name: 'Краторная булка N-200i',
@@ -201,10 +228,18 @@ export default function BurgerConstructor() {
             <CurrencyIcon type="primary" />
           </span>
         </p>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={onOpenModal}>
           Оформить заказ
         </Button>
       </div>
+
+      {isOpenModal && order ? (
+        <Modal onClose={onCloseModal}>
+          <OrderDetails order={order} />
+        </Modal>
+      ) : null}
     </section>
   );
 }
+
+export default memo(BurgerConstructor);
