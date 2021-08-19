@@ -37,8 +37,6 @@ function App() {
     };
 
     getIngredientData();
-
-    return () => {};
   }, []);
 
   return (
