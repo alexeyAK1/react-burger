@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Main.module.css';
+import styles from './main.module.css';
 
 interface IProps {
   children: React.ReactChild;

@@ -1,9 +1,9 @@
 import React, { ReactChild, MouseEvent, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import ModalHeader from './ModalHeader/ModalHeader';
-import ModalOverlay from './ModalOverlay/ModalOverlay';
+import ModalHeader from './modal-header/modal-header';
+import ModalOverlay from './modal-overlay/modal-overlay';
 
-import styles from './Modal.module.css';
+import styles from './modal.module.css';
 
 const modalRoot = document.getElementById('react-modals');
 

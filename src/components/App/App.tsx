@@ -4,17 +4,17 @@ import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
 import '../../styles/main.css';
 
-import AppHeader from '../AppHeader/AppHeader';
-import Header from '../../layouts/Header/Header';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
-import TwoColumns from '../../layouts/TwoColumns/TwoColumns';
-import ErrorBoundary from '../common/ErrorBoundary/ErrorBoundary';
-import MainAllLayouts from '../../layouts/MainAllLayouts/MainAllLayouts';
+import AppHeader from '../app-header/app-header';
+import Header from '../../layouts/header/header';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
+import TwoColumns from '../../layouts/two-columns/two-columns';
+import ErrorBoundary from '../common/error-boundary/error-boundary';
+import MainAllLayouts from '../../layouts/main-all-layouts/main-alll-layouts';
 import { IIngredientsItem } from '../../models/ingredients';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import { ingredientsUrl } from '../../common/constants';
-import Loader from '../common/Loader/Loader';
-import ErrorMessage from '../common/ErrorMessage/ErrorMessage';
+import Loader from '../common/loader/loader';
+import ErrorMessage from '../common/error-message/error-message';
 
 function App() {
   const [data, setData] = useState<IIngredientsItem[]>([]);
