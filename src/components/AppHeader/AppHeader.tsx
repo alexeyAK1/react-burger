@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './AppHeader.module.css';
 import LeftMenu from './LeftMenu/LeftMenu';
-import LogoLink from '../../common/LogoLink/LogoLink';
+import LogoLink from '../common/LogoLink/LogoLink';
 import RightMenu from './RightMenu/RightMenu';
 
 export default function AppHeader() {

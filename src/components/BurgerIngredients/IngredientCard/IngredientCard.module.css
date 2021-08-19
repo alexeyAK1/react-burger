@@ -4,20 +4,12 @@
     flex-direction: column;
     align-items: center;
     position: relative;
+    cursor: pointer;
 }
 .ingredient_count{
-position: absolute;
-right: 0px;
-top: 0px;
-background: var(--colors-interface-accent);
-border-radius: 16px;
-color: var(--text-primary-color);
-min-width: 32px;
-min-height: 32px;
-margin: initial;
-display: flex;
-align-items: center;
-justify-content: center;
+    position: absolute;
+    right: 0px;
+    top: 0px;
 }
 
 .ingredient_image{

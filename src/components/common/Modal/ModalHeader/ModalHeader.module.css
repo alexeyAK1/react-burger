@@ -1,0 +1,19 @@
+.modal_header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.modal_header_content{
+    min-height: 64px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.modal_header_close_button{
+    cursor: pointer;
+}
+.modal_header_close_button svg{
+    height: 18px;
+    width: 18px;
+}

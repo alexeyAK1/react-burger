@@ -1,22 +1,40 @@
-import React, { memo } from 'react';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-
-import { IItem } from '../BurgerIngredients';
+import React, { memo, MouseEvent, useCallback, useState } from 'react';
+import {
+  Counter,
+  CurrencyIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './IngredientCard.module.css';
+import { IIngredientsItem } from '../../../models/ingredients';
+import Modal from '../../common/Modal/Modal';
+import IngredientDetails from '../../IngredientDetails/IngredientDetails';
 
 interface IProps {
-  ingredientData: IItem;
+  ingredientData: IIngredientsItem;
   count?: number;
 }
 
 function IngredientCard({ ingredientData, count = 0 }: IProps) {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const onCloseModal = useCallback((e?: MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    setIsOpenModal(false);
+  }, []);
+
+  const onOpenModal = () => {
+    setIsOpenModal(true);
+  };
+
   return (
-    <li className={styles.ingredient_card}>
+    <li className={styles.ingredient_card} onClick={onOpenModal}>
       {count ? (
-        <p className={styles.ingredient_count}>
-          <span className="text text_type_digits-default">{count}</span>
-        </p>
+        <div className={styles.ingredient_count}>
+          <Counter count={count} size={count < 100 ? 'default' : 'small'} />
+        </div>
       ) : null}
       <img
         className={styles.ingredient_image}
@@ -36,6 +54,11 @@ function IngredientCard({ ingredientData, count = 0 }: IProps) {
           {ingredientData.name}
         </span>
       </p>
+      {isOpenModal ? (
+        <Modal header={'Детали ингредиента'} onClose={onCloseModal}>
+          <IngredientDetails ingredient={ingredientData} />
+        </Modal>
+      ) : null}
     </li>
   );
 }

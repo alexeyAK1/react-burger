@@ -15,11 +15,8 @@
 }
 
 .item_container {
-    background: var(--background);
-    border-radius: 40px;
     display: flex;
     align-items: center;
-    padding: 16px 32px 16px 24px;
     margin-top: 8px;
     margin-bottom: 8px;
 }
