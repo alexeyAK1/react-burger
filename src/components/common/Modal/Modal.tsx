@@ -14,16 +14,6 @@ interface IProps {
 }
 
 export default function Modal({ children, header, onClose }: IProps) {
-  const dataType = 'modal';
-
-  const onClick = (e: MouseEvent<HTMLElement>): void => {
-    const target = e.target as Element;
-
-    if (target.getAttribute('data-type') === dataType) {
-      onClose(e);
-    }
-  };
-
   const onKeyDown = (e: KeyboardEvent) => {
     //закрытие окна по escape
     if (e.which === 27) {
@@ -43,13 +33,12 @@ export default function Modal({ children, header, onClose }: IProps) {
 
   return createPortal(
     <>
-      <div className={styles.modal} onClick={onClick} data-type={dataType}>
-        <div className={`p-10 pb-15 ${styles.modal_container}`}>
+      <ModalOverlay onClose={onClose}>
+        <div className={`p-10 pb-15 ${styles.modal}`}>
           <ModalHeader onClose={onClose}>{header}</ModalHeader>
           <div className={styles.modal_body}>{children}</div>
         </div>
-      </div>
-      <ModalOverlay />
+      </ModalOverlay>
     </>,
     modalRoot!
   );
