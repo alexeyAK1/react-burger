@@ -33,7 +33,7 @@ function IngredientItem({
         <ConstructorElement
           type={type}
           isLocked={isLocked}
-          text={name}
+          text={`${name}${isTop ? ' (верх)' : isBottom ? ' (низ)' : ''}`}
           price={price}
           thumbnail={image}
         />
