@@ -13,7 +13,7 @@ import MainAllLayouts from '../../layouts/main-all-layouts/main-alll-layouts';
 import { IIngredientsItem } from '../../models/ingredients';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import { ingredientsUrl } from '../../common/constants';
-import Loader from '../common/loader/loader';
+import Loader from '../UI/loader/loader';
 import ErrorMessage from '../common/error-message/error-message';
 
 function App() {
