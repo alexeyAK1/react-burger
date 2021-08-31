@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { IOrder } from '../../models/order';
-import { BurgerConstructorContext } from '../burger-constructor/services/burger-constructor-context';
+import { BurgerContext } from '../../services/burger-context';
 import Loader from '../ui/loader/loader';
 
 import styles from './order-details.module.css';
 
 export default function OrderDetails() {
-  const context = useContext(BurgerConstructorContext);
+  const context = useContext(BurgerContext);
   const [localOder, setOrder] = useState<IOrder | null>(null);
 
   useEffect(() => {
