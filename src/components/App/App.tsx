@@ -12,9 +12,9 @@ import ErrorBoundary from '../common/error-boundary/error-boundary';
 import MainAllLayouts from '../../layouts/main-all-layouts/main-alll-layouts';
 import { IIngredientsItem } from '../../models/ingredients';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import { ingredientsUrl } from '../../common/constants';
 import Loader from '../UI/loader/loader';
 import ErrorMessage from '../common/error-message/error-message';
+import { getIngredientData } from '../../common/agent';
 
 function App() {
   const [data, setData] = useState<IIngredientsItem[]>([]);
@@ -22,13 +22,11 @@ function App() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const getIngredientData = async () => {
+    const getIngredient = async () => {
       setLoading(true);
       try {
-        const res = await fetch(ingredientsUrl);
-        const fetchData = await res.json();
-
-        setData(fetchData.data as IIngredientsItem[]);
+        const ingredientsData = await getIngredientData();
+        setData(ingredientsData);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -36,7 +34,7 @@ function App() {
       }
     };
 
-    getIngredientData();
+    getIngredient();
   }, []);
 
   return (
