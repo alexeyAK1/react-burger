@@ -5,8 +5,8 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './ingredient-card.module.css';
-import { IIngredientsItem } from '../../../models/ingredients';
-import Modal from '../../common/modal/modal';
+import { IIngredientsItem } from '../../../models/ingredients1';
+import Modal from '../../common/modal1/modal1';
 import IngredientDetails from '../../ingredient-details/ingredient-details';
 
 interface IProps {

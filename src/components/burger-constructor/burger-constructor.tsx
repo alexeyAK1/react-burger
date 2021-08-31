@@ -7,7 +7,7 @@ import {
 import styles from './burger-constructor.module.css';
 import ScrollContainer from '../../layouts/scroll-container/scroll-container';
 import IngredientItem from './ingredient-item/ingredient-item';
-import Modal from '../common/modal/modal';
+import Modal from '../common/modal1/modal1';
 import OrderDetails from '../order-details/order-details';
 import { BurgerConstructorContextProvider } from './services/burger-constructor-context';
 import { useToggleModal } from './hooks/use_toggle_modal';
