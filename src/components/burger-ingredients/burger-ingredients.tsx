@@ -5,7 +5,7 @@ import styles from './burger-ingredients.module.css';
 import CategoriesSection from './categories-section/categories-section';
 import IngredientCard from './ingredient-card/ingredient-card';
 import ScrollContainer from '../../layouts/scroll-container/scroll-container';
-import { IIngredientsItem, TCategory } from '../../models/ingredients1';
+import { IIngredientsItem, TCategory } from '../../models/ingredients';
 
 const categories = { bun: 'Булки', sauce: 'Соусы', main: 'Начинки' };
 

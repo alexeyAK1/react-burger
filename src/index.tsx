@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/app1/app1';
+import App from './components/app/app';
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';

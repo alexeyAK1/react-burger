@@ -1,6 +1,6 @@
-import { IIngredientsItem } from "../models/ingredients1";
+import { IIngredientsItem } from "../models/ingredients";
 import { MAIN_URL } from "./constants";
-import { IOrder } from '../models/order1';
+import { IOrder } from '../models/order';
 
 export const getIngredientData = async () => {
     const res = await fetch(MAIN_URL + '/ingredients');

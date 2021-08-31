@@ -1,5 +1,5 @@
 import React from 'react';
-import Main from '../main1/main1';
+import Main from '../main/main';
 import MainIndent from '../main-indent/main-indent';
 import MainMaximumHeight from '../main-maximum-height/main-maximum-height';
 

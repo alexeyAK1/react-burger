@@ -1,7 +1,7 @@
 import { useReducer, useEffect } from "react";
 import { getOrderData } from "../../../common/agent";
-import { IIngredientsItem } from "../../../models/ingredients1";
-import { IOrder } from "../../../models/order1";
+import { IIngredientsItem } from "../../../models/ingredients";
+import { IOrder } from "../../../models/order";
 import bun from "../../../utils/bun";
 import ingredients from "../../../utils/ingredients";
 import { SET_BUN, SET_INGREDIENTS, SET_ORDER} from "../services/burger-constructor-action-types";

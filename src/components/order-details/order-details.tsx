@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IOrder } from '../../models/order1';
+import { IOrder } from '../../models/order';
 import { BurgerConstructorContext } from '../burger-constructor/services/burger-constructor-context';
-import Loader from '../ui1/loader1/loader1';
+import Loader from '../ui/loader/loader';
 
 import styles from './order-details.module.css';
 

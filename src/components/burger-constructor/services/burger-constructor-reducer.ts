@@ -1,5 +1,5 @@
-import { IIngredientsItem } from "../../../models/ingredients1";
-import { IOrder } from "../../../models/order1";
+import { IIngredientsItem } from "../../../models/ingredients";
+import { IOrder } from "../../../models/order";
 import { IBurgerConstructorState } from "../hooks/use-burger-constructor-state";
 import { SET_BUN, SET_INGREDIENTS, SET_ORDER, SET_TOTAL_SUM } from "./burger-constructor-action-types";
 
