@@ -43,7 +43,7 @@ function IngredientCard({ ingredientData, count = 0 }: IProps) {
       />
       <p className={`p-2 ${styles.ingredient_price_container}`}>
         <span className="text text_type_digits-default">
-          {ingredientData.price}
+          {ingredientData.price / 100}
         </span>
         <span className={styles.ingredient_price_icon}>
           <CurrencyIcon type="primary" />
