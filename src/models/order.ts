@@ -1,5 +1,5 @@
 export interface IOrder {
-  _id: string;
-    status: 'check';
-    status_text: string;
+  name: string
+  order: {number: number}
+  success: true
 }

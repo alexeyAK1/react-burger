@@ -4,10 +4,13 @@ import App from './components/app/app';
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';
+import { BurgerState } from './services/burger-state';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BurgerState>
+      <App />
+    </BurgerState>
   </React.StrictMode>,
   document.getElementById('root')
 );

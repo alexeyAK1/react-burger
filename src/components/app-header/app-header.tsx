@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styles from './app-header.module.css';
-import LeftMenu from './left-menu/LeftMenu';
-import LogoLink from '../common/logo-link/logo-link';
+import LeftMenu from './left-menu/left-menu';
+import LogoLink from '../ui/logo-link/logo-link';
 import RightMenu from './right-menu/right-menu';
 
 export default function AppHeader() {
