@@ -1,0 +1,8 @@
+.category_ingredients_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 32px;
+  column-gap: 40px;
+  margin-left: 0;
+  padding-left: 0;
+}
