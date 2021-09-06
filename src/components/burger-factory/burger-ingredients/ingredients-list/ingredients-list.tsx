@@ -1,7 +1,11 @@
 import React, { memo, MutableRefObject, useCallback } from 'react';
 import InView from 'react-intersection-observer';
 
-import { categories, categoriesTypeArray } from '../../../../common/constants';
+import {
+  bunName,
+  categories,
+  categoriesTypeArray,
+} from '../../../../common/constants';
 import {
   ICountIngredient,
   IIngredientsItem,
@@ -21,6 +25,7 @@ interface IProps {
   ingredients: IIngredientsItem[];
   countIngredients: ICountIngredient[];
   isClicked: boolean;
+  bun: IIngredientsItem | null;
   onChangeInView: (inView: boolean, entry: IntersectionObserverEntry) => void;
 }
 
@@ -29,17 +34,22 @@ function IngredientsList({
   ingredients,
   countIngredients,
   isClicked,
+  bun,
   onChangeInView,
 }: IProps) {
   const getCount = useCallback(
     (item: IIngredientsItem) => {
-      const findCountObj = countIngredients.find(
-        (countObj) => countObj.id === item._id
-      );
+      if (item.type === bunName) {
+        return bun!._id === item._id ? 2 : 0;
+      } else {
+        const findCountObj = countIngredients.find(
+          (countObj) => countObj.id === item._id
+        );
 
-      return findCountObj ? findCountObj.count : 0;
+        return findCountObj ? findCountObj.count : 0;
+      }
     },
-    [countIngredients]
+    [bun, countIngredients]
   );
 
   return (

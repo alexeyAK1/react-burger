@@ -27,7 +27,10 @@ const ingredientsSlice = createSlice({
   },
   extraReducers: {
     // @ts-expect-error
-    [addIngredientInConstructor]: (state, action) => {
+    [addIngredientInConstructor]: (
+      state,
+      action: PayloadAction<IIngredientsItem>
+    ) => {
       if (action.payload.type !== bunName) {
         state.countIngredients = addOrDeleteCountIngredients(
           state,
@@ -37,7 +40,10 @@ const ingredientsSlice = createSlice({
       }
     },
     // @ts-expect-error
-    [deleteIngredientFromConstructor]: (state, action) => {
+    [deleteIngredientFromConstructor]: (
+      state,
+      action: PayloadAction<IIngredientsItem>
+    ) => {
       state.countIngredients = addOrDeleteCountIngredients(
         state,
         'delete',

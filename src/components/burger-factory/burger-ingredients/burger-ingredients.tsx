@@ -26,6 +26,9 @@ export default function BurgerIngredients() {
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.ingredients
   );
+  const bun = useSelector(
+    (state: RootState) => state.constructorIngredients.bun
+  );
   const countIngredients = useSelector(
     (state: RootState) => state.ingredients.countIngredients
   );
@@ -118,6 +121,7 @@ export default function BurgerIngredients() {
           ingredients={ingredients}
           countIngredients={countIngredients}
           isClicked={isClicked}
+          bun={bun}
           onChangeInView={handleOnChangeInView}
         />
       </ScrollContainer>
