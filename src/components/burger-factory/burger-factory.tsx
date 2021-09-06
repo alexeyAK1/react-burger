@@ -8,14 +8,7 @@ import { RootState } from '../../redux/store';
 import Loader from '../ui/loader/loader';
 import BurgerIngredients from './burger-ingredients/burger-ingredients';
 import BurgerConstructor from './burger-constructor/burger-constructor';
-import {
-  setIngredients,
-  setIngredientsLoading,
-} from '../../redux/ingredients-slice';
-import { setAppError } from '../../redux/app-slice';
-import { getIngredientData } from '../../api/agent';
-import { bunName } from '../../common/constants';
-import { setBun } from '../../redux/constructor-ingredients-slice';
+import { ingredientFetch } from '../../redux/ingredients-slice';
 
 export default function BurgerFactory() {
   const isLoading = useSelector(
@@ -25,29 +18,7 @@ export default function BurgerFactory() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const setLoading = (isLoading: boolean) =>
-      dispatch(setIngredientsLoading(isLoading));
-    const setError = (error: Error | null) => dispatch(setAppError(error));
-    const getIngredient = async () => {
-      setLoading(true);
-
-      try {
-        const ingredientsData = await getIngredientData();
-        const firstBunElement = ingredientsData.filter(
-          (item) => item.type === bunName
-        )[0];
-
-        dispatch(setBun(firstBunElement));
-        dispatch(setIngredients(ingredientsData));
-
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-
-    getIngredient();
+    dispatch(ingredientFetch());
   }, [dispatch]);
 
   return (
