@@ -9,6 +9,7 @@ export interface IAppState {
 export interface IIngredientsState {
   ingredients: IIngredientsItem[];
   countIngredients: ICountIngredient[];
+  isLoading: boolean;
 }
 
 export interface ICurrentIngredientState {

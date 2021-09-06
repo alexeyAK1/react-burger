@@ -11,6 +11,7 @@ import {
 const initialState: IIngredientsState = {
   ingredients: [],
   countIngredients: [],
+  isLoading: false,
 };
 
 const ingredientsSlice = createSlice({
@@ -19,6 +20,9 @@ const ingredientsSlice = createSlice({
   reducers: {
     setIngredients(state, action: PayloadAction<IIngredientsItem[]>) {
       state.ingredients = action.payload;
+    },
+    setIngredientsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
     },
   },
   extraReducers: {
@@ -45,4 +49,5 @@ const ingredientsSlice = createSlice({
 
 export default ingredientsSlice.reducer;
 
-export const { setIngredients } = ingredientsSlice.actions;
+export const { setIngredients, setIngredientsLoading } =
+  ingredientsSlice.actions;
