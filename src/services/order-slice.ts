@@ -51,6 +51,7 @@ const orderSlice = createSlice({
     // @ts-expect-error
     [getOrderFetch.rejected]: (state, action: PayloadAction<Error>) => {
       state.isLoading = false;
+      state.order = null;
       console.log(action.payload);
     },
   },
