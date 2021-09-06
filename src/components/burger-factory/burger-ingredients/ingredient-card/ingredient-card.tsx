@@ -24,6 +24,9 @@ function IngredientCard({ ingredientData, count = 0 }: IProps) {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    options: {
+      dropEffect: 'copy',
+    },
   }));
 
   const handleOnClick = () => {
