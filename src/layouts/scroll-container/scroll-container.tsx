@@ -21,7 +21,7 @@ function ScrollContainer({
   return (
     <div className={`${styles.scroll_container} ${className}`} style={style}>
       <div
-        className={`${styles.scroll_container_inner} ${classNameInner}`}
+        className={`${styles.scroll_container_inner} ${classNameInner} custom-scroll`}
         style={styleInner}
       >
         {children}
