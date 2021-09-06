@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { TCategory } from '../../../models/ingredients';
+import { TCategory } from '../../../../models/ingredients';
 
 export const useToggleRefs = (initialName: TCategory) => {
   const [currentTabName, setCurrentTabNameLocal] =

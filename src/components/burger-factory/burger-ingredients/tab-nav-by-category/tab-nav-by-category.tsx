@@ -1,8 +1,8 @@
 import React, { memo, RefObject } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { categories, categoriesTypeArray } from '../../../common/constants';
-import { TCategory } from '../../../models/ingredients';
+import { categories, categoriesTypeArray } from '../../../../common/constants';
+import { TCategory } from '../../../../models/ingredients';
 
 import styles from './tab-nav-by-category.module.css';
 

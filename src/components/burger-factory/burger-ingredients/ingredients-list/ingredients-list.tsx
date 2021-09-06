@@ -1,12 +1,12 @@
 import React, { memo, MutableRefObject, useCallback } from 'react';
 import InView from 'react-intersection-observer';
 
-import { categories, categoriesTypeArray } from '../../../common/constants';
+import { categories, categoriesTypeArray } from '../../../../common/constants';
 import {
   ICountIngredient,
   IIngredientsItem,
   TCategory,
-} from '../../../models/ingredients';
+} from '../../../../models/ingredients';
 import CategoriesSection from '../categories-section/categories-section';
 import IngredientCard from '../ingredient-card/ingredient-card';
 
