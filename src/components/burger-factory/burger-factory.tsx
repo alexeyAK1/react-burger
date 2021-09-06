@@ -8,7 +8,7 @@ import { RootState } from '../../redux/store';
 import Loader from '../ui/loader/loader';
 import BurgerIngredients from './burger-ingredients/burger-ingredients';
 import BurgerConstructor from './burger-constructor/burger-constructor';
-import { ingredientFetch } from '../../redux/ingredients-slice';
+import { getIngredientFetch } from '../../redux/ingredients-slice';
 
 export default function BurgerFactory() {
   const isLoading = useSelector(
@@ -18,7 +18,7 @@ export default function BurgerFactory() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(ingredientFetch());
+    dispatch(getIngredientFetch());
   }, [dispatch]);
 
   return (

@@ -6,9 +6,7 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { getOrderData } from '../../../../api/agent';
-import { getNElementArr } from '../../../../common/functions';
-import { setOrder } from '../../../../redux/order-slice';
+import { getOrderFetch } from '../../../../redux/order-slice';
 import { RootState } from '../../../../redux/store';
 import { useToggleModal } from '../../../common/modal/hooks/use_toggle_modal';
 import Modal from '../../../common/modal/modal';
@@ -17,31 +15,15 @@ import OrderDetails from '../../../order-details/order-details';
 import styles from './order.module.css';
 
 export default function Order() {
-  const { bun, constructorIngredients, order, totalSum } = useSelector(
-    (state: RootState) => ({
-      bun: state.constructorIngredients.bun,
-      constructorIngredients:
-        state.constructorIngredients.constructorIngredients,
-      order: state.order.order,
-      totalSum: state.constructorIngredients.totalSum,
-    })
+  const nameButton = 'Оформить заказ';
+  const totalSum = useSelector(
+    (state: RootState) => state.constructorIngredients.totalSum
   );
   const dispatch = useDispatch();
   const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();
+
   const handleOnOpenModule = async () => {
-    const getIngredientIds = () =>
-      constructorIngredients.map((item) => item._id);
-
-    const ingredients = [...getIngredientIds(), ...getNElementArr(2, bun?._id)];
-
-    try {
-      const orderData = await getOrderData(ingredients);
-
-      dispatch(setOrder(orderData));
-    } catch (error) {
-      console.log(error);
-    }
-
+    dispatch(getOrderFetch());
     onOpenModal();
   };
 
@@ -55,11 +37,11 @@ export default function Order() {
           </span>
         </p>
         <Button type="primary" size="large" onClick={handleOnOpenModule}>
-          Оформить заказ
+          {nameButton}
         </Button>
       </div>
 
-      {isOpenModal && order ? (
+      {isOpenModal ? (
         <Modal onClose={onCloseModal}>
           <OrderDetails />
         </Modal>

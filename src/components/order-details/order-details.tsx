@@ -8,8 +8,9 @@ import { RootState } from '../../redux/store';
 
 export default function OrderDetails() {
   const order = useSelector((state: RootState) => state.order.order);
+  const isLoading = useSelector((state: RootState) => state.order.isLoading);
 
-  if (order) {
+  if (!isLoading && order) {
     const {
       name,
       order: { number: orderNumber },

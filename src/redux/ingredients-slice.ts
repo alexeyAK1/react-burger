@@ -17,7 +17,7 @@ const initialState: IIngredientsState = {
   isLoading: false,
 };
 
-export const ingredientFetch = createAsyncThunk(
+export const getIngredientFetch = createAsyncThunk(
   'ingredients/ingredientFetch',
   async function (_, { rejectWithValue, dispatch }) {
     try {
@@ -42,21 +42,18 @@ const ingredientsSlice = createSlice({
     setIngredients(state, action: PayloadAction<IIngredientsItem[]>) {
       state.ingredients = action.payload;
     },
-    setIngredientsLoading(state, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
-    },
   },
   extraReducers: {
     // @ts-expect-error
-    [ingredientFetch.pending]: (state) => {
+    [getIngredientFetch.pending]: (state) => {
       state.isLoading = true;
     },
     // @ts-expect-error
-    [ingredientFetch.fulfilled]: (state) => {
+    [getIngredientFetch.fulfilled]: (state) => {
       state.isLoading = false;
     },
     // @ts-expect-error
-    [ingredientFetch.rejected]: (state) => {
+    [getIngredientFetch.rejected]: (state) => {
       state.isLoading = false;
     },
     // @ts-expect-error
@@ -88,5 +85,4 @@ const ingredientsSlice = createSlice({
 
 export default ingredientsSlice.reducer;
 
-export const { setIngredients, setIngredientsLoading } =
-  ingredientsSlice.actions;
+const { setIngredients } = ingredientsSlice.actions;

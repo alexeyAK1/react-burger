@@ -15,7 +15,6 @@ const constructorIngredientsSlice = createSlice({
   initialState,
   reducers: {
     setBun(state, action: PayloadAction<IIngredientsItem>) {
-      console.log(22);
       state.bun = action.payload;
       state.totalSum = calculateTotalPrice(state);
     },
