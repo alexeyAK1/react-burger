@@ -8,6 +8,7 @@ interface IProps {
   className?: string;
   styleInner?: React.CSSProperties;
   classNameInner?: string;
+  forceUpdate?: string;
 }
 
 function ScrollContainer({

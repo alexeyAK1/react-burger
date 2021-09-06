@@ -16,7 +16,7 @@ export interface IIngredientsItem {
   __v: number;
 }
 
-export interface ICountIngredient{
+export interface ICountIngredient {
   id: string;
   count: number;
 }

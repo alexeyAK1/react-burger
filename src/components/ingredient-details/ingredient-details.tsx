@@ -13,11 +13,7 @@ export default function IngredientDetails({ ingredient }: IProps) {
 
   return (
     <div className={styles.ingredient_details}>
-      <img
-        className={styles.ingredient_image}
-        alt={`Картинка ${name}`}
-        src={image_large}
-      />
+      <img className={styles.ingredient_image} alt={name} src={image_large} />
       <p
         className={`text text_type_main-medium pt-4 pb-7 ${styles.ingredient_name}`}
       >
