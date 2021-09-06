@@ -10,7 +10,7 @@ import Header from '../../layouts/header/header';
 import ErrorBoundary from '../common/error-boundary/error-boundary';
 import MainAllLayouts from '../../layouts/main-all-layouts/main-all-layouts';
 import ErrorMessage from '../common/error-message/error-message';
-import { RootState } from '../../redux/store';
+import { RootState } from '../../services/store';
 import BurgerFactoryPage from '../../pages/burger-factory-page/burger-factory-page';
 import Loader from '../ui/loader/loader';
 

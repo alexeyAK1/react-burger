@@ -6,8 +6,8 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { getOrderFetch } from '../../../../redux/order-slice';
-import { RootState } from '../../../../redux/store';
+import { getOrderFetch } from '../../../../services/order-slice';
+import { RootState } from '../../../../services/store';
 import { useToggleModal } from '../../../common/modal/hooks/use_toggle_modal';
 import Modal from '../../../common/modal/modal';
 import OrderDetails from '../../../order-details/order-details';

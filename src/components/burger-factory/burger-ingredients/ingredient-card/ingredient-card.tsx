@@ -9,7 +9,7 @@ import { IIngredientsItem } from '../../../../models/ingredients';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 import { ItemTypes } from '../../../../models/drag-and-drop';
 import { useDispatch } from 'react-redux';
-import { setCurrentIngredient } from '../../../../redux/current-ingredient-slice';
+import { setCurrentIngredient } from '../../../../services/current-ingredient-slice';
 
 interface IProps {
   ingredientData: IIngredientsItem;

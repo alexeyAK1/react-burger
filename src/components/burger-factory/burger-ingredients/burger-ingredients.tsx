@@ -10,14 +10,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import ScrollContainer from '../../../layouts/scroll-container/scroll-container';
 import TabNavByCategory from './tab-nav-by-category/tab-nav-by-category';
 import { TCategory } from '../../../models/ingredients';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../services/store';
 import { useForceMemoUpdate } from './hooks/use-force-memo-update';
 import { useToggleRefs } from './hooks/use-toggle-refs';
 import { useToggleModal } from '../../common/modal/hooks/use_toggle_modal';
 import Modal from '../../common/modal/modal';
 import IngredientDetails from '../../ingredient-details/ingredient-details';
 import IngredientsList from './ingredients-list/ingredients-list';
-import { setCurrentIngredient } from '../../../redux/current-ingredient-slice';
+import { setCurrentIngredient } from '../../../services/current-ingredient-slice';
 import { bunName, categoriesTypeArray } from '../../../common/constants';
 
 export default function BurgerIngredients() {

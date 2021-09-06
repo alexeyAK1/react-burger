@@ -4,14 +4,14 @@ import { useDrop } from 'react-dnd';
 
 import styles from './burger-constructor.module.css';
 import ScrollContainer from '../../../layouts/scroll-container/scroll-container';
-import { RootState } from '../../../redux/store';
+import { RootState } from '../../../services/store';
 import { IIngredientsItem } from '../../../models/ingredients';
 import { ItemTypes } from '../../../models/drag-and-drop';
 import Bun from './bun/bun';
 import {
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
-} from '../../../redux/constructor-ingredients-slice';
+} from '../../../services/constructor-ingredients-slice';
 import ConstructorIngredientsList from './constructor-ingredients-list/constructor-ingredients-list';
 import Order from './order/order';
 

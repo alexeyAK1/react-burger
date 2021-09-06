@@ -9,7 +9,7 @@ import { IIngredientsItem } from '../../../../models/ingredients';
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import { ItemTypes } from '../../../../models/drag-and-drop';
 import { useDispatch } from 'react-redux';
-import { swapCards } from '../../../../redux/constructor-ingredients-slice';
+import { swapCards } from '../../../../services/constructor-ingredients-slice';
 
 interface IProps {
   isTop?: boolean;

@@ -4,11 +4,11 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import TwoColumns from '../../layouts/two-columns/two-columns';
-import { RootState } from '../../redux/store';
+import { RootState } from '../../services/store';
 import Loader from '../ui/loader/loader';
 import BurgerIngredients from './burger-ingredients/burger-ingredients';
 import BurgerConstructor from './burger-constructor/burger-constructor';
-import { getIngredientFetch } from '../../redux/ingredients-slice';
+import { getIngredientFetch } from '../../services/ingredients-slice';
 
 export default function BurgerFactory() {
   const isLoading = useSelector(
