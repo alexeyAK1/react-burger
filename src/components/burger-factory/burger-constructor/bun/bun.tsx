@@ -13,7 +13,8 @@ export default function Bun({ bun, isTop }: IProps) {
     <div>
       {bun ? (
         <IngredientItem
-          isTop={isTop}
+          isTop={isTop ? true : false}
+          isBottom={isTop ? false : true}
           price={bun.price / 100}
           name={bun.name}
           image={bun.image_mobile}
