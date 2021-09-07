@@ -59,13 +59,8 @@ export const getNewElementConstructor = (
   state: IConstructorIngredientState,
   addedIngredient: IIngredientsItem
 ) => {
-  const nextIndex = state.constructorIngredients.length
-    ? +state.constructorIngredients[state.constructorIngredients.length - 1]
-        .sort_id! + 1
-    : 0;
-
   return {
     ...addedIngredient,
-    sort_id: `${nextIndex}`,
+    sort_id: `${state.nextIndex}`,
   };
 };

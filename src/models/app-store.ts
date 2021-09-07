@@ -27,6 +27,7 @@ export interface IConstructorIngredientState {
   bun: IIngredientsItem | null;
   constructorIngredients: IIngredientsItem[];
   totalSum: number;
+  nextIndex: number;
 }
 
 export interface IOrderState {

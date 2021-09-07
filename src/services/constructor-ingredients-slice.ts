@@ -8,6 +8,7 @@ const initialState: IConstructorIngredientState = {
   bun: null,
   constructorIngredients: [],
   totalSum: 0,
+  nextIndex: 0,
 };
 
 const constructorIngredientsSlice = createSlice({
@@ -28,6 +29,7 @@ const constructorIngredientsSlice = createSlice({
         const newIngredient = getNewElementConstructor(state, action.payload);
 
         state.constructorIngredients.push(newIngredient);
+        state.nextIndex++;
       }
       state.totalSum = calculateTotalPrice(state);
     },
