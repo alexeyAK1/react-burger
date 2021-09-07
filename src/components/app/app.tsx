@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
@@ -13,10 +13,17 @@ import ErrorMessage from '../common/error-message/error-message';
 import { RootState } from '../../services/store';
 import BurgerFactoryPage from '../../pages/burger-factory-page/burger-factory-page';
 import Loader from '../ui/loader/loader';
+import { getIngredientFetch } from '../../services/ingredients-slice';
 
 function App() {
   const error = useSelector((state: RootState) => state.app.error);
   const isLoading = useSelector((state: RootState) => state.app.isLoading);
+
+    const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredientFetch());
+  }, [dispatch]);
 
   return (
     <div className="App">
