@@ -40,7 +40,7 @@ function IngredientsList({
   const getCount = useCallback(
     (item: IIngredientsItem) => {
       if (item.type === bunName) {
-        return bun!._id === item._id ? 2 : 0;
+        return bun && bun!._id === item._id ? 2 : 0;
       } else {
         const findCountObj = countIngredients.find(
           (countObj) => countObj.id === item._id

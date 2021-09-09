@@ -8,7 +8,6 @@ import { addOrDeleteCountIngredients } from './common';
 import {
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
-  setBun,
 } from './constructor-ingredients-slice';
 
 const initialState: IIngredientsState = {
@@ -22,11 +21,7 @@ export const getIngredientFetch = createAsyncThunk(
   async function (_, { rejectWithValue, dispatch }) {
     try {
       const ingredientsData = await getIngredientData();
-      const firstBunElement = ingredientsData.filter(
-        (item) => item.type === bunName
-      )[0];
 
-      dispatch(setBun(firstBunElement));
       dispatch(setIngredients(ingredientsData));
     } catch (error) {
       rejectWithValue(error);

@@ -14,3 +14,8 @@
   width: 33px;
   margin-left: 9px;
 }
+
+.alert{
+  padding: calc(var(--offset-base-size)  * 3);
+  text-align: center;
+}

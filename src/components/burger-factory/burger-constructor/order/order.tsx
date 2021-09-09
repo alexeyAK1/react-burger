@@ -19,12 +19,20 @@ export default function Order() {
   const totalSum = useSelector(
     (state: RootState) => state.constructorIngredients.totalSum
   );
+  const bun = useSelector(
+    (state: RootState) => state.constructorIngredients.bun
+  );
   const dispatch = useDispatch();
   const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();
+  const { isOpenModal: isOpenModalAlert, onOpenModal: onOpenModalAlert, onCloseModal: onCloseModalAlert } = useToggleModal();
 
   const handleOnOpenModule = async () => {
-    dispatch(getOrderFetch());
-    onOpenModal();
+    if (bun) {
+      dispatch(getOrderFetch());
+      onOpenModal();
+    } else {
+      onOpenModalAlert();
+    }
   };
 
   return (
@@ -44,6 +52,11 @@ export default function Order() {
       {isOpenModal ? (
         <Modal onClose={onCloseModal}>
           <OrderDetails />
+        </Modal>
+      ) : null}
+      {isOpenModalAlert ? (
+        <Modal onClose={onCloseModalAlert}>
+          <h2 className={styles.alert}>{"Бургером можно наслаждаться только с булками! =)"}</h2>
         </Modal>
       ) : null}
     </>

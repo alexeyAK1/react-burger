@@ -15,11 +15,15 @@ const constructorIngredientsSlice = createSlice({
   name: 'constructorIngredients',
   initialState,
   reducers: {
-    setBun(state, action: PayloadAction<IIngredientsItem>) {
+    setBun(state, action: PayloadAction<IIngredientsItem | null>) {
       state.bun = action.payload;
       state.totalSum = calculateTotalPrice(state);
     },
     calculateTotal(state) {
+      state.totalSum = calculateTotalPrice(state);
+    },
+    setIngredientsInConstructor(state, action: PayloadAction<IIngredientsItem[]>){
+      state.constructorIngredients = action.payload;
       state.totalSum = calculateTotalPrice(state);
     },
     addIngredientInConstructor(state, action: PayloadAction<IIngredientsItem>) {
@@ -69,6 +73,7 @@ export default constructorIngredientsSlice.reducer;
 
 export const {
   setBun,
+  setIngredientsInConstructor,
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
   swapCards,

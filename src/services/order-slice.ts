@@ -3,6 +3,7 @@ import { getOrderData } from '../api/agent';
 import { getNElementArr } from '../common/functions';
 import { IOrderState, IRootStore } from '../models/app-store';
 import { IOrder } from '../models/order';
+import { setBun, setIngredientsInConstructor } from './constructor-ingredients-slice';
 
 const initialState: IOrderState = {
   order: null,
@@ -25,6 +26,8 @@ export const getOrderFetch = createAsyncThunk(
 
       const orderData = await getOrderData(ingredients);
       dispatch(setOrder(orderData));
+      dispatch(setBun(null));
+      dispatch(setIngredientsInConstructor([]));
     } catch (error) {
       rejectWithValue(error);
     }
