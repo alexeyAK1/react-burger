@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+
 import App from './components/app/app';
 import './index.css';
-
 import reportWebVitals from './reportWebVitals';
-import { BurgerState } from './services/burger-state';
+import store from './services/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BurgerState>
+    <Provider store={store}>
       <App />
-    </BurgerState>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

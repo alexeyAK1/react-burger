@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
@@ -6,31 +7,23 @@ import '../../styles/main.css';
 
 import AppHeader from '../app-header/app-header';
 import Header from '../../layouts/header/header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import TwoColumns from '../../layouts/two-columns/two-columns';
 import ErrorBoundary from '../common/error-boundary/error-boundary';
 import MainAllLayouts from '../../layouts/main-all-layouts/main-all-layouts';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import Loader from '../ui/loader/loader';
 import ErrorMessage from '../common/error-message/error-message';
-import { BurgerContext } from '../../services/burger-context';
+import { RootState } from '../../services/store';
+import BurgerFactoryPage from '../../pages/burger-factory-page/burger-factory-page';
+import Loader from '../ui/loader/loader';
+import { getIngredientFetch } from '../../services/ingredients-slice';
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const { setIngredients } = useContext(BurgerContext)!;
+  const error = useSelector((state: RootState) => state.app.error);
+  const isLoading = useSelector((state: RootState) => state.app.isLoading);
+
+    const dispatch = useDispatch();
 
   useEffect(() => {
-    const resolve = () => setLoading(false);
-    const reject = () => {
-      setError(error);
-      setLoading(false);
-    };
-
-    setLoading(true);
-    setIngredients(resolve, reject);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getIngredientFetch());
+  }, [dispatch]);
 
   return (
     <div className="App">
@@ -38,25 +31,18 @@ function App() {
         <Header>
           <AppHeader />
         </Header>
-        <MainAllLayouts>
-          {error ? (
+
+        {error ? (
+          <MainAllLayouts>
             <ErrorMessage error={error} />
-          ) : (
-            <>
-              <h1>Соберите бургер</h1>
-              {loading ? (
-                <Loader />
-              ) : (
-                <TwoColumns style={{ height: '100%' }}>
-                  <>
-                    <BurgerIngredients />
-                    <BurgerConstructor />
-                  </>
-                </TwoColumns>
-              )}
-            </>
-          )}
-        </MainAllLayouts>
+          </MainAllLayouts>
+        ) : isLoading ? (
+          <MainAllLayouts>
+            <Loader />
+          </MainAllLayouts>
+        ) : (
+          <BurgerFactoryPage />
+        )}
       </ErrorBoundary>
     </div>
   );

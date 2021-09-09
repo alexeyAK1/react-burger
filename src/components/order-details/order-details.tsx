@@ -1,29 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IOrder } from '../../models/order';
-import { BurgerContext } from '../../services/burger-context';
 import Loader from '../ui/loader/loader';
-
 import styles from './order-details.module.css';
+import { RootState } from '../../services/store';
 
 export default function OrderDetails() {
-  const context = useContext(BurgerContext);
-  const [localOder, setOrder] = useState<IOrder | null>(null);
+  const order = useSelector((state: RootState) => state.order.order);
+  const isLoading = useSelector((state: RootState) => state.order.isLoading);
 
-  useEffect(() => {
-    if (context && context?.order) {
-      setOrder({ ...context?.order });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context?.order]);
-
-  if (localOder) {
+  if (!isLoading && order) {
     const {
       name,
       order: { number: orderNumber },
       success,
-    } = localOder;
+    } = order;
 
     return (
       <div className={styles.order_details}>
