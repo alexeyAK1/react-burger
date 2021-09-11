@@ -15,8 +15,7 @@ interface IProps {
 
 export default function Modal({ children, header, onClose }: IProps) {
   const onKeyDown = (e: KeyboardEvent) => {
-    //закрытие окна по escape
-    if (e.which === 27) {
+    if (e.key === 'Escape') {
       e.preventDefault();
       onClose();
     }
