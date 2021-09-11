@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getIngredientData } from '../api/agent';
 import { bunName } from '../common/constants';
 import { IIngredientsState } from '../models/app-store';
-import { IIngredientsItem } from '../models/ingredients';
+import { ICountIngredient, IIngredientsItem } from '../models/ingredients';
 import { setAppError } from './app-slice';
 import { addOrDeleteCountIngredients } from './common';
 import {
@@ -37,6 +37,9 @@ const ingredientsSlice = createSlice({
     setIngredients(state, action: PayloadAction<IIngredientsItem[]>) {
       state.ingredients = action.payload;
     },
+    resetCountIngredients(state, action: PayloadAction<ICountIngredient[]>){
+      state.countIngredients = action.payload;
+    }
   },
   extraReducers: {
     // @ts-expect-error
@@ -80,4 +83,4 @@ const ingredientsSlice = createSlice({
 
 export default ingredientsSlice.reducer;
 
-const { setIngredients } = ingredientsSlice.actions;
+export const { setIngredients, resetCountIngredients } = ingredientsSlice.actions;
