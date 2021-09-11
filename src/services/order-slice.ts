@@ -4,6 +4,7 @@ import { getNElementArr } from '../common/functions';
 import { IOrderState, IRootStore } from '../models/app-store';
 import { IOrder } from '../models/order';
 import { setBun, setIngredientsInConstructor } from './constructor-ingredients-slice';
+import { resetCountIngredients } from './ingredients-slice';
 
 const initialState: IOrderState = {
   order: null,
@@ -28,6 +29,7 @@ export const getOrderFetch = createAsyncThunk(
       dispatch(setOrder(orderData));
       dispatch(setBun(null));
       dispatch(setIngredientsInConstructor([]));
+      dispatch(resetCountIngredients([]));
     } catch (error) {
       rejectWithValue(error);
     }
