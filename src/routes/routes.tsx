@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import {
   BurgerFactoryPage,
@@ -14,7 +14,6 @@ import {
 
 export default function Routes() {
   return (
-    <Router>
       <Switch>
         <Route path="/" exact>
           <BurgerFactoryPage />
@@ -41,6 +40,5 @@ export default function Routes() {
           <NotFound404Page />
         </Route>
       </Switch>
-    </Router>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router } from "react-router-dom";
 
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css';
 import '@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css';
@@ -28,6 +29,7 @@ function App() {
   return (
     <div className="App">
       <ErrorBoundary>
+        <Router>
         <Header>
           <AppHeader />
         </Header>
@@ -43,6 +45,7 @@ function App() {
         ) : (
           <RoutesRoot />
         )}
+        </Router>
       </ErrorBoundary>
     </div>
   );

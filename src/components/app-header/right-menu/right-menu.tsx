@@ -5,7 +5,7 @@ import MenuButton from '../menu-button/menu-button';
 
 export default function RightMenu() {
   return (
-    <MenuButton Icon={ProfileIcon} link="#">
+    <MenuButton Icon={ProfileIcon} link="/profile">
       <span>Личный кабинет</span>
     </MenuButton>
   );
