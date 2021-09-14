@@ -6,6 +6,7 @@ import {
   ForgotPasswordPage,
   IngredientPage,
   LoginPage,
+  NotFound404Page,
   ProfilePage,
   RegisterPage,
   ResetPasswordPage,
@@ -35,6 +36,9 @@ export default function Routes() {
         </Route>
         <Route path="/ingredients/:id">
           <IngredientPage />
+        </Route>
+        <Route>
+          <NotFound404Page />
         </Route>
       </Switch>
     </Router>

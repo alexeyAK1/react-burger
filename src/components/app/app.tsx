@@ -13,7 +13,7 @@ import ErrorMessage from '../common/error-message/error-message';
 import { RootState } from '../../services/store';
 import Loader from '../ui/loader/loader';
 import { getIngredientFetch } from '../../services/ingredients-slice';
-import Routes from '../../routes/routes';
+import RoutesRoot from '../../routes/routes';
 
 function App() {
   const error = useSelector((state: RootState) => state.app.error);
@@ -41,7 +41,7 @@ function App() {
             <Loader />
           </MainAllLayouts>
         ) : (
-          <Routes />
+          <RoutesRoot />
         )}
       </ErrorBoundary>
     </div>
