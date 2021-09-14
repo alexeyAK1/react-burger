@@ -11,9 +11,9 @@ import ErrorBoundary from '../common/error-boundary/error-boundary';
 import MainAllLayouts from '../../layouts/main-all-layouts/main-all-layouts';
 import ErrorMessage from '../common/error-message/error-message';
 import { RootState } from '../../services/store';
-import BurgerFactoryPage from '../../pages/burger-factory-page/burger-factory-page';
 import Loader from '../ui/loader/loader';
 import { getIngredientFetch } from '../../services/ingredients-slice';
+import Routes from '../../routes/routes';
 
 function App() {
   const error = useSelector((state: RootState) => state.app.error);
@@ -41,7 +41,7 @@ function App() {
             <Loader />
           </MainAllLayouts>
         ) : (
-          <BurgerFactoryPage />
+          <Routes />
         )}
       </ErrorBoundary>
     </div>
