@@ -1,0 +1,6 @@
+.ingredient_page_container{
+    padding-top: calc(var(--offset-base-size) * 45);
+}
+.ingredient_page_container_header{
+    text-align: center;
+}

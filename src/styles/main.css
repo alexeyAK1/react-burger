@@ -1,8 +1,51 @@
 :root {
-    --height-header: 88px;
-    --background-modal-overlay: rgba(0, 0, 0, 0.6);
+  --height-header: 88px;
+  --background-modal-overlay: rgba(0, 0, 0, 0.6);
 }
 
-body{
-    font-family: 'Jet Brains Mono';
+body {
+  font-family: "Jet Brains Mono";
+}
+
+.burger_input_container .input__container {
+  width: initial;
+}
+.burger_input_container .input_size_default {
+  width: 100%;
+}
+
+.login_container {
+  width: 480px;
+}
+.login_container h2 {
+  text-align: center;
+}
+.login_input_container {
+  padding-top: calc(var(--offset-base-size) * 6);
+}
+.login_input_container .input__container{
+    width: initial;
+}
+.login_input_container .input_size_default{
+    width: 100%;
+}
+.login_button_container {
+  padding-top: calc(var(--offset-base-size) * 6);
+  padding-bottom: calc(var(--offset-base-size) * 20);
+  display: flex;
+  justify-content: center;
+}
+.login_container p {
+  text-align: center;
+  padding-bottom: calc(var(--offset-base-size) * 4);
+  color: var(--text-inactive-color);
+}
+.login_container p a {
+  padding-left: calc(var(--offset-base-size) * 2);
+  text-decoration: none;
+}
+.login_container p a,
+.login_container p a:visited,
+.login_container p a:active {
+  color: var(--colors-interface-accent);
 }
