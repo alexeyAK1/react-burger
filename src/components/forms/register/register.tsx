@@ -18,14 +18,10 @@ export default function Register() {
           type={"text"}
           placeholder={"Имя"}
           onChange={handleOnChange}
-          //   icon={'CurrencyIcon'}
           value={""}
           name={"name"}
           error={false}
-          //   ref={inputRef}
-          //   onIconClick={onIconClick}
           errorText={"Ошибка"}
-          //   size={"small"}
         />
       </div>
       <div className="login_input_container">
@@ -33,14 +29,10 @@ export default function Register() {
           type={"email"}
           placeholder={"E-mail"}
           onChange={handleOnChange}
-          //   icon={'CurrencyIcon'}
           value={""}
           name={"email"}
           error={false}
-          //   ref={inputRef}
-          //   onIconClick={onIconClick}
           errorText={"Ошибка"}
-          //   size={"small"}
         />
       </div>
       <div className="login_input_container">
@@ -53,7 +45,7 @@ export default function Register() {
       </div>
       <p className="text text_type_main-default">
         <span>Уже зарегистрированы?</span>
-        <Link to={"/"}>Войти</Link>
+        <Link to={"/login"}>Войти</Link>
       </p>
     </section>
   );

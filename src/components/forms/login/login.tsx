@@ -18,14 +18,10 @@ export default function Login() {
           type={"email"}
           placeholder={"E-mail"}
           onChange={handleOnChange}
-          //   icon={'CurrencyIcon'}
           value={""}
           name={"email"}
           error={false}
-          //   ref={inputRef}
-          //   onIconClick={onIconClick}
           errorText={"Ошибка"}
-          //   size={"small"}
         />
       </div>
       <div className="login_input_container">
@@ -38,11 +34,11 @@ export default function Login() {
       </div>
       <p className="text text_type_main-default">
         <span>Вы — новый пользователь?</span>
-        <Link to={"/"}>Зарегистрироваться</Link>
+        <Link to={"/register"}>Зарегистрироваться</Link>
       </p>
       <p className="text text_type_main-default">
         <span>Забыли пароль?</span>
-        <Link to={"/"}>Восстановить пароль</Link>
+        <Link to={"/forgot-password"}>Восстановить пароль</Link>
       </p>
     </section>
   );
