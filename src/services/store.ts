@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import appReducer from './app-slice';
-import ingredientReducer from './ingredients-slice';
-import currentIngredientReducer from './current-ingredient-slice';
-import constructorIngredientsReducer from './constructor-ingredients-slice';
-import orderReducer from './order-slice';
+import { configureStore } from "@reduxjs/toolkit";
+import appReducer from "./app-slice";
+import ingredientReducer from "./ingredients-slice";
+import currentIngredientReducer from "./current-ingredient-slice";
+import constructorIngredientsReducer from "./constructor-ingredients-slice";
+import orderReducer from "./order-slice";
+import userReducer from "./user-slice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     currentIngredient: currentIngredientReducer,
     constructorIngredients: constructorIngredientsReducer,
     order: orderReducer,
+    user: userReducer,
   },
 });
 

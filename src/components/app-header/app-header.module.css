@@ -4,13 +4,13 @@
   align-items: center;
 }
 .content_left{
-  width: 41%;
+  width: 39%;
 }
 .content_center{
   flex: 1;
 }
 .content_right{
-  width: 40%;
+  width: 39%;
   display: flex;
   justify-content: flex-end;
 }
