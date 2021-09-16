@@ -10,13 +10,31 @@ import {
 import styles from "./profile-page.module.css";
 import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
 import { ProfileForm } from "../../components/forms";
+import { getLogoutFetch } from "../../services/user-slice";
+import { useDispatch } from "react-redux";
 
 const MAIN_PATH = "/profile";
-const ORDER_HISTORY_PATH = MAIN_PATH + "/order-history";
+const ORDER_PATH = "/orders";
+const ORDER_HISTORY_PATH = MAIN_PATH + ORDER_PATH;
 
 export default function ProfilePage() {
+  const dispatch = useDispatch();
+  // const history = useHistory();
   const { path } = useRouteMatch();
   const { pathname } = useLocation();
+  // const refreshToken = useSelector((state: RootState) => state.user.refreshToken);
+  const handleOnClickLogOut = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    dispatch(getLogoutFetch());
+  }
+
+  // useEffect(() => {
+  //   if(!refreshToken){
+  //     history.push("/");
+  //   }
+  // }, [history, refreshToken])
 
   return (
     <MainAllLayouts>
@@ -43,7 +61,7 @@ export default function ProfilePage() {
             </Link>
           </li>
           <li className="text text_type_main-medium">
-            <Link to={`#`} className={styles.menu_link}>
+            <Link to={`#`} className={styles.menu_link} onClick={handleOnClickLogOut}>
               Выход
             </Link>
           </li>
@@ -64,8 +82,8 @@ export default function ProfilePage() {
             <Route exact path={path}>
               <ProfileForm />
             </Route>
-            <Route path={`${path}/order-history`}>
-              <div>111</div>
+            <Route path={`${path}${ORDER_PATH}`}>
+              <div>ORDER_PATH</div>
             </Route>
           </Switch>
         </div>

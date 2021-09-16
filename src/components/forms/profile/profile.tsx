@@ -31,65 +31,76 @@ export default function Profile() {
   const handleOnBlur = () => {
     setFocusedName("");
   };
+  const handleOnSendData = (e: React.SyntheticEvent<Element, Event>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   return (
     <section className="login_container">
-      <div className="login_input_container">
-        <Input
-          type={"text"}
-          placeholder={"Имя"}
-          onChange={handleOnChange}
-          icon={focusedName === fieldsName.Name ? "CloseIcon" : "EditIcon"}
-          value={""}
-          name={fieldsName.Name}
-          error={false}
-          onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
-          //   ref={inputRef}
-          onIconClick={handleOnIconClick}
-          errorText={"Ошибка"}
-          //   size={"small"}
-        />
-      </div>
-      <div className="login_input_container">
-        <Input
-          type={"text"}
-          placeholder={"Логин"}
-          onChange={handleOnChange}
-          icon={focusedName === fieldsName.Login ? "CloseIcon" : "EditIcon"}
-          value={""}
-          name={fieldsName.Login}
-          error={false}
-          onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
-          //   ref={inputRef}
-          onIconClick={handleOnIconClick}
-          errorText={"Ошибка"}
-          //   size={"small"}
-        />
-      </div>
-      <div className="login_input_container">
-        <Input
-          type={"password"}
-          placeholder={"Пароль"}
-          onChange={handleOnChange}
-          icon={focusedName === fieldsName.Password ? "CloseIcon" : "EditIcon"}
-          value={""}
-          name={fieldsName.Password}
-          error={false}
-          onFocus={handleOnFocus}
-          onBlur={handleOnBlur}
-          //   ref={inputRef}
-          onIconClick={handleOnIconClick}
-          errorText={"Ошибка"}
-          //   size={"small"}
-        />
-      </div>
+      <form onSubmit={handleOnSendData}>
+        <div className="login_input_container">
+          <Input
+            type={"text"}
+            placeholder={"Имя"}
+            onChange={handleOnChange}
+            icon={focusedName === fieldsName.Name ? "CloseIcon" : "EditIcon"}
+            value={""}
+            name={fieldsName.Name}
+            error={false}
+            onFocus={handleOnFocus}
+            onBlur={handleOnBlur}
+            //   ref={inputRef}
+            onIconClick={handleOnIconClick}
+            errorText={"Ошибка"}
+            //   size={"small"}
+          />
+        </div>
+        <div className="login_input_container">
+          <Input
+            type={"text"}
+            placeholder={"Логин"}
+            onChange={handleOnChange}
+            icon={focusedName === fieldsName.Login ? "CloseIcon" : "EditIcon"}
+            value={""}
+            name={fieldsName.Login}
+            error={false}
+            onFocus={handleOnFocus}
+            onBlur={handleOnBlur}
+            //   ref={inputRef}
+            onIconClick={handleOnIconClick}
+            errorText={"Ошибка"}
+            //   size={"small"}
+          />
+        </div>
+        <div className="login_input_container">
+          <Input
+            type={"password"}
+            placeholder={"Пароль"}
+            onChange={handleOnChange}
+            icon={
+              focusedName === fieldsName.Password ? "CloseIcon" : "EditIcon"
+            }
+            value={""}
+            name={fieldsName.Password}
+            error={false}
+            onFocus={handleOnFocus}
+            onBlur={handleOnBlur}
+            //   ref={inputRef}
+            onIconClick={handleOnIconClick}
+            errorText={"Ошибка"}
+            //   size={"small"}
+          />
+        </div>
+        <button type="submit" style={{ display: "none" }}>
+          Submit
+        </button>
+      </form>
       <div className={`login_input_container ${styles.buttons_container}`}>
         <div>
           <Link to={"#"}>Отмена</Link>
         </div>
-        <Button type="primary" size="medium">
+        <Button type="primary" size="medium" onClick={handleOnSendData}>
           Сохранить
         </Button>
       </div>
