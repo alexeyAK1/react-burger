@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import styles from "./menu-button.module.css";
@@ -13,12 +13,14 @@ interface IProps {
   Icon?: React.ComponentType<IIconProps>;
   link: string;
   children: React.ReactChild;
+  entry?: boolean;
 }
 
 export default function MenuButton({
   Icon,
   link,
   children,
+  entry = false,
 }: IProps) {
   const location = useLocation();
   const [isSelected, setIsSelected] = useState(false);
@@ -26,9 +28,15 @@ export default function MenuButton({
   const classType = isDisplayed ? "text_color_primary" : "text_color_inactive";
   const type: TType = isDisplayed ? "primary" : "secondary";
 
+  const criterion: boolean = useMemo(
+    () =>
+      entry ? location.pathname.indexOf(link) >= 0 : location.pathname === link,
+    [entry, link, location.pathname]
+  );
+
   useEffect(() => {
-    setIsSelected(location.pathname === link);
-  }, [link, location.pathname]);
+    setIsSelected(criterion);
+  }, [criterion]);
 
   useEffect(() => {
     if (isSelected) {
