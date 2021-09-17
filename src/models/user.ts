@@ -16,6 +16,10 @@ export interface ILogoutResponse extends ISuccessResponse {
   message: string;
 }
 
+export interface IUserDataResponse extends ISuccessResponse {
+  user: IUserFields;
+}
+
 export interface IUserResponse extends IRefreshResponse {
   user: IUserFields;
 }

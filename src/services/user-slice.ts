@@ -5,20 +5,22 @@ import {
   PayloadAction,
   ThunkDispatch,
 } from "@reduxjs/toolkit";
-import { Api } from "../api/api";
+import { Api, errorAuthorized } from "../api/api";
 
 import {
   getLoginUser,
   getLogout,
-  getRefreshToken,
   getRegisterUser,
+  getUser,
+  updateUser,
 } from "../api/auth";
 import { IRootStore, IUserState } from "../models/app-store";
 import { IRefreshResponse, IUserFields } from "../models/user";
+import { MAIN_PATH } from "../routes/constants-path";
 import { setAppError } from "./app-slice";
 
 const api = Api.getInstance();
-console.log(api.token);
+
 const initialState: IUserState = {
   user: {
     name: "",
@@ -60,7 +62,6 @@ export const getRegisterFetch = createAsyncThunk(
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
-
       try {
         const userResponse = await getRegisterUser(email, password, name);
 
@@ -69,13 +70,17 @@ export const getRegisterFetch = createAsyncThunk(
           dispatch(setUser(userResponse.user));
         }
       } catch (error) {
-        if ((error as Error).message === "403") {
-          dispatch(setError("Такой пользователь уже существует"));
+        const [errorSuccess, errorMessage] = (error as Error).message.split(
+          "==="
+        );
+        if (errorSuccess === "403") {
+          dispatch(setError(errorMessage));
         } else {
           rejectWithValue(error);
           dispatch(setAppError(error as Error));
         }
       }
+      dispatch(setRefreshToken(api.refreshToken));
     }
   }
 );
@@ -89,10 +94,8 @@ export const getLoginFetch = createAsyncThunk(
     const {
       user: { isLoading },
     } = getState() as IRootStore;
-    console.log(isLoading);
     if (!isLoading) {
       dispatch(setIsLoading(true));
-
       try {
         dispatch(setRedirectPath(""));
         const userResponse = await getLoginUser(email, password);
@@ -100,35 +103,24 @@ export const getLoginFetch = createAsyncThunk(
         if (userResponse.success) {
           setToken(userResponse, dispatch);
           dispatch(setUser(userResponse.user));
-          dispatch(setRedirectPath("/"));
+          dispatch(setRedirectPath(MAIN_PATH));
         }
       } catch (error) {
-        rejectWithValue(error);
-        dispatch(setAppError(error as Error));
+        const [errorSuccess, errorMessage] = (error as Error).message.split(
+          "==="
+        );
+        if (
+          errorSuccess === "401" &&
+          errorMessage === errorAuthorized.emailOrPasswordAreIncorrect
+        ) {
+          alert("Не корректный логин или пароль");
+        } else {
+          rejectWithValue(error);
+          dispatch(setAppError(error as Error));
+        }
       }
     }
-  }
-);
-
-export const getRefreshTokenFetch = createAsyncThunk(
-  "user/getRefreshTokenFetch",
-  async function (_, { rejectWithValue, dispatch, getState }) {
-    const {
-      user: { refreshToken },
-    } = getState() as IRootStore;
-    dispatch(setIsLoading(true));
-
-    try {
-      dispatch(setRedirectPath(""));
-      const userResponse = await getRefreshToken(refreshToken);
-
-      if (userResponse.success) {
-        setToken(userResponse, dispatch);
-      }
-    } catch (error) {
-      rejectWithValue(error);
-      dispatch(setAppError(error as Error));
-    }
+    dispatch(setRefreshToken(api.refreshToken));
   }
 );
 
@@ -141,7 +133,6 @@ export const getLogoutFetch = createAsyncThunk(
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
-
       try {
         dispatch(setRedirectPath(""));
         const userResponse = await getLogout(refreshToken);
@@ -149,12 +140,84 @@ export const getLogoutFetch = createAsyncThunk(
         if (userResponse.success) {
           deleteToken(dispatch);
           dispatch(setUser({ email: "", name: "" }));
+          dispatch(setRefreshToken(api.refreshToken));
         }
       } catch (error) {
         rejectWithValue(error);
         dispatch(setAppError(error as Error));
       }
     }
+    dispatch(setRefreshToken(api.refreshToken));
+  }
+);
+
+export const getUserFetch = createAsyncThunk(
+  "user/getUserFetch",
+  async function (_, { rejectWithValue, dispatch, getState }) {
+    const {
+      user: { isLoading },
+    } = getState() as IRootStore;
+
+    if (!isLoading) {
+      dispatch(setIsLoading(true));
+      try {
+        const userResponse = await getUser();
+
+        if (userResponse.success) {
+          dispatch(setUser(userResponse.user));
+          dispatch(setRefreshToken(api.refreshToken));
+        } else {
+          console.log(userResponse);
+        }
+      } catch (error) {
+        const [errorSuccess, errorMessage] = (error as Error).message.split(
+          "==="
+        );
+
+        if (
+          errorSuccess === "403" &&
+          errorMessage === errorAuthorized.jwtExpired
+        ) {
+          // alert("");
+        } else {
+          rejectWithValue(error);
+          dispatch(setAppError(error as Error));
+        }
+      }
+    }
+    dispatch(setRefreshToken(api.refreshToken));
+  }
+);
+
+export const updateUserFetch = createAsyncThunk(
+  "user/updateUserFetch",
+  async function (
+    {
+      email,
+      password,
+      name,
+    }: { email: string; password: string; name: string },
+    { rejectWithValue, dispatch, getState }
+  ) {
+    const {
+      user: { isLoading },
+    } = getState() as IRootStore;
+
+    if (!isLoading) {
+      dispatch(setIsLoading(true));
+      try {
+        const userResponse = await updateUser(email, password, name);
+
+        if (userResponse.success) {
+          dispatch(setUser(userResponse.user));
+          dispatch(setRefreshToken(api.refreshToken));
+        }
+      } catch (error) {
+        rejectWithValue(error);
+        dispatch(setAppError(error as Error));
+      }
+    }
+    dispatch(setRefreshToken(api.refreshToken));
   }
 );
 
@@ -199,19 +262,27 @@ const userSlice = createSlice({
       state.isLoading = false;
     },
     // @ts-expect-error
-    [getRefreshTokenFetch.fulfilled]: (state) => {
-      state.isLoading = false;
-    },
-    // @ts-expect-error
-    [getRefreshTokenFetch.rejected]: (state) => {
-      state.isLoading = false;
-    },
-    // @ts-expect-error
     [getLogoutFetch.fulfilled]: (state) => {
       state.isLoading = false;
     },
     // @ts-expect-error
     [getLogoutFetch.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    // @ts-expect-error
+    [getUserFetch.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    // @ts-expect-error
+    [getUserFetch.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    // @ts-expect-error
+    [updateUserFetch.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    // @ts-expect-error
+    [updateUserFetch.rejected]: (state) => {
       state.isLoading = false;
     },
   },

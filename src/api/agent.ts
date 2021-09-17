@@ -5,11 +5,13 @@ import { Api } from "./api";
 const api = Api.getInstance();
 
 export const getIngredientData = async () => {
-  return await api.getFetch<IIngredientsItem[]>("/ingredients");
+  return await (
+    await api.getFetch<{ data: IIngredientsItem[] }>("/ingredients")
+  ).data;
 };
 
 export const getOrderData = async (ingredients: string[]) => {
-  return await api.postFetch<IOrder>(
+  return await api.postProtectedFetch<IOrder>(
     "/orders",
     JSON.stringify({ ingredients })
   );
@@ -29,7 +31,7 @@ export const getChangePassword = async (email: string) => {
 
 export const getResetPassword = async (password: string, token: string) => {
   return await api.postFetch<IChangePasswordResponse>(
-    "password-reset/reset",
+    "/password-reset/reset",
     JSON.stringify({ password, token })
   );
 };
