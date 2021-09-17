@@ -12,10 +12,9 @@ import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
 import { ProfileForm } from "../../components/forms";
 import { getLogoutFetch } from "../../services/user-slice";
 import { useDispatch } from "react-redux";
+import { ORDERS_PATH, PROFILE_PATH } from "../../routes/constants-path";
 
-const MAIN_PATH = "/profile";
-const ORDER_PATH = "/orders";
-const ORDER_HISTORY_PATH = MAIN_PATH + ORDER_PATH;
+const ORDER_HISTORY_PATH = PROFILE_PATH + ORDERS_PATH;
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -23,18 +22,14 @@ export default function ProfilePage() {
   const { path } = useRouteMatch();
   const { pathname } = useLocation();
   // const refreshToken = useSelector((state: RootState) => state.user.refreshToken);
-  const handleOnClickLogOut = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleOnClickLogOut = async (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     event.stopPropagation();
     event.preventDefault();
 
     dispatch(getLogoutFetch());
-  }
-
-  // useEffect(() => {
-  //   if(!refreshToken){
-  //     history.push("/");
-  //   }
-  // }, [history, refreshToken])
+  };
 
   return (
     <MainAllLayouts>
@@ -42,9 +37,9 @@ export default function ProfilePage() {
         <ul className={styles.profile_page_container_menu}>
           <li className="text text_type_main-medium">
             <Link
-              to={MAIN_PATH}
+              to={PROFILE_PATH}
               className={`${styles.menu_link} ${
-                pathname === MAIN_PATH ? styles.active : ""
+                pathname === PROFILE_PATH ? styles.active : ""
               }`}
             >
               Профиль
@@ -61,11 +56,15 @@ export default function ProfilePage() {
             </Link>
           </li>
           <li className="text text_type_main-medium">
-            <Link to={`#`} className={styles.menu_link} onClick={handleOnClickLogOut}>
+            <Link
+              to={`#`}
+              className={styles.menu_link}
+              onClick={handleOnClickLogOut}
+            >
               Выход
             </Link>
           </li>
-          {pathname === MAIN_PATH ? (
+          {pathname === PROFILE_PATH ? (
             <li className="text text_type_main-default">
               <p>
                 <span>
@@ -82,7 +81,7 @@ export default function ProfilePage() {
             <Route exact path={path}>
               <ProfileForm />
             </Route>
-            <Route path={`${path}${ORDER_PATH}`}>
+            <Route path={`${path}${ORDERS_PATH}`}>
               <div>ORDER_PATH</div>
             </Route>
           </Switch>
