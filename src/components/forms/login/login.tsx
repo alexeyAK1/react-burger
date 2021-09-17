@@ -9,7 +9,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useInitFields } from "../hooks/use-init-fields";
 import { getLoginFetch } from "../../../services/user-slice";
-import { useRedirectIfPathEqualTo } from "../../common/hooks/use-custom-redirect";
+import {
+  FORGOT_PASSWORD_PATH,
+  REGISTER_PATH,
+} from "../../../routes/constants-path";
 
 enum nameFields {
   Email = "email",
@@ -46,8 +49,6 @@ export default function Login() {
     }
   };
 
-  useRedirectIfPathEqualTo("/");
-
   return (
     <section className="login_container">
       <h2 className="text text_type_main-medium">Вход</h2>
@@ -82,11 +83,11 @@ export default function Login() {
       </div>
       <p className="text text_type_main-default">
         <span>Вы — новый пользователь?</span>
-        <Link to={"/register"}>Зарегистрироваться</Link>
+        <Link to={REGISTER_PATH}>Зарегистрироваться</Link>
       </p>
       <p className="text text_type_main-default">
         <span>Забыли пароль?</span>
-        <Link to={"/forgot-password"}>Восстановить пароль</Link>
+        <Link to={FORGOT_PASSWORD_PATH}>Восстановить пароль</Link>
       </p>
     </section>
   );

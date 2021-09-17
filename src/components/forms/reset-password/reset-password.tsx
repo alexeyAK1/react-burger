@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import {
   Button,
@@ -7,6 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { getResetPassword } from "../../../api/agent";
 import { useInitFields } from "../hooks/use-init-fields";
+import { LOGIN_PATH } from "../../../routes/constants-path";
 
 enum nameFields {
   Password = "password",
@@ -14,6 +15,7 @@ enum nameFields {
 }
 
 export default function ResetPassword() {
+  const history = useHistory();
   const { isBlocked, setIsBlocked, fields, errors, setErrors, handleOnChange } =
     useInitFields(nameFields);
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -40,10 +42,15 @@ export default function ResetPassword() {
         setIsBlocked(false);
 
         if (result.success) {
-          alert(result.message);
+          history.push(LOGIN_PATH);
         }
       } catch (error) {
         setIsBlocked(false);
+        const [errorSuccess, errorMessage] = (error as Error).message.split(
+          "==="
+        );
+        alert(errorMessage);
+        console.log(errorSuccess);
         console.log(error);
       }
     }
@@ -89,7 +96,7 @@ export default function ResetPassword() {
       </div>
       <p className="text text_type_main-default">
         <span>Вспомнили пароль?</span>
-        <Link to={"/"}>Войти</Link>
+        <Link to={LOGIN_PATH}>Войти</Link>
       </p>
     </section>
   );

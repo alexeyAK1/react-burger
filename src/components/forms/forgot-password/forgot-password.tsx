@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import {
   Button,
@@ -7,9 +7,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { getChangePassword } from "../../../api/agent";
 import { reEmail } from "../../../common/constants";
+import {
+  LOGIN_PATH,
+  RESET_PASSWORD_PATH,
+} from "../../../routes/constants-path";
 
 export default function ForgotPassword() {
   const history = useHistory();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [isBlocked, setIsBlocked] = useState(false);
@@ -32,7 +37,7 @@ export default function ForgotPassword() {
           setIsBlocked(false);
 
           if (result.success) {
-            history.push("/reset-password");
+            history.push(RESET_PASSWORD_PATH, { prevPath: location.pathname });
           }
         } catch (error) {
           setIsBlocked(false);
@@ -70,7 +75,7 @@ export default function ForgotPassword() {
       </div>
       <p className="text text_type_main-default">
         <span>Вспомнили пароль?</span>
-        <Link to={"/"}>Войти</Link>
+        <Link to={LOGIN_PATH}>Войти</Link>
       </p>
     </section>
   );

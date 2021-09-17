@@ -10,6 +10,7 @@ import { getRegisterFetch, setError } from "../../../services/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useInitFields } from "../hooks/use-init-fields";
 import { RootState } from "../../../services/store";
+import { LOGIN_PATH } from "../../../routes/constants-path";
 
 enum nameFields {
   Name = "name",
@@ -113,7 +114,7 @@ export default function Register() {
       </div>
       <p className="text text_type_main-default">
         <span>Уже зарегистрированы?</span>
-        <Link to={"/login"}>Войти</Link>
+        <Link to={LOGIN_PATH}>Войти</Link>
       </p>
     </section>
   );

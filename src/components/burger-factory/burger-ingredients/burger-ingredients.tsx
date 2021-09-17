@@ -4,24 +4,27 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-import ScrollContainer from '../../../layouts/scroll-container/scroll-container';
-import TabNavByCategory from './tab-nav-by-category/tab-nav-by-category';
-import { TCategory } from '../../../models/ingredients';
-import { RootState } from '../../../services/store';
-import { useForceMemoUpdate } from './hooks/use-force-memo-update';
-import { useToggleRefs } from './hooks/use-toggle-refs';
-import { useToggleModal } from '../../common/modal/hooks/use_toggle_modal';
-import Modal from '../../common/modal/modal';
-import IngredientDetails from '../../ingredient-details/ingredient-details';
-import IngredientsList from './ingredients-list/ingredients-list';
-import { setCurrentIngredient } from '../../../services/current-ingredient-slice';
-import { bunName, categoriesTypeArray } from '../../../common/constants';
+import ScrollContainer from "../../../layouts/scroll-container/scroll-container";
+import TabNavByCategory from "./tab-nav-by-category/tab-nav-by-category";
+import { TCategory } from "../../../models/ingredients";
+import { RootState } from "../../../services/store";
+import { useForceMemoUpdate } from "./hooks/use-force-memo-update";
+import { useToggleRefs } from "./hooks/use-toggle-refs";
+import { useToggleModal } from "../../common/modal/hooks/use_toggle_modal";
+import Modal from "../../common/modal/modal";
+import IngredientDetails from "../../ingredient-details/ingredient-details";
+import IngredientsList from "./ingredients-list/ingredients-list";
+import { setCurrentIngredient } from "../../../services/current-ingredient-slice";
+import { bunName, categoriesTypeArray } from "../../../common/constants";
+import { INGREDIENTS_PATH } from "../../../routes/constants-path";
 
 export default function BurgerIngredients() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const tabsRef = useRef<HTMLDivElement>(null);
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.ingredients
@@ -53,12 +56,19 @@ export default function BurgerIngredients() {
 
   useEffect(() => {
     if (currentIngredient) {
+      window.history.replaceState(
+        null,
+        currentIngredient.name,
+        `${INGREDIENTS_PATH}/${currentIngredient._id}`
+      );
       onOpenModal();
     }
   }, [currentIngredient, onOpenModal]);
 
   const handleOnCloseModal = () => {
     onCloseModal();
+    console.log(location);
+    window.history.replaceState(null, "Главная", location.pathname);
 
     dispatch(setCurrentIngredient(null));
   };
@@ -72,7 +82,7 @@ export default function BurgerIngredients() {
 
   const handleOnChangeInView = useCallback(
     (inView: boolean, entry: IntersectionObserverEntry) => {
-      const inViewName = entry.target.getAttribute('name') as TCategory;
+      const inViewName = entry.target.getAttribute("name") as TCategory;
 
       if (inView) {
         setVisibleList([...visibleList, inViewName]);
@@ -126,7 +136,7 @@ export default function BurgerIngredients() {
         />
       </ScrollContainer>
       {isOpenModal ? (
-        <Modal header={'Детали ингредиента'} onClose={handleOnCloseModal}>
+        <Modal header={"Детали ингредиента"} onClose={handleOnCloseModal}>
           <IngredientDetails ingredient={currentIngredient!} />
         </Modal>
       ) : null}
