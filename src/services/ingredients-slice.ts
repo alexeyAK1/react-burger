@@ -3,8 +3,7 @@ import { getIngredientData } from "../api/agent";
 import { bunName } from "../common/constants";
 import { IIngredientsState } from "../models/app-store";
 import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
-import { setAppError } from "./app-slice";
-import { addOrDeleteCountIngredients } from "./common";
+import { addOrDeleteCountIngredients, setErrorInAsyncThunk } from "./common";
 import {
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
@@ -24,8 +23,7 @@ export const getIngredientFetch = createAsyncThunk(
 
       dispatch(setIngredients(ingredientsData));
     } catch (error) {
-      rejectWithValue(error);
-      dispatch(setAppError(error as Error));
+      setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
     }
   }
 );

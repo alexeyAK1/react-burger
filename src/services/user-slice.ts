@@ -17,7 +17,7 @@ import {
 import { IRootStore, IUserState } from "../models/app-store";
 import { IRefreshResponse, IUserFields } from "../models/user";
 import { MAIN_PATH } from "../routes/constants-path";
-import { setAppError } from "./app-slice";
+import { setErrorInAsyncThunk } from "./common";
 
 const api = Api.getInstance();
 
@@ -76,8 +76,7 @@ export const getRegisterFetch = createAsyncThunk(
         if (errorSuccess === "403") {
           dispatch(setError(errorMessage));
         } else {
-          rejectWithValue(error);
-          dispatch(setAppError(error as Error));
+          setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
         }
       }
       dispatch(setRefreshToken(api.refreshToken));
@@ -115,8 +114,7 @@ export const getLoginFetch = createAsyncThunk(
         ) {
           alert("Не корректный логин или пароль");
         } else {
-          rejectWithValue(error);
-          dispatch(setAppError(error as Error));
+          setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
         }
       }
     }
@@ -143,8 +141,7 @@ export const getLogoutFetch = createAsyncThunk(
           dispatch(setRefreshToken(api.refreshToken));
         }
       } catch (error) {
-        rejectWithValue(error);
-        dispatch(setAppError(error as Error));
+        setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
       }
     }
     dispatch(setRefreshToken(api.refreshToken));
@@ -180,8 +177,7 @@ export const getUserFetch = createAsyncThunk(
         ) {
           // alert("");
         } else {
-          rejectWithValue(error);
-          dispatch(setAppError(error as Error));
+          setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
         }
       }
     }
@@ -213,8 +209,7 @@ export const updateUserFetch = createAsyncThunk(
           dispatch(setRefreshToken(api.refreshToken));
         }
       } catch (error) {
-        rejectWithValue(error);
-        dispatch(setAppError(error as Error));
+        setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
       }
     }
     dispatch(setRefreshToken(api.refreshToken));

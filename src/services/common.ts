@@ -1,8 +1,10 @@
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   IConstructorIngredientState,
   IIngredientsState,
-} from '../models/app-store';
-import { ICountIngredient, IIngredientsItem } from '../models/ingredients';
+} from "../models/app-store";
+import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
+import { setAppError } from "./app-slice";
 
 export const calculateTotalPrice = (state: IConstructorIngredientState) => {
   const totalAddition = state.constructorIngredients.reduce(
@@ -18,7 +20,7 @@ export const calculateTotalPrice = (state: IConstructorIngredientState) => {
 
 export const addOrDeleteCountIngredients = (
   state: IIngredientsState,
-  type: 'add' | 'delete',
+  type: "add" | "delete",
   idIngredient: string
 ) => {
   let newCountIngredients: ICountIngredient[] = [];
@@ -33,7 +35,7 @@ export const addOrDeleteCountIngredients = (
   const deleteCount = (item: ICountIngredient) =>
     item.id === idIngredient ? { ...item, count: item.count - 1 } : item;
 
-  if (type === 'add') {
+  if (type === "add") {
     if (index !== -1) {
       newCountIngredients = state.countIngredients.map(addCount);
     } else {
@@ -63,4 +65,17 @@ export const getNewElementConstructor = (
     ...addedIngredient,
     sort_id: `${state.nextIndex}`,
   };
+};
+
+export const setErrorInAsyncThunk = (
+  error: Error,
+  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+  rejectWithValue: (value: unknown) => any
+) => {
+  const sendError = {
+    name: (error as Error).name,
+    message: (error as Error).message,
+  };
+  rejectWithValue(error);
+  dispatch(setAppError(sendError));
 };
