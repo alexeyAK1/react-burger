@@ -20,6 +20,7 @@ export default function Order() {
   const nameButton = "Оформить заказ";
   const history = useHistory();
   const abortController = new AbortController();
+  const abortSignal = abortController.signal;
   const totalSum = useSelector(
     (state: RootState) => state.constructorIngredients.totalSum
   );
@@ -37,10 +38,12 @@ export default function Order() {
     onCloseModal: onCloseModalAlert,
   } = useToggleModal();
 
+  abortSignal.addEventListener('abort', () => alert("отмена!"));
+
   const handleOnOpenModule = async () => {
     if (refreshToken) {
       if (bun) {
-        await dispatch(getOrderFetch({abortController}));
+        dispatch(getOrderFetch({ abortSignal }));
         onOpenModal();
       } else {
         onOpenModalAlert();
@@ -50,10 +53,12 @@ export default function Order() {
     }
   };
 
-  const handleOnCloseModule =(e?: React.MouseEvent<HTMLElement, MouseEvent> | undefined) => {
-    onCloseModal(e);
+  const handleOnCloseModule = (
+    e?: React.MouseEvent<HTMLElement, MouseEvent> | undefined
+  ) => {
     abortController.abort();
-  }
+    onCloseModal(e);
+  };
 
   return (
     <>

@@ -17,7 +17,7 @@ const initialState: IOrderState = {
 export const getOrderFetch = createAsyncThunk(
   "order/getOrderFetch",
   async function (
-    { abortController }: { abortController?: AbortController },
+    { abortSignal }: { abortSignal?: AbortSignal },
     { rejectWithValue, dispatch, getState }
   ) {
     try {
@@ -31,7 +31,7 @@ export const getOrderFetch = createAsyncThunk(
         ...getNElementArr(2, bun?._id),
       ];
 
-      const orderData = await getOrderData(ingredients, abortController);
+      const orderData = await getOrderData(ingredients, abortSignal);
       dispatch(setOrder(orderData));
       dispatch(setBun(null));
       dispatch(setIngredientsInConstructor([]));

@@ -75,36 +75,33 @@ export class Api {
   public async postFetch<T>(
     url: string,
     body: BodyInit,
-    abortController?: AbortController
+    abortSignal?: AbortSignal
   ) {
-    return this.mainFetch<T>(url, false, "POST", body, abortController);
+    return this.mainFetch<T>(url, false, "POST", body, abortSignal);
   }
 
   public async postProtectedFetch<T>(
     url: string,
     body: BodyInit,
-    abortController?: AbortController
+    abortSignal?: AbortSignal
   ) {
-    return this.mainFetch<T>(url, true, "POST", body, abortController);
+    return this.mainFetch<T>(url, true, "POST", body, abortSignal);
   }
 
   public async patchProtectedFetch<T>(
     url: string,
     body: BodyInit,
-    abortController?: AbortController
+    abortSignal?: AbortSignal
   ) {
-    return this.mainFetch<T>(url, true, "PATCH", body, abortController);
+    return this.mainFetch<T>(url, true, "PATCH", body, abortSignal);
   }
 
-  public async getProtectedFetch<T>(
-    url: string,
-    abortController?: AbortController
-  ) {
-    return this.mainFetch<T>(url, true, "GET", undefined, abortController);
+  public async getProtectedFetch<T>(url: string, abortSignal?: AbortSignal) {
+    return this.mainFetch<T>(url, true, "GET", undefined, abortSignal);
   }
 
-  public async getFetch<T>(url: string, abortController?: AbortController) {
-    return this.mainFetch<T>(url, false, "GET", undefined, abortController);
+  public async getFetch<T>(url: string, abortSignal?: AbortSignal) {
+    return this.mainFetch<T>(url, false, "GET", undefined, abortSignal);
   }
 
   private async mainFetch<T>(
@@ -112,11 +109,15 @@ export class Api {
     isProtect: boolean = false,
     method?: TMethod,
     body?: BodyInit,
-    abortController?: AbortController
+    abortSignal?: AbortSignal
   ) {
     const finalUrl = MAIN_URL + url;
+
+    if (isProtect && !this.localToken) {
+      await this.refreshTokenFetch();
+    }
     const fetchFields = method
-      ? this.getFiledRequest(method, isProtect, body, abortController)
+      ? this.getFiledRequest(method, isProtect, body, abortSignal)
       : undefined;
     const res = await fetch(finalUrl, fetchFields);
 
@@ -180,7 +181,7 @@ export class Api {
     method: TMethod,
     isProtect: boolean = false,
     body?: BodyInit,
-    abortController?: AbortController
+    abortSignal?: AbortSignal
   ) {
     const headers: { "Content-Type": string; Authorization?: string } = {
       "Content-Type": "application/json",
@@ -201,9 +202,8 @@ export class Api {
     if (body) {
       retObject.body = body;
     }
-
-    if (abortController) {
-      retObject.signal = abortController.signal;
+    if (abortSignal) {
+      retObject.signal = abortSignal;
     }
 
     return retObject;

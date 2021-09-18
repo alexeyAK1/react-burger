@@ -12,12 +12,12 @@ export const getIngredientData = async () => {
 
 export const getOrderData = async (
   ingredients: string[],
-  abortController?: AbortController
+  abortSignal?: AbortSignal
 ) => {
   return await api.postProtectedFetch<IOrder>(
     "/orders",
     JSON.stringify({ ingredients }),
-    abortController
+    abortSignal
   );
 };
 
