@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -21,6 +21,7 @@ export default function Order() {
   const history = useHistory();
   const abortController = new AbortController();
   const abortSignal = abortController.signal;
+  const isLoading = useSelector((state: RootState) => state.order.isLoading);
   const totalSum = useSelector(
     (state: RootState) => state.constructorIngredients.totalSum
   );
@@ -38,25 +39,29 @@ export default function Order() {
     onCloseModal: onCloseModalAlert,
   } = useToggleModal();
 
-  abortSignal.addEventListener('abort', () => alert("отмена!"));
+  abortSignal.addEventListener("abort", () => alert("отмена!"));
 
   const handleOnOpenModule = async () => {
-    if (refreshToken) {
-      if (bun) {
-        dispatch(getOrderFetch({ abortSignal }));
-        onOpenModal();
+    if (isLoading) {
+      if (refreshToken) {
+        if (bun) {
+          dispatch(getOrderFetch({ abortSignal }));
+          onOpenModal();
+        } else {
+          onOpenModalAlert();
+        }
       } else {
-        onOpenModalAlert();
+        history.push(LOGIN_PATH);
       }
-    } else {
-      history.push(LOGIN_PATH);
     }
   };
 
   const handleOnCloseModule = (
     e?: React.MouseEvent<HTMLElement, MouseEvent> | undefined
   ) => {
-    abortController.abort();
+    if (isLoading) {
+      abortController.abort();
+    }
     onCloseModal(e);
   };
 
