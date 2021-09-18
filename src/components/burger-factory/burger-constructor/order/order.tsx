@@ -42,7 +42,7 @@ export default function Order() {
   abortSignal.addEventListener("abort", () => alert("отмена!"));
 
   const handleOnOpenModule = async () => {
-    if (isLoading) {
+    if (!isLoading) {
       if (refreshToken) {
         if (bun) {
           dispatch(getOrderFetch({ abortSignal }));
