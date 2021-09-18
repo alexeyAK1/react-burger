@@ -1,10 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getOrderData } from '../api/agent';
-import { getNElementArr } from '../common/functions';
-import { IOrderState, IRootStore } from '../models/app-store';
-import { IOrder } from '../models/order';
-import { setBun, setIngredientsInConstructor } from './constructor-ingredients-slice';
-import { resetCountIngredients } from './ingredients-slice';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getOrderData } from "../api/agent";
+import { getNElementArr } from "../common/functions";
+import { IOrderState, IRootStore } from "../models/app-store";
+import { IOrder } from "../models/order";
+import {
+  setBun,
+  setIngredientsInConstructor,
+} from "./constructor-ingredients-slice";
+import { resetCountIngredients } from "./ingredients-slice";
 
 const initialState: IOrderState = {
   order: null,
@@ -12,8 +15,11 @@ const initialState: IOrderState = {
 };
 
 export const getOrderFetch = createAsyncThunk(
-  'order/getOrderFetch',
-  async function (_, { rejectWithValue, dispatch, getState }) {
+  "order/getOrderFetch",
+  async function (
+    { abortController }: { abortController?: AbortController },
+    { rejectWithValue, dispatch, getState }
+  ) {
     try {
       const {
         constructorIngredients: { constructorIngredients, bun },
@@ -25,7 +31,7 @@ export const getOrderFetch = createAsyncThunk(
         ...getNElementArr(2, bun?._id),
       ];
 
-      const orderData = await getOrderData(ingredients);
+      const orderData = await getOrderData(ingredients, abortController);
       dispatch(setOrder(orderData));
       dispatch(setBun(null));
       dispatch(setIngredientsInConstructor([]));
@@ -37,7 +43,7 @@ export const getOrderFetch = createAsyncThunk(
 );
 
 const orderSlice = createSlice({
-  name: 'order',
+  name: "order",
   initialState,
   reducers: {
     setOrder(state, action: PayloadAction<IOrder | null>) {

@@ -72,35 +72,51 @@ export class Api {
     this.localToken = "";
   }
 
-  public async postFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, false, "POST", body);
+  public async postFetch<T>(
+    url: string,
+    body: BodyInit,
+    abortController?: AbortController
+  ) {
+    return this.mainFetch<T>(url, false, "POST", body, abortController);
   }
 
-  public async postProtectedFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, true, "POST", body);
+  public async postProtectedFetch<T>(
+    url: string,
+    body: BodyInit,
+    abortController?: AbortController
+  ) {
+    return this.mainFetch<T>(url, true, "POST", body, abortController);
   }
 
-  public async patchProtectedFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, true, "PATCH", body);
+  public async patchProtectedFetch<T>(
+    url: string,
+    body: BodyInit,
+    abortController?: AbortController
+  ) {
+    return this.mainFetch<T>(url, true, "PATCH", body, abortController);
   }
 
-  public async getProtectedFetch<T>(url: string) {
-    return this.mainFetch<T>(url, true, "GET");
+  public async getProtectedFetch<T>(
+    url: string,
+    abortController?: AbortController
+  ) {
+    return this.mainFetch<T>(url, true, "GET", undefined, abortController);
   }
 
-  public async getFetch<T>(url: string) {
-    return this.mainFetch<T>(url);
+  public async getFetch<T>(url: string, abortController?: AbortController) {
+    return this.mainFetch<T>(url, false, "GET", undefined, abortController);
   }
 
   private async mainFetch<T>(
     url: string,
     isProtect: boolean = false,
     method?: TMethod,
-    body?: BodyInit
+    body?: BodyInit,
+    abortController?: AbortController
   ) {
     const finalUrl = MAIN_URL + url;
     const fetchFields = method
-      ? this.getFiledRequest(method, isProtect, body)
+      ? this.getFiledRequest(method, isProtect, body, abortController)
       : undefined;
     const res = await fetch(finalUrl, fetchFields);
 
@@ -163,7 +179,8 @@ export class Api {
   private getFiledRequest(
     method: TMethod,
     isProtect: boolean = false,
-    body?: BodyInit
+    body?: BodyInit,
+    abortController?: AbortController
   ) {
     const headers: { "Content-Type": string; Authorization?: string } = {
       "Content-Type": "application/json",
@@ -183,6 +200,10 @@ export class Api {
 
     if (body) {
       retObject.body = body;
+    }
+
+    if (abortController) {
+      retObject.signal = abortController.signal;
     }
 
     return retObject;

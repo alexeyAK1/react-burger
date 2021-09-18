@@ -18,7 +18,8 @@ import { LOGIN_PATH } from "../../../../routes/constants-path";
 
 export default function Order() {
   const nameButton = "Оформить заказ";
-  let history = useHistory();
+  const history = useHistory();
+  const abortController = new AbortController();
   const totalSum = useSelector(
     (state: RootState) => state.constructorIngredients.totalSum
   );
@@ -39,7 +40,7 @@ export default function Order() {
   const handleOnOpenModule = async () => {
     if (refreshToken) {
       if (bun) {
-        dispatch(getOrderFetch());
+        await dispatch(getOrderFetch({abortController}));
         onOpenModal();
       } else {
         onOpenModalAlert();
@@ -48,6 +49,11 @@ export default function Order() {
       history.push(LOGIN_PATH);
     }
   };
+
+  const handleOnCloseModule =(e?: React.MouseEvent<HTMLElement, MouseEvent> | undefined) => {
+    onCloseModal(e);
+    abortController.abort();
+  }
 
   return (
     <>
@@ -64,7 +70,7 @@ export default function Order() {
       </div>
 
       {isOpenModal ? (
-        <Modal onClose={onCloseModal}>
+        <Modal onClose={handleOnCloseModule}>
           <OrderDetails />
         </Modal>
       ) : null}
