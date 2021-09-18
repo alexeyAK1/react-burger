@@ -59,7 +59,7 @@ export class Api {
 
   set refreshToken(token: string) {
     if (token) {
-      setCookie(REFRESH_TOKEN, token);
+      setCookie(REFRESH_TOKEN, token, { path: "/" });
       this.localRefreshToken = token;
     } else {
       this.localRefreshToken = "";
@@ -154,7 +154,7 @@ export class Api {
 
       this.localToken = token;
       this.localRefreshToken = userTokens.refreshToken;
-      setCookie(REFRESH_TOKEN, userTokens.refreshToken);
+      setCookie(REFRESH_TOKEN, userTokens.refreshToken, { path: "/" });
     } else {
       this.logOut();
     }
