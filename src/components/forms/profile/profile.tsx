@@ -29,6 +29,8 @@ export default function Profile() {
     setFields,
     errors,
     setErrors,
+    isSend,
+    setIsSent,
     handleOnChange,
   } = useInitFields(nameFields);
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
@@ -54,7 +56,6 @@ export default function Profile() {
 
     await Object.keys(fields).forEach(async (name) => {
       if (!fields[name].length) {
-        console.log("fields[name]", fields[name]);
         setErrors((state) => ({
           ...state,
           [name]: "Обязательно к заполнению",
@@ -63,20 +64,25 @@ export default function Profile() {
       }
     });
 
-    console.log("isBlocked", isBlocked);
-
-    if (!isBlocked) {
-      setIsBlocked(true);
-      await dispatch(
-        updateUserFetch({
-          name: fields[nameFields.Name],
-          email: fields[nameFields.Login],
-          password: fields[nameFields.Password],
-        })
-      );
-      setIsBlocked(false);
-    }
+    setIsSent(true);
   };
+
+  useEffect(() => {
+    const send = async () => {
+      if (!isBlocked && isSend) {
+        setIsSent(false);
+        await dispatch(
+          updateUserFetch({
+            name: fields[nameFields.Name],
+            email: fields[nameFields.Login],
+            password: fields[nameFields.Password],
+          })
+        );
+      }
+    };
+
+    send();
+  }, [isSend, isBlocked, dispatch, fields, setIsSent]);
 
   const handleOnCancellation = () => {
     setFields((state) => ({
@@ -165,7 +171,9 @@ export default function Profile() {
           </form>
           <div className={`login_input_container ${styles.buttons_container}`}>
             <div>
-              <Link to={"#"} onClick={handleOnCancellation}>Отмена</Link>
+              <Link to={"#"} onClick={handleOnCancellation}>
+                Отмена
+              </Link>
             </div>
             <Button type="primary" size="medium" onClick={handleOnSendData}>
               Сохранить

@@ -3,6 +3,7 @@ import { useState } from "react";
 export const useInitFields = (nameFields: { [key: string]: string }) => {
   const initialFields: { [key: string]: string } = {};
   const [isBlocked, setIsBlocked] = useState(false);
+  const [isSend, setIsSent] = useState(false);
 
   Object.keys(nameFields).forEach((name) => {
     initialFields[nameFields[name]] = "";
@@ -16,6 +17,7 @@ export const useInitFields = (nameFields: { [key: string]: string }) => {
     const value = e.target.value;
 
     setIsBlocked(false);
+    setIsSent(false);
     setFields((state) => ({ ...state, [name]: value }));
     setErrors((state) => ({ ...state, [name]: "" }));
   };
@@ -27,6 +29,8 @@ export const useInitFields = (nameFields: { [key: string]: string }) => {
     setFields,
     errors,
     setErrors,
+    isSend,
+    setIsSent,
     handleOnChange,
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import {
@@ -16,8 +16,16 @@ enum nameFields {
 
 export default function ResetPassword() {
   const history = useHistory();
-  const { isBlocked, setIsBlocked, fields, errors, setErrors, handleOnChange } =
-    useInitFields(nameFields);
+  const {
+    isBlocked,
+    setIsBlocked,
+    fields,
+    errors,
+    setErrors,
+    isSend,
+    setIsSent,
+    handleOnChange,
+  } = useInitFields(nameFields);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleOnIconClick = () => {
     setIsShowPassword(!isShowPassword);
@@ -30,31 +38,35 @@ export default function ResetPassword() {
       }
     });
 
-    if (!isBlocked) {
-      setIsBlocked(true);
-
-      try {
-        const result = await getResetPassword(
-          fields[nameFields.Password],
-          fields[nameFields.Code]
-        );
-
-        setIsBlocked(false);
-
-        if (result.success) {
-          history.push(LOGIN_PATH);
-        }
-      } catch (error) {
-        setIsBlocked(false);
-        const [errorSuccess, errorMessage] = (error as Error).message.split(
-          "==="
-        );
-        alert(errorMessage);
-        console.log(errorSuccess);
-        console.log(error);
-      }
-    }
+    setIsSent(true);
   };
+
+  useEffect(() => {
+    const send = async () => {
+      if (!isBlocked && isSend) {
+        setIsBlocked(false);
+        try {
+          const result = await getResetPassword(
+            fields[nameFields.Password],
+            fields[nameFields.Code]
+          );
+
+          if (result.success) {
+            history.push(LOGIN_PATH);
+          }
+        } catch (error) {
+          const [errorSuccess, errorMessage] = (error as Error).message.split(
+            "==="
+          );
+          alert(errorMessage);
+          console.log(errorSuccess);
+          console.log(error);
+        }
+      }
+    };
+
+    send();
+  }, [isSend, isBlocked, fields, setIsSent, setIsBlocked, history]);
 
   return (
     <section className="login_container">

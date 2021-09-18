@@ -21,8 +21,16 @@ enum nameFields {
 export default function Register() {
   const dispatch = useDispatch();
   const errorText = useSelector((state: RootState) => state.user.errorText);
-  const { isBlocked, setIsBlocked, fields, errors, setErrors, handleOnChange } =
-    useInitFields(nameFields);
+  const {
+    isBlocked,
+    setIsBlocked,
+    fields,
+    errors,
+    setErrors,
+    isSend,
+    setIsSent,
+    handleOnChange,
+  } = useInitFields(nameFields);
 
   const handleOnSendData = async (e: React.SyntheticEvent<Element, Event>) => {
     e.preventDefault();
@@ -40,25 +48,30 @@ export default function Register() {
       }
     });
 
-    if (!isBlocked) {
-      setIsBlocked(true);
-
-      try {
-        await dispatch(
-          getRegisterFetch({
-            email: fields[nameFields.Email],
-            password: fields[nameFields.Password],
-            name: fields[nameFields.Name],
-          })
-        );
-        setIsBlocked(false);
-      } catch (error) {
-        console.log(error);
-        alert((error as Error).message);
-        setIsBlocked(false);
-      }
-    }
+    setIsSent(true);
   };
+
+  useEffect(() => {
+    const send = async () => {
+      if (!isBlocked && isSend) {
+        setIsSent(false);
+        try {
+          await dispatch(
+            getRegisterFetch({
+              email: fields[nameFields.Email],
+              password: fields[nameFields.Password],
+              name: fields[nameFields.Name],
+            })
+          );
+        } catch (error) {
+          console.log(error);
+          alert((error as Error).message);
+        }
+      }
+    };
+
+    send();
+  }, [isSend, isBlocked, dispatch, fields, setIsSent, setIsBlocked]);
 
   useEffect(() => {
     if (errorText) {

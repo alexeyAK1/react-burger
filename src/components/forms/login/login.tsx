@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -21,33 +21,49 @@ enum nameFields {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const { isBlocked, setIsBlocked, fields, errors, setErrors, handleOnChange } =
-    useInitFields(nameFields);
-  const handleOnSendData = async (e: React.FormEvent) => {
+  const {
+    isBlocked,
+    setIsBlocked,
+    fields,
+    errors,
+    setErrors,
+    isSend,
+    setIsSent,
+    handleOnChange,
+  } = useInitFields(nameFields);
+
+  const handleOnSendData = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     Object.keys(fields).forEach((name) => {
-      if (!fields[name].length) {
+      if (fields[name].length <= 0) {
+        setIsBlocked(true);
         setErrors((state) => ({
           ...state,
           [name]: "Обязательно к заполнению",
         }));
-        setIsBlocked(true);
       }
     });
 
-    if (!isBlocked) {
-      setIsBlocked(true);
-      await dispatch(
-        getLoginFetch({
-          email: fields[nameFields.Email],
-          password: fields[nameFields.Password],
-        })
-      );
-      setIsBlocked(false);
-    }
+    setIsSent(true);
   };
+
+  useEffect(() => {
+    const send = async () => {
+      if (!isBlocked && isSend) {
+        setIsSent(false);
+        await dispatch(
+          getLoginFetch({
+            email: fields[nameFields.Email],
+            password: fields[nameFields.Password],
+          })
+        );
+      }
+    };
+
+    send();
+  }, [isSend, isBlocked, dispatch, fields, setIsSent]);
 
   return (
     <section className="login_container">

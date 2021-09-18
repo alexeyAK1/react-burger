@@ -33,7 +33,6 @@ export default function ForgotPassword() {
 
         try {
           const result = await getChangePassword(email);
-
           setIsBlocked(false);
 
           if (result.success) {
