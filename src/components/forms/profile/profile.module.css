@@ -1,0 +1,14 @@
+.buttons_container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.buttons_container a{
+    padding: calc(var(--offset-base-size) * 2);
+    margin-right: calc(var(--offset-base-size) * 5);
+    text-decoration: none;
+    color: var(--colors-interface-accent);
+}
+.buttons_container a:visited{
+    color: var(--colors-interface-accent);
+}

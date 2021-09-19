@@ -1,34 +1,41 @@
-import { IIngredientsItem } from '../models/ingredients';
-import { MAIN_URL } from '../common/constants';
-import { IOrder } from '../models/order';
+import { IIngredientsItem } from "../models/ingredients";
+import { IOrder } from "../models/order";
+import { Api } from "./api";
+
+const api = Api.getInstance();
 
 export const getIngredientData = async () => {
-  const res = await fetch(MAIN_URL + '/ingredients');
-
-  if (res.status === 200) {
-    const fetchData = await res.json();
-
-    return fetchData.data as IIngredientsItem[];
-  }
-
-  throw new Error('' + res.status);
+  return await (
+    await api.getFetch<{ data: IIngredientsItem[] }>("/ingredients")
+  ).data;
 };
 
-export const getOrderData = async (ingredients: string[]) => {
-  const res = await fetch(MAIN_URL + '/orders', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ingredients }),
-  });
+export const getOrderData = async (
+  ingredients: string[],
+  abortSignal?: AbortSignal
+) => {
+  return await api.postProtectedFetch<IOrder>(
+    "/orders",
+    JSON.stringify({ ingredients }),
+    abortSignal
+  );
+};
 
-  if (res.status === 200) {
-    const fetchData = await res.json();
+interface IChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
 
-    return fetchData as IOrder;
-  }
+export const getChangePassword = async (email: string) => {
+  return await api.postFetch<IChangePasswordResponse>(
+    "/password-reset",
+    JSON.stringify({ email })
+  );
+};
 
-  throw new Error('' + res.status);
+export const getResetPassword = async (password: string, token: string) => {
+  return await api.postFetch<IChangePasswordResponse>(
+    "/password-reset/reset",
+    JSON.stringify({ password, token })
+  );
 };

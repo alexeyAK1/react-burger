@@ -1,0 +1,6 @@
+.login_layout_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: calc(var(--offset-base-size)  * 45);
+}

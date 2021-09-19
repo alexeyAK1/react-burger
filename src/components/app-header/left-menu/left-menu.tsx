@@ -10,7 +10,7 @@ import MenuButton from '../menu-button/menu-button';
 export default function LeftMenu() {
   return (
     <menu className={`text text_type_main-default ${styles.left_menu}`}>
-      <MenuButton Icon={BurgerIcon} link="#" isSelected={true}>
+      <MenuButton Icon={BurgerIcon} link="/">
         <span>Конструктор</span>
       </MenuButton>
       <MenuButton Icon={ListIcon} link="#">

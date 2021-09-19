@@ -1,14 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getIngredientData } from '../api/agent';
-import { bunName } from '../common/constants';
-import { IIngredientsState } from '../models/app-store';
-import { ICountIngredient, IIngredientsItem } from '../models/ingredients';
-import { setAppError } from './app-slice';
-import { addOrDeleteCountIngredients } from './common';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getIngredientData } from "../api/agent";
+import { bunName } from "../common/constants";
+import { IIngredientsState } from "../models/app-store";
+import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
+import { addOrDeleteCountIngredients, setErrorInAsyncThunk } from "./common";
 import {
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
-} from './constructor-ingredients-slice';
+} from "./constructor-ingredients-slice";
 
 const initialState: IIngredientsState = {
   ingredients: [],
@@ -17,29 +16,28 @@ const initialState: IIngredientsState = {
 };
 
 export const getIngredientFetch = createAsyncThunk(
-  'ingredients/ingredientFetch',
+  "ingredients/ingredientFetch",
   async function (_, { rejectWithValue, dispatch }) {
     try {
       const ingredientsData = await getIngredientData();
 
       dispatch(setIngredients(ingredientsData));
     } catch (error) {
-      rejectWithValue(error);
-      dispatch(setAppError(error));
+      setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
     }
   }
 );
 
 const ingredientsSlice = createSlice({
-  name: 'ingredients',
+  name: "ingredients",
   initialState,
   reducers: {
     setIngredients(state, action: PayloadAction<IIngredientsItem[]>) {
       state.ingredients = action.payload;
     },
-    resetCountIngredients(state, action: PayloadAction<ICountIngredient[]>){
+    resetCountIngredients(state, action: PayloadAction<ICountIngredient[]>) {
       state.countIngredients = action.payload;
-    }
+    },
   },
   extraReducers: {
     // @ts-expect-error
@@ -56,25 +54,25 @@ const ingredientsSlice = createSlice({
     },
     // @ts-expect-error
     [addIngredientInConstructor]: (
-      state,
+      state: IIngredientsState,
       action: PayloadAction<IIngredientsItem>
     ) => {
       if (action.payload.type !== bunName) {
         state.countIngredients = addOrDeleteCountIngredients(
           state,
-          'add',
+          "add",
           action.payload._id
         );
       }
     },
     // @ts-expect-error
     [deleteIngredientFromConstructor]: (
-      state,
+      state: IIngredientsState,
       action: PayloadAction<IIngredientsItem>
     ) => {
       state.countIngredients = addOrDeleteCountIngredients(
         state,
-        'delete',
+        "delete",
         action.payload._id
       );
     },
@@ -83,4 +81,5 @@ const ingredientsSlice = createSlice({
 
 export default ingredientsSlice.reducer;
 
-export const { setIngredients, resetCountIngredients } = ingredientsSlice.actions;
+export const { setIngredients, resetCountIngredients } =
+  ingredientsSlice.actions;
