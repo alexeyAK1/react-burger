@@ -25,6 +25,7 @@ import {
   REGISTER_PATH,
   RESET_PASSWORD_PATH,
 } from "./constants-path";
+import ProtectedFromAuthorizedRoute from "./protected-from-authorized-route/protected-from-authorized-route";
 import ProtectedRoute from "./protected-route/protected-route";
 
 export default function Routes() {
@@ -47,34 +48,18 @@ export default function Routes() {
           <Route path={MAIN_PATH} exact>
             <BurgerFactoryPage />
           </Route>
-          <ProtectedRoute
-            protectionFromAuthorized={true}
-            redirectTo={MAIN_PATH}
-            path={LOGIN_PATH}
-          >
+          <ProtectedFromAuthorizedRoute path={LOGIN_PATH}>
             <LoginPage />
-          </ProtectedRoute>
-          <ProtectedRoute
-            protectionFromAuthorized={true}
-            redirectTo={MAIN_PATH}
-            path={REGISTER_PATH}
-          >
+          </ProtectedFromAuthorizedRoute>
+          <ProtectedFromAuthorizedRoute path={REGISTER_PATH}>
             <RegisterPage />
-          </ProtectedRoute>
-          <ProtectedRoute
-            protectionFromAuthorized={true}
-            redirectTo={MAIN_PATH}
-            path={FORGOT_PASSWORD_PATH}
-          >
+          </ProtectedFromAuthorizedRoute>
+          <ProtectedFromAuthorizedRoute path={FORGOT_PASSWORD_PATH}>
             <ForgotPasswordPage />
-          </ProtectedRoute>
-          <ProtectedRoute
-            protectionFromAuthorized={true}
-            redirectTo={MAIN_PATH}
-            path={RESET_PASSWORD_PATH}
-          >
+          </ProtectedFromAuthorizedRoute>
+          <ProtectedFromAuthorizedRoute path={RESET_PASSWORD_PATH}>
             <ResetPasswordPage />
-          </ProtectedRoute>
+          </ProtectedFromAuthorizedRoute>
           <ProtectedRoute path={PROFILE_PATH}>
             <ProfilePage />
           </ProtectedRoute>

@@ -2,21 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route, RouteProps } from "react-router-dom";
 import { RootState } from "../../services/store";
-import { LOGIN_PATH } from "../constants-path";
+import { MAIN_PATH } from "../constants-path";
 
 interface IProps extends RouteProps {
   children: React.ReactChild;
-  redirectTo?: string;
-  protectionFromAuthorized?: boolean;
 }
 
 interface ILocalState {
   state: { from: string };
 }
 
-export default function ProtectedRoute({
+export default function ProtectedFromAuthorizedRoute({
   children,
-  redirectTo = LOGIN_PATH,
   ...rest
 }: IProps) {
   const refreshToken = useSelector(
@@ -32,15 +29,16 @@ export default function ProtectedRoute({
     <Route
       {...rest}
       render={({ location }) => {
-        const localState = (location as ILocalState).state || {};
-
-        return isUserAuthorized ? (
+        return !isUserAuthorized ? (
           children
         ) : (
           <Redirect
             to={{
-              pathname: redirectTo,
-              state: { ...localState, from: location.pathname },
+              pathname:
+                ((location as ILocalState).state &&
+                  (location as ILocalState).state.from) ||
+                MAIN_PATH,
+              state: {},
             }}
           />
         );
