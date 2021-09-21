@@ -37,6 +37,8 @@ function IngredientsList({
   bun,
   onChangeInView,
 }: IProps) {
+let numElement = 0;
+
   const getCount = useCallback(
     (item: IIngredientsItem) => {
       if (item.type === bunName) {
@@ -75,11 +77,14 @@ function IngredientsList({
             >
               <ul className={`${styles.category_ingredients_container}`}>
                 {filteredDate.map((filteredItem) => {
+                  numElement++;
+
                   return (
                     <IngredientCard
                       ingredientData={filteredItem}
                       key={filteredItem._id}
                       count={getCount(filteredItem)}
+                      numElement={numElement}
                     />
                   );
                 })}

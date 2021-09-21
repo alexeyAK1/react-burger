@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   Button,
@@ -7,11 +9,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from "./profile.module.css";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../services/store";
 import Loader from "../../ui/loader/loader";
 import { useInitFields } from "../hooks/use-init-fields";
 import { getUserFetch, updateUserFetch } from "../../../services/user-slice";
+import { variantsNextRouter } from "../common/constants";
 
 enum nameFields {
   Name = "name",
@@ -108,79 +110,97 @@ export default function Profile() {
   }, [setFields, user]);
 
   return (
-    <section className="login_container">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <form onSubmit={handleOnSendData}>
-            <div className="login_input_container">
-              <Input
-                type={"text"}
-                placeholder={"Имя"}
-                onChange={handleOnChange}
-                icon={
-                  focusedName === nameFields.Name ? "CloseIcon" : "EditIcon"
-                }
-                value={fields[nameFields.Name]}
-                name={nameFields.Name}
-                error={!!errors[nameFields.Name]}
-                errorText={errors[nameFields.Name]}
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
-                onIconClick={handleOnIconClick}
-              />
+    <motion.section
+      className="login_container"
+      variants={variantsNextRouter}
+      initial="hidden"
+      exit="exit"
+      animate="visible"
+    >
+      <AnimatePresence exitBeforeEnter>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <motion.div
+            className="login_container"
+            variants={variantsNextRouter}
+            initial="hidden"
+            exit="exit"
+            animate="visible"
+          >
+            <form onSubmit={handleOnSendData}>
+              <div className="login_input_container">
+                <Input
+                  type={"text"}
+                  placeholder={"Имя"}
+                  onChange={handleOnChange}
+                  icon={
+                    focusedName === nameFields.Name ? "CloseIcon" : "EditIcon"
+                  }
+                  value={fields[nameFields.Name]}
+                  name={nameFields.Name}
+                  error={!!errors[nameFields.Name]}
+                  errorText={errors[nameFields.Name]}
+                  onFocus={handleOnFocus}
+                  onBlur={handleOnBlur}
+                  onIconClick={handleOnIconClick}
+                />
+              </div>
+              <div className="login_input_container">
+                <Input
+                  type={"text"}
+                  placeholder={"Логин"}
+                  onChange={handleOnChange}
+                  icon={
+                    focusedName === nameFields.Login ? "CloseIcon" : "EditIcon"
+                  }
+                  value={fields[nameFields.Login]}
+                  name={nameFields.Login}
+                  error={!!errors[nameFields.Login]}
+                  errorText={errors[nameFields.Login]}
+                  onFocus={handleOnFocus}
+                  onBlur={handleOnBlur}
+                  onIconClick={handleOnIconClick}
+                />
+              </div>
+              <div className="login_input_container">
+                <Input
+                  type={"password"}
+                  placeholder={"Пароль"}
+                  onChange={handleOnChange}
+                  icon={
+                    focusedName === nameFields.Password
+                      ? "CloseIcon"
+                      : "EditIcon"
+                  }
+                  value={fields[nameFields.Password]}
+                  name={nameFields.Password}
+                  error={!!errors[nameFields.Password]}
+                  errorText={errors[nameFields.Password]}
+                  onFocus={handleOnFocus}
+                  onBlur={handleOnBlur}
+                  onIconClick={handleOnIconClick}
+                />
+              </div>
+              <button type="submit" style={{ display: "none" }}>
+                Submit
+              </button>
+            </form>
+            <div
+              className={`login_input_container ${styles.buttons_container}`}
+            >
+              <div>
+                <Link to={"#"} onClick={handleOnCancellation}>
+                  Отмена
+                </Link>
+              </div>
+              <Button type="primary" size="medium" onClick={handleOnSendData}>
+                Сохранить
+              </Button>
             </div>
-            <div className="login_input_container">
-              <Input
-                type={"text"}
-                placeholder={"Логин"}
-                onChange={handleOnChange}
-                icon={
-                  focusedName === nameFields.Login ? "CloseIcon" : "EditIcon"
-                }
-                value={fields[nameFields.Login]}
-                name={nameFields.Login}
-                error={!!errors[nameFields.Login]}
-                errorText={errors[nameFields.Login]}
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
-                onIconClick={handleOnIconClick}
-              />
-            </div>
-            <div className="login_input_container">
-              <Input
-                type={"password"}
-                placeholder={"Пароль"}
-                onChange={handleOnChange}
-                icon={
-                  focusedName === nameFields.Password ? "CloseIcon" : "EditIcon"
-                }
-                value={fields[nameFields.Password]}
-                name={nameFields.Password}
-                error={!!errors[nameFields.Password]}
-                errorText={errors[nameFields.Password]}
-                onFocus={handleOnFocus}
-                onBlur={handleOnBlur}
-                onIconClick={handleOnIconClick}
-              />
-            </div>
-            <button type="submit" style={{ display: "none" }}>
-              Submit
-            </button>
-          </form>
-          <div className={`login_input_container ${styles.buttons_container}`}>
-            <div>
-              <Link to={"#"} onClick={handleOnCancellation}>
-                Отмена
-              </Link>
-            </div>
-            <Button type="primary" size="medium" onClick={handleOnSendData}>
-              Сохранить
-            </Button>
-          </div>
-        </>
-      )}
-    </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.section>
   );
 }

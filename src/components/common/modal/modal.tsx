@@ -1,12 +1,12 @@
-import React, { ReactChild, MouseEvent, useEffect } from "react";
+import React, { ReactChild, MouseEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import "animate.css";
 
 import ModalHeader from "./modal-header/modal-header";
 import ModalOverlay from "./modal-overlay/modal-overlay";
 
 import styles from "./modal.module.css";
-import { useAnimateModal } from "./hooks/use_animate_modal";
 
 const modalRoot = document.getElementById("react-modals");
 
@@ -20,19 +20,30 @@ interface IProps {
   onClose: (e?: MouseEvent<HTMLElement>) => void;
 }
 
+const variants = {
+  visible: { y: 0, scaleX: 1 },
+  hidden: { y: "100vh", scaleX: 0.1 },
+};
+
 export default function Modal({
   children,
   header,
   isAnimated = true,
-  animateClassIn = "animate__fadeInUp",
-  animateClassOut = " animate__fadeOutDown",
-  animateTime = 1000,
+  animateTime = 0.5,
   onClose,
 }: IProps) {
-  const { isAnimate, isCloseAnimate, getCloseAnimation } = useAnimateModal(
-    isAnimated,
-    animateTime
-  );
+  const [timerId, setTimerId] = useState(0);
+  const [isEndAnimate, setIsEndAnimate] = useState(false);
+  const [isAnimationGoingOn, setIsAnimationGoingOn] = useState(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timerId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       e.preventDefault();
@@ -43,13 +54,25 @@ export default function Modal({
   const handleOnClose = (
     e?: React.MouseEvent<HTMLElement, globalThis.MouseEvent>
   ) => {
-    getCloseAnimation(() => {
+    setIsAnimationGoingOn(true);
+    setIsEndAnimate(true);
+
+    const timeout = window.setTimeout(() => {
       onClose(e);
-    });
+    }, animateTime * 1000);
+
+    setTimerId(timeout);
   };
 
   useEffect(() => {
+    const goAnimate = async () => {
+      setIsAnimationGoingOn(true);
+      await controls.start("visible");
+      setIsAnimationGoingOn(false);
+    };
+
     window.addEventListener("keydown", onKeyDown);
+    goAnimate();
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
@@ -59,15 +82,26 @@ export default function Modal({
 
   return createPortal(
     <>
-      <ModalOverlay onClose={handleOnClose} isAnimate={isAnimate}>
-        <div
-          className={`p-10 pb-15 ${styles.modal} animate__animated ${
-            isCloseAnimate ? animateClassOut : animateClassIn
-          }`}
-        >
-          <ModalHeader onClose={handleOnClose}>{header}</ModalHeader>
-          <div className={styles.modal_body}>{children}</div>
-        </div>
+      <ModalOverlay onClose={handleOnClose} isAnimate={isAnimationGoingOn}>
+        <AnimatePresence>
+          {!isEndAnimate && (
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate={controls}
+              exit="hidden"
+              transition={{
+                duration: animateTime,
+                type: "spring",
+                stiffness: 80,
+              }}
+              className={`p-10 pb-15 ${styles.modal}`}
+            >
+              <ModalHeader onClose={handleOnClose}>{header}</ModalHeader>
+              <div className={styles.modal_body}>{children}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </ModalOverlay>
     </>,
     modalRoot!
