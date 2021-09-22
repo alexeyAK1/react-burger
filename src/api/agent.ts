@@ -11,13 +11,11 @@ export const getIngredientData = async () => {
 };
 
 export const getOrderData = async (
-  ingredients: string[],
-  abortSignal?: AbortSignal
+  ingredients: string[]
 ) => {
   return await api.postProtectedFetch<IOrder>(
     "/orders",
-    JSON.stringify({ ingredients }),
-    abortSignal
+    JSON.stringify({ ingredients })
   );
 };
 

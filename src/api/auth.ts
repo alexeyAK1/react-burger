@@ -1,5 +1,6 @@
 import {
   ILogoutResponse,
+  IRefreshResponse,
   IUserDataResponse,
   IUserResponse,
 } from "../models/user";
@@ -47,3 +48,21 @@ export const updateUser = async (
       JSON.stringify({ email, password, name })
     );
   };
+
+  export const getRefreshToken = async () => {
+    const userTokens = await api.postFetch<IRefreshResponse>(
+      "/auth/token",
+      JSON.stringify({ token: api.refreshToken })
+    );
+
+    if (userTokens) {
+      const token = userTokens.accessToken.split("Bearer ")[1];
+
+      api.token = token;
+      api.refreshToken = userTokens.refreshToken;
+    } else {
+      api.logOut();
+    }
+
+    return userTokens;
+  }

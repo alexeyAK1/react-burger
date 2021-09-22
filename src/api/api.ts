@@ -22,11 +22,13 @@ export class Api {
   private static instance: Api;
   private localToken: string;
   private localRefreshToken: string;
+  private localAbortController: AbortController | null;
 
   private constructor() {
     const refreshToken = getCookie(REFRESH_TOKEN);
     this.localToken = "";
     this.localRefreshToken = "";
+    this.localAbortController = null;
 
     if (refreshToken) {
       this.localRefreshToken = refreshToken;
@@ -70,55 +72,59 @@ export class Api {
     deleteCookie(REFRESH_TOKEN);
     this.localRefreshToken = "";
     this.localToken = "";
+    this.localAbortController = null;
   }
 
-  public async postFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, false, "POST", body, abortSignal);
+  public setAbortController() {
+    this.localAbortController = new AbortController();
   }
 
-  public async postProtectedFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, true, "POST", body, abortSignal);
+  public getAbortFetch() {
+    if (this.localAbortController) {
+      this.localAbortController.abort();
+    }
   }
 
-  public async patchProtectedFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, true, "PATCH", body, abortSignal);
+  public async postFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>(url, false, "POST", body);
   }
 
-  public async getProtectedFetch<T>(url: string, abortSignal?: AbortSignal) {
-    return this.mainFetch<T>(url, true, "GET", undefined, abortSignal);
+  public async postProtectedFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>(url, true, "POST", body);
   }
 
-  public async getFetch<T>(url: string, abortSignal?: AbortSignal) {
-    return this.mainFetch<T>(url, false, "GET", undefined, abortSignal);
+  public async patchProtectedFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>(url, true, "PATCH", body);
+  }
+
+  public async getProtectedFetch<T>(url: string) {
+    return this.mainFetch<T>(url, true, "GET", undefined);
+  }
+
+  public async getFetch<T>(url: string) {
+    return this.mainFetch<T>(url, false, "GET", undefined);
   }
 
   private async mainFetch<T>(
     url: string,
     isProtect: boolean = false,
     method?: TMethod,
-    body?: BodyInit,
-    abortSignal?: AbortSignal
+    body?: BodyInit
   ) {
     const finalUrl = MAIN_URL + url;
+
+    if(this.localAbortController?.signal.aborted){
+      this.localAbortController = null;
+    }
 
     if (isProtect && !this.localToken) {
       await this.refreshTokenFetch();
     }
+
     const fetchFields = method
-      ? this.getFiledRequest(method, isProtect, body, abortSignal)
+      ? this.getFiledRequest(method, isProtect, body)
       : undefined;
+
     const res = await fetch(finalUrl, fetchFields);
 
     if (res.status === 200) {
@@ -136,6 +142,7 @@ export class Api {
         const res = await fetch(finalUrl, newFetchFields);
 
         if (res.status === 200) {
+          this.localAbortController = null;
           return (await res.json()) as T;
         }
 
@@ -180,8 +187,7 @@ export class Api {
   private getFiledRequest(
     method: TMethod,
     isProtect: boolean = false,
-    body?: BodyInit,
-    abortSignal?: AbortSignal
+    body?: BodyInit
   ) {
     const headers: { "Content-Type": string; Authorization?: string } = {
       "Content-Type": "application/json",
@@ -202,8 +208,8 @@ export class Api {
     if (body) {
       retObject.body = body;
     }
-    if (abortSignal) {
-      retObject.signal = abortSignal;
+    if (this.localAbortController) {
+      retObject.signal = this.localAbortController.signal;
     }
 
     return retObject;

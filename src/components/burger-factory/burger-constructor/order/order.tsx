@@ -15,12 +15,13 @@ import OrderDetails from "../../../order-details/order-details";
 import styles from "./order.module.css";
 import { useHistory } from "react-router-dom";
 import { LOGIN_PATH } from "../../../../routes/constants-path";
+import { Api } from "../../../../api/api";
+
+const api = Api.getInstance();
 
 export default function Order() {
   const nameButton = "Оформить заказ";
   const history = useHistory();
-  const abortController = new AbortController();
-  const abortSignal = abortController.signal;
   const isLoading = useSelector((state: RootState) => state.order.isLoading);
   const totalSum = useSelector(
     (state: RootState) => state.constructorIngredients.totalSum
@@ -39,14 +40,13 @@ export default function Order() {
     onCloseModal: onCloseModalAlert,
   } = useToggleModal();
 
-  abortSignal.addEventListener("abort", () => alert("отмена!"));
-
   const handleOnOpenModule = async () => {
     if (!isLoading) {
       if (refreshToken) {
         if (bun) {
-          dispatch(getOrderFetch({ abortSignal }));
+          api.setAbortController();
           onOpenModal();
+          await dispatch(getOrderFetch());
         } else {
           onOpenModalAlert();
         }
@@ -60,7 +60,7 @@ export default function Order() {
     e?: React.MouseEvent<HTMLElement, MouseEvent> | undefined
   ) => {
     if (isLoading) {
-      abortController.abort();
+      api.getAbortFetch();
     }
     onCloseModal(e);
   };
