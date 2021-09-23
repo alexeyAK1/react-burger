@@ -13,6 +13,17 @@ export enum errorAuthorized {
   emailOrPasswordAreIncorrect = "email or password are incorrect",
 }
 
+interface IFetchProps {
+  url: string;
+  isProtect?: boolean;
+  method?: TMethod;
+  body?: BodyInit;
+}
+
+interface IFetchPropsWithError extends IFetchProps {
+  responseError: Response;
+}
+
 type TMethod = "GET" | "POST" | "PATCH";
 
 export const MAIN_URL = "https://norma.nomoreparties.space/api";
@@ -86,75 +97,87 @@ export class Api {
   }
 
   public async postFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, false, "POST", body);
+    return this.mainFetch<T>({ url, isProtect: false, method: "POST", body });
   }
 
   public async postProtectedFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, true, "POST", body);
+    return this.mainFetch<T>({ url, isProtect: true, method: "POST", body });
   }
 
   public async patchProtectedFetch<T>(url: string, body: BodyInit) {
-    return this.mainFetch<T>(url, true, "PATCH", body);
+    return this.mainFetch<T>({ url, isProtect: true, method: "PATCH", body });
   }
 
   public async getProtectedFetch<T>(url: string) {
-    return this.mainFetch<T>(url, true, "GET", undefined);
+    return this.mainFetch<T>({ url, isProtect: true, method: "GET" });
   }
 
   public async getFetch<T>(url: string) {
-    return this.mainFetch<T>(url, false, "GET", undefined);
+    return this.mainFetch<T>({ url, method: "GET" });
   }
 
-  private async mainFetch<T>(
-    url: string,
-    isProtect: boolean = false,
-    method?: TMethod,
-    body?: BodyInit
-  ) {
+  private async mainFetch<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    this.ifNeedInitialRestartAbortController();
+    await this.ifNeedInitialRefreshToken(isProtect);
+
     const finalUrl = MAIN_URL + url;
-
-    if(this.localAbortController?.signal.aborted){
-      this.localAbortController = null;
-    }
-
-    if (isProtect && !this.localToken) {
-      await this.refreshTokenFetch();
-    }
-
-    const fetchFields = method
-      ? this.getFiledRequest(method, isProtect, body)
-      : undefined;
-
-    const res = await fetch(finalUrl, fetchFields);
+    const res = await this.simpleFetch({
+      url: finalUrl,
+      isProtect,
+      method,
+      body,
+    });
 
     if (res.status === 200) {
       return (await res.json()) as T;
     }
-    const fetchError = (await res.json()) as IErrorServer;
+
+    return await this.refreshTokenOrLogout<T>({
+      url: finalUrl,
+      isProtect,
+      method,
+      body,
+      responseError: res,
+    });
+  }
+
+  private ifNeedInitialRestartAbortController() {
+    if (this.localAbortController?.signal.aborted) {
+      this.localAbortController = null;
+    }
+  }
+
+  private async ifNeedInitialRefreshToken(isProtect: boolean) {
+    if (isProtect && !this.localToken) {
+      await this.refreshTokenFetch();
+    }
+  }
+
+  private async refreshTokenOrLogout<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+    responseError,
+  }: IFetchPropsWithError) {
+    const fetchError = (await responseError.json()) as IErrorServer;
 
     if (this.isNeedRefreshToken(fetchError)) {
       await this.refreshTokenFetch();
-
-      if (this.localRefreshToken) {
-        const newFetchFields = method
-          ? this.getFiledRequest(method, isProtect, body)
-          : undefined;
-        const res = await fetch(finalUrl, newFetchFields);
-
-        if (res.status === 200) {
-          this.localAbortController = null;
-          return (await res.json()) as T;
-        }
-
-        this.logOut();
-        throw new Error(`401===${errorAuthorized.unauthorized}`);
-      } else {
-        this.logOut();
-        throw new Error(`401===${errorAuthorized.unauthorized}`);
-      }
+      return await this.getNewFetchAfterTokenRefresh<T>({
+        url,
+        isProtect,
+        method,
+        body,
+      });
     } else {
       this.logOut();
-      throw new Error("" + res.status + "===" + fetchError.message);
+      throw new Error("" + responseError.status + "===" + fetchError.message);
     }
   }
 
@@ -182,6 +205,45 @@ export class Api {
     } else {
       this.logOut();
     }
+  }
+
+  private async getNewFetchAfterTokenRefresh<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    if (this.localRefreshToken) {
+      const res = await this.simpleFetch({
+        url,
+        isProtect,
+        method,
+        body,
+      });
+
+      if (res.status === 200) {
+        this.localAbortController = null;
+        return (await res.json()) as T;
+      }
+
+      this.logOut();
+      throw new Error(`401===${errorAuthorized.unauthorized}`);
+    } else {
+      this.logOut();
+      throw new Error(`401===${errorAuthorized.unauthorized}`);
+    }
+  }
+
+  private async simpleFetch({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    const newFetchFields = method
+      ? this.getFiledRequest(method, isProtect, body)
+      : undefined;
+    return await fetch(url, newFetchFields);
   }
 
   private getFiledRequest(
