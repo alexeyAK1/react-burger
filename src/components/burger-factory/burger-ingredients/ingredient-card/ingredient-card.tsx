@@ -1,16 +1,16 @@
-import React, { memo, useEffect, useRef } from "react";
-import { AnimatePresence, motion, useAnimation, Variants } from "framer-motion";
-import { DragPreviewImage, useDrag } from "react-dnd";
-import { useDispatch } from "react-redux";
 import {
   Counter,
-  CurrencyIcon,
+  CurrencyIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
-
-import styles from "./ingredient-card.module.css";
-import { IIngredientsItem } from "../../../../models/ingredients";
+import { AnimatePresence, motion, useAnimation, Variants } from "framer-motion";
+import React, { memo, useEffect, useRef } from "react";
+import { DragPreviewImage, useDrag } from "react-dnd";
+import { Preview } from "react-dnd-multi-backend";
+import { useDispatch } from "react-redux";
 import { ItemTypes } from "../../../../models/drag-and-drop";
+import { IIngredientsItem } from "../../../../models/ingredients";
 import { setCurrentIngredient } from "../../../../services/current-ingredient-slice";
+import styles from "./ingredient-card.module.css";
 
 interface IProps {
   ingredientData: IIngredientsItem;
@@ -74,6 +74,28 @@ function IngredientCard({ ingredientData, count = 0, numElement = 0 }: IProps) {
     },
   }));
 
+  //TODO placeholder for mobile version
+  const generatePreview = (props: any) => {
+    const { item, style } = props;
+    const newStyle = {
+      ...style,
+      height: "100px",
+      width: "100px",
+      opacity: 1,
+      backgroundColor: "aqua",
+    };
+    console.log(item, style);
+    return (
+      <div style={newStyle}>
+        <DragPreviewImage
+          connect={preview}
+          src={ingredientData.image}
+          {...item}
+        />
+      </div>
+    );
+  };
+
   const handleOnClick = () => {
     dispatch(setCurrentIngredient(ingredientData));
   };
@@ -97,6 +119,7 @@ function IngredientCard({ ingredientData, count = 0, numElement = 0 }: IProps) {
   return (
     <>
       <DragPreviewImage connect={preview} src={ingredientData.image} />
+      <Preview generator={generatePreview} />
       <motion.li
         className={styles.ingredient_card}
         style={{ opacity }}
