@@ -1,6 +1,7 @@
-import React, { memo, useCallback } from 'react';
-import { IIngredientsItem } from '../../../../models/ingredients';
-import IngredientItem from '../ingredient-item/ingredient-item';
+import { AnimateSharedLayout } from "framer-motion";
+import React, { memo, useCallback } from "react";
+import { IIngredientsItem } from "../../../../models/ingredients";
+import IngredientItem from "../ingredient-item/ingredient-item";
 
 interface IProps {
   constructorIngredients: IIngredientsItem[];
@@ -18,7 +19,7 @@ function ConstructorIngredientsList({
     [deleteItem]
   );
   return (
-    <>
+    <AnimateSharedLayout>
       {constructorIngredients.map((ingredient) => (
         <IngredientItem
           price={ingredient.price / 100}
@@ -29,7 +30,7 @@ function ConstructorIngredientsList({
           onDeleteItem={handleDeleteItem}
         />
       ))}
-    </>
+    </AnimateSharedLayout>
   );
 }
 
