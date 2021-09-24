@@ -1,15 +1,15 @@
-import React, { memo, useRef } from 'react';
 import {
   ConstructorElement,
-  DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-
-import styles from './ingredient-item.module.css';
-import { IIngredientsItem } from '../../../../models/ingredients';
-import { DropTargetMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
-import { ItemTypes } from '../../../../models/drag-and-drop';
-import { useDispatch } from 'react-redux';
-import { swapCards } from '../../../../services/constructor-ingredients-slice';
+  DragIcon
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
+import { useDispatch } from "react-redux";
+import { ItemTypes } from "../../../../models/drag-and-drop";
+import { IIngredientsItem } from "../../../../models/ingredients";
+import { swapCards } from "../../../../services/constructor-ingredients-slice";
+import styles from "./ingredient-item.module.css";
 
 interface IProps {
   isTop?: boolean;
@@ -21,6 +21,8 @@ interface IProps {
   onDeleteItem?: (ingredient: IIngredientsItem) => void;
 }
 
+const timerAnimation = 0.2;
+
 function IngredientItem({
   isTop = false,
   isBottom = false,
@@ -30,8 +32,9 @@ function IngredientItem({
   ingredient,
   onDeleteItem,
 }: IProps) {
-  const type = isTop ? 'top' : isBottom ? 'bottom' : undefined;
+  const type = isTop ? "top" : isBottom ? "bottom" : undefined;
   const isLocked = isTop || isBottom ? true : false;
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
   const dispatch = useDispatch();
   const handleOnDelete =
     ingredient && onDeleteItem
@@ -73,9 +76,22 @@ function IngredientItem({
         return;
       }
 
-      dispatch(swapCards({ dragId, hoverId }));
+      if (timerIdRef.current === null) {
+        dispatch(swapCards({ dragId, hoverId }));
+        timerIdRef.current = setTimeout(() => {
+          timerIdRef.current = null;
+        }, timerAnimation * 1000);
+      }
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
+      }
+    };
+  }, []);
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: ItemTypes.CONSTRUCTOR_CARD,
@@ -92,11 +108,13 @@ function IngredientItem({
   preview(drop(ref));
 
   return (
-    <div
+    <motion.div
       className={styles.ingredient_item}
       ref={ingredient ? ref : undefined}
       style={{ opacity }}
       data-handler-id={handlerId}
+      transition={{ duration: timerAnimation, type: "tween" }}
+      layout
     >
       <div className={styles.drag_container} ref={drag}>
         {isTop || isBottom ? null : <DragIcon type="primary" />}
@@ -105,14 +123,14 @@ function IngredientItem({
         <ConstructorElement
           type={type}
           isLocked={isLocked}
-          text={`${name}${isTop ? ' (верх)' : isBottom ? ' (низ)' : ''}`}
+          text={`${name}${isTop ? " (верх)" : isBottom ? " (низ)" : ""}`}
           price={price}
           thumbnail={image}
           handleClose={handleOnDelete}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-export default memo(IngredientItem);
+export default IngredientItem;

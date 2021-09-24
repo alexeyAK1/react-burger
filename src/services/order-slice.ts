@@ -17,7 +17,7 @@ const initialState: IOrderState = {
 export const getOrderFetch = createAsyncThunk(
   "order/getOrderFetch",
   async function (
-    { abortSignal }: { abortSignal?: AbortSignal },
+    _,
     { rejectWithValue, dispatch, getState }
   ) {
     try {
@@ -31,12 +31,13 @@ export const getOrderFetch = createAsyncThunk(
         ...getNElementArr(2, bun?._id),
       ];
 
-      const orderData = await getOrderData(ingredients, abortSignal);
+      const orderData = await getOrderData(ingredients);
       dispatch(setOrder(orderData));
       dispatch(setBun(null));
       dispatch(setIngredientsInConstructor([]));
       dispatch(resetCountIngredients([]));
     } catch (error) {
+      console.log(error);
       rejectWithValue(error);
     }
   }

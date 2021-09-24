@@ -3,7 +3,7 @@ import React, { MouseEvent, ReactChild } from "react";
 import styles from "./modal-overlay.module.css";
 
 interface IProps {
-  children: ReactChild;
+  children: ReactChild | false | Element;
   isAnimate?: boolean;
   onClose?: (e: MouseEvent<HTMLElement>) => void;
 }

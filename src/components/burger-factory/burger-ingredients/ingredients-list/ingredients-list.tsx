@@ -1,20 +1,20 @@
-import React, { memo, MutableRefObject, useCallback } from 'react';
-import InView from 'react-intersection-observer';
+import React, { memo, MutableRefObject, useCallback } from "react";
+import InView from "react-intersection-observer";
 
 import {
   bunName,
   categories,
   categoriesTypeArray,
-} from '../../../../common/constants';
+} from "../../../../common/constants";
 import {
   ICountIngredient,
   IIngredientsItem,
   TCategory,
-} from '../../../../models/ingredients';
-import CategoriesSection from '../categories-section/categories-section';
-import IngredientCard from '../ingredient-card/ingredient-card';
+} from "../../../../models/ingredients";
+import CategoriesSection from "../categories-section/categories-section";
+import IngredientCard from "../ingredient-card/ingredient-card";
 
-import styles from './ingredients-list.module.css';
+import styles from "./ingredients-list.module.css";
 
 interface IProps {
   tabListRefs: MutableRefObject<{
@@ -37,6 +37,8 @@ function IngredientsList({
   bun,
   onChangeInView,
 }: IProps) {
+  let numElement = 0;
+
   const getCount = useCallback(
     (item: IIngredientsItem) => {
       if (item.type === bunName) {
@@ -75,11 +77,14 @@ function IngredientsList({
             >
               <ul className={`${styles.category_ingredients_container}`}>
                 {filteredDate.map((filteredItem) => {
+                  numElement++;
+
                   return (
                     <IngredientCard
                       ingredientData={filteredItem}
                       key={filteredItem._id}
                       count={getCount(filteredItem)}
+                      numElement={numElement}
                     />
                   );
                 })}

@@ -1,0 +1,34 @@
+.loader_container {
+  width: 10px;
+  height: 10px;
+  margin: 40px auto;
+  position: relative;
+}
+.loader1 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--colors-interface-accent);
+  position: absolute;
+}
+.loader2 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-inactive-color);
+  position: absolute;
+}
+.loader3 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-primary-color);
+  position: absolute;
+}
+.loader4 {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--colors-interface-success);
+  position: absolute;
+}

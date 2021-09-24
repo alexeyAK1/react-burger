@@ -13,6 +13,17 @@ export enum errorAuthorized {
   emailOrPasswordAreIncorrect = "email or password are incorrect",
 }
 
+interface IFetchProps {
+  url: string;
+  isProtect?: boolean;
+  method?: TMethod;
+  body?: BodyInit;
+}
+
+interface IFetchPropsWithError extends IFetchProps {
+  responseError: Response;
+}
+
 type TMethod = "GET" | "POST" | "PATCH";
 
 export const MAIN_URL = "https://norma.nomoreparties.space/api";
@@ -22,11 +33,13 @@ export class Api {
   private static instance: Api;
   private localToken: string;
   private localRefreshToken: string;
+  private localAbortController: AbortController | null;
 
   private constructor() {
     const refreshToken = getCookie(REFRESH_TOKEN);
     this.localToken = "";
     this.localRefreshToken = "";
+    this.localAbortController = null;
 
     if (refreshToken) {
       this.localRefreshToken = refreshToken;
@@ -70,84 +83,101 @@ export class Api {
     deleteCookie(REFRESH_TOKEN);
     this.localRefreshToken = "";
     this.localToken = "";
+    this.localAbortController = null;
   }
 
-  public async postFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, false, "POST", body, abortSignal);
+  public setAbortController() {
+    this.localAbortController = new AbortController();
   }
 
-  public async postProtectedFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, true, "POST", body, abortSignal);
-  }
-
-  public async patchProtectedFetch<T>(
-    url: string,
-    body: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    return this.mainFetch<T>(url, true, "PATCH", body, abortSignal);
-  }
-
-  public async getProtectedFetch<T>(url: string, abortSignal?: AbortSignal) {
-    return this.mainFetch<T>(url, true, "GET", undefined, abortSignal);
-  }
-
-  public async getFetch<T>(url: string, abortSignal?: AbortSignal) {
-    return this.mainFetch<T>(url, false, "GET", undefined, abortSignal);
-  }
-
-  private async mainFetch<T>(
-    url: string,
-    isProtect: boolean = false,
-    method?: TMethod,
-    body?: BodyInit,
-    abortSignal?: AbortSignal
-  ) {
-    const finalUrl = MAIN_URL + url;
-
-    if (isProtect && !this.localToken) {
-      await this.refreshTokenFetch();
+  public getAbortFetch() {
+    if (this.localAbortController) {
+      this.localAbortController.abort();
     }
-    const fetchFields = method
-      ? this.getFiledRequest(method, isProtect, body, abortSignal)
-      : undefined;
-    const res = await fetch(finalUrl, fetchFields);
+  }
+
+  public async postFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>({ url, isProtect: false, method: "POST", body });
+  }
+
+  public async postProtectedFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>({ url, isProtect: true, method: "POST", body });
+  }
+
+  public async patchProtectedFetch<T>(url: string, body: BodyInit) {
+    return this.mainFetch<T>({ url, isProtect: true, method: "PATCH", body });
+  }
+
+  public async getProtectedFetch<T>(url: string) {
+    return this.mainFetch<T>({ url, isProtect: true, method: "GET" });
+  }
+
+  public async getFetch<T>(url: string) {
+    return this.mainFetch<T>({ url, method: "GET" });
+  }
+
+  private async mainFetch<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    this.ifNeedInitialRestartAbortController();
+    await this.ifNeedInitialRefreshToken(isProtect);
+
+    const finalUrl = MAIN_URL + url;
+    const res = await this.simpleFetch({
+      url: finalUrl,
+      isProtect,
+      method,
+      body,
+    });
 
     if (res.status === 200) {
       return (await res.json()) as T;
     }
-    const fetchError = (await res.json()) as IErrorServer;
+
+    return await this.refreshTokenOrLogout<T>({
+      url: finalUrl,
+      isProtect,
+      method,
+      body,
+      responseError: res,
+    });
+  }
+
+  private ifNeedInitialRestartAbortController() {
+    if (this.localAbortController?.signal.aborted) {
+      this.localAbortController = null;
+    }
+  }
+
+  private async ifNeedInitialRefreshToken(isProtect: boolean) {
+    if (isProtect && !this.localToken) {
+      await this.refreshTokenFetch();
+    }
+  }
+
+  private async refreshTokenOrLogout<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+    responseError,
+  }: IFetchPropsWithError) {
+    const fetchError = (await responseError.json()) as IErrorServer;
 
     if (this.isNeedRefreshToken(fetchError)) {
       await this.refreshTokenFetch();
-
-      if (this.localRefreshToken) {
-        const newFetchFields = method
-          ? this.getFiledRequest(method, isProtect, body)
-          : undefined;
-        const res = await fetch(finalUrl, newFetchFields);
-
-        if (res.status === 200) {
-          return (await res.json()) as T;
-        }
-
-        this.logOut();
-        throw new Error(`401===${errorAuthorized.unauthorized}`);
-      } else {
-        this.logOut();
-        throw new Error(`401===${errorAuthorized.unauthorized}`);
-      }
+      return await this.getNewFetchAfterTokenRefresh<T>({
+        url,
+        isProtect,
+        method,
+        body,
+      });
     } else {
       this.logOut();
-      throw new Error("" + res.status + "===" + fetchError.message);
+      throw new Error("" + responseError.status + "===" + fetchError.message);
     }
   }
 
@@ -177,11 +207,49 @@ export class Api {
     }
   }
 
+  private async getNewFetchAfterTokenRefresh<T>({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    if (this.localRefreshToken) {
+      const res = await this.simpleFetch({
+        url,
+        isProtect,
+        method,
+        body,
+      });
+
+      if (res.status === 200) {
+        this.localAbortController = null;
+        return (await res.json()) as T;
+      }
+
+      this.logOut();
+      throw new Error(`401===${errorAuthorized.unauthorized}`);
+    } else {
+      this.logOut();
+      throw new Error(`401===${errorAuthorized.unauthorized}`);
+    }
+  }
+
+  private async simpleFetch({
+    url,
+    isProtect = false,
+    method,
+    body,
+  }: IFetchProps) {
+    const newFetchFields = method
+      ? this.getFiledRequest(method, isProtect, body)
+      : undefined;
+    return await fetch(url, newFetchFields);
+  }
+
   private getFiledRequest(
     method: TMethod,
     isProtect: boolean = false,
-    body?: BodyInit,
-    abortSignal?: AbortSignal
+    body?: BodyInit
   ) {
     const headers: { "Content-Type": string; Authorization?: string } = {
       "Content-Type": "application/json",
@@ -202,8 +270,8 @@ export class Api {
     if (body) {
       retObject.body = body;
     }
-    if (abortSignal) {
-      retObject.signal = abortSignal;
+    if (this.localAbortController) {
+      retObject.signal = this.localAbortController.signal;
     }
 
     return retObject;
