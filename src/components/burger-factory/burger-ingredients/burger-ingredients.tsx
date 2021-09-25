@@ -3,28 +3,20 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import { bunName, categoriesTypeArray } from "../../../common/constants";
 import ScrollContainer from "../../../layouts/scroll-container/scroll-container";
-import TabNavByCategory from "./tab-nav-by-category/tab-nav-by-category";
 import { TCategory } from "../../../models/ingredients";
 import { RootState } from "../../../services/store";
 import { useForceMemoUpdate } from "./hooks/use-force-memo-update";
 import { useToggleRefs } from "./hooks/use-toggle-refs";
-import { useToggleModal } from "../../common/modal/hooks/use_toggle_modal";
-import Modal from "../../common/modal/modal";
-import IngredientDetails from "../../ingredient-details/ingredient-details";
 import IngredientsList from "./ingredients-list/ingredients-list";
-import { setCurrentIngredient } from "../../../services/current-ingredient-slice";
-import { bunName, categoriesTypeArray } from "../../../common/constants";
-import { INGREDIENTS_PATH } from "../../../routes/constants-path";
+import TabNavByCategory from "./tab-nav-by-category/tab-nav-by-category";
+
 
 export default function BurgerIngredients() {
-  const dispatch = useDispatch();
-  const location = useLocation();
   const tabsRef = useRef<HTMLDivElement>(null);
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.ingredients
@@ -35,12 +27,8 @@ export default function BurgerIngredients() {
   const countIngredients = useSelector(
     (state: RootState) => state.ingredients.countIngredients
   );
-  const currentIngredient = useSelector(
-    (state: RootState) => state.currentIngredient.currentIngredient
-  );
   const [visibleList, setVisibleList] = useState<TCategory[]>([]);
   const [isClicked, setIsClicked] = useState(false);
-  const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();
   const forceMemoUpdate = useForceMemoUpdate([ingredients]);
   const { currentTabName, tabListRefs, setCurrentType } =
     useToggleRefs(bunName);
@@ -53,25 +41,6 @@ export default function BurgerIngredients() {
     setCurrentType(newTab);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleList]);
-
-  useEffect(() => {
-    if (currentIngredient) {
-      window.history.replaceState(
-        null,
-        currentIngredient.name,
-        `${INGREDIENTS_PATH}/${currentIngredient._id}`
-      );
-      onOpenModal();
-    }
-  }, [currentIngredient, onOpenModal]);
-
-  const handleOnCloseModal = () => {
-    onCloseModal();
-    console.log(location);
-    window.history.replaceState(null, "Главная", location.pathname);
-
-    dispatch(setCurrentIngredient(null));
-  };
 
   const handleOnClickTab = useCallback(
     (value: string) => {
@@ -135,11 +104,6 @@ export default function BurgerIngredients() {
           onChangeInView={handleOnChangeInView}
         />
       </ScrollContainer>
-      {isOpenModal ? (
-        <Modal header={"Детали ингредиента"} onClose={handleOnCloseModal}>
-          <IngredientDetails ingredient={currentIngredient!} />
-        </Modal>
-      ) : null}
     </section>
   );
 }
