@@ -6,10 +6,10 @@ import { AnimatePresence, motion, useAnimation, Variants } from "framer-motion";
 import React, { memo, useEffect, useRef } from "react";
 import { DragPreviewImage, useDrag } from "react-dnd";
 import { Preview } from "react-dnd-multi-backend";
-import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router";
 import { ItemTypes } from "../../../../models/drag-and-drop";
 import { IIngredientsItem } from "../../../../models/ingredients";
-import { setCurrentIngredient } from "../../../../services/current-ingredient-slice";
+import { INGREDIENTS_PATH } from "../../../../routes/constants-path";
 import styles from "./ingredient-card.module.css";
 
 interface IProps {
@@ -60,9 +60,10 @@ const variantsCount: Variants = {
 };
 
 function IngredientCard({ ingredientData, count = 0, numElement = 0 }: IProps) {
-  const dispatch = useDispatch();
   const countRef = useRef(0);
   const controls = useAnimation();
+  const history = useHistory();
+  const location = useLocation();
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: ItemTypes.INGREDIENT_CARD,
     item: ingredientData,
@@ -84,7 +85,6 @@ function IngredientCard({ ingredientData, count = 0, numElement = 0 }: IProps) {
       opacity: 1,
       backgroundColor: "aqua",
     };
-    console.log(item, style);
     return (
       <div style={newStyle}>
         <DragPreviewImage
@@ -97,7 +97,10 @@ function IngredientCard({ ingredientData, count = 0, numElement = 0 }: IProps) {
   };
 
   const handleOnClick = () => {
-    dispatch(setCurrentIngredient(ingredientData));
+    history.push({
+      pathname: `${INGREDIENTS_PATH}/${ingredientData._id}`,
+      state: { background: location }
+    });
   };
 
   useEffect(() => {

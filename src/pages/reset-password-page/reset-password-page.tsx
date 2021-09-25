@@ -1,13 +1,14 @@
 import React from "react";
-
-import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
-import LoginLayoutContainer from "../../layouts/login-layout-container/login-layout-container";
-import { ResetPasswordForm } from "../../components/forms";
 import { useHistory, useLocation } from "react-router-dom";
+import { ResetPasswordForm } from "../../components/forms";
+import LoginLayoutContainer from "../../layouts/login-layout-container/login-layout-container";
+import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
+import { ILocationState } from "../../models/routes";
 import { FORGOT_PASSWORD_PATH } from "../../routes/constants-path";
 
+
 export default function ResetPasswordPage() {
-  const location = useLocation<{ prevPath: string }>();
+  const location = useLocation<ILocationState>();
   const history = useHistory();
 
   if (
