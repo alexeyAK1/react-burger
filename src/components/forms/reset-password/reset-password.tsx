@@ -10,7 +10,6 @@ import { nameFields } from "../common/names-forms";
 import { requiredValidation, validations } from "../common/validate-form";
 import { useForm } from "../hooks/use-form";
 
-
 interface IResetPasswordForm {
   [nameFields.Code]: string;
   [nameFields.Password]: string;
@@ -39,10 +38,11 @@ export default function ResetPassword() {
               data[nameFields.Code]
             );
 
+            setIsLoading(false);
+
             if (result.success) {
               history.push(LOGIN_PATH);
             }
-            setIsLoading(false);
           } catch (error) {
             const [errorSuccess, errorMessage] = (error as Error).message.split(
               "==="
