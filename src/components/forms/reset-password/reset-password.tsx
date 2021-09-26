@@ -1,99 +1,91 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-
 import {
   Button,
-  Input,
+  Input
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { getResetPassword } from "../../../api/agent";
-import { useInitFields } from "../hooks/use-init-fields";
 import { LOGIN_PATH } from "../../../routes/constants-path";
+import { nameFields } from "../common/names-forms";
+import { requiredValidation, validations } from "../common/validate-form";
+import { useForm } from "../hooks/use-form";
 
-enum nameFields {
-  Password = "password",
-  Code = "code",
+
+interface IResetPasswordForm {
+  [nameFields.Code]: string;
+  [nameFields.Password]: string;
 }
 
 export default function ResetPassword() {
   const history = useHistory();
-  const {
-    isBlocked,
-    setIsBlocked,
-    fields,
-    errors,
-    setErrors,
-    isSend,
-    setIsSent,
-    handleOnChange,
-  } = useInitFields(nameFields);
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleSubmit, handleChange, data, errors } =
+    useForm<IResetPasswordForm>({
+      initialValues: {
+        [nameFields.Code]: "",
+        [nameFields.Password]: "",
+      },
+      validations: {
+        [nameFields.Code]: requiredValidation,
+        [nameFields.Password]: validations[nameFields.Password],
+      },
+      onSubmit: async () => {
+        if (!isLoading) {
+          setIsLoading(true);
+          try {
+            const result = await getResetPassword(
+              data[nameFields.Password],
+              data[nameFields.Code]
+            );
+
+            if (result.success) {
+              history.push(LOGIN_PATH);
+            }
+            setIsLoading(false);
+          } catch (error) {
+            const [errorSuccess, errorMessage] = (error as Error).message.split(
+              "==="
+            );
+            alert(errorMessage);
+            console.log(errorSuccess);
+            console.log(error);
+            setIsLoading(false);
+          }
+        }
+      },
+    });
+
   const handleOnIconClick = () => {
     setIsShowPassword(!isShowPassword);
   };
-  const handleOnSendData = async (e: React.SyntheticEvent<Element, Event>) => {
-    Object.keys(fields).forEach((name) => {
-      if (!fields[name as nameFields].length) {
-        setErrors({ ...errors, [name]: "Обязательно к заполнению" });
-        setIsBlocked(true);
-      }
-    });
-
-    setIsSent(true);
-  };
-
-  useEffect(() => {
-    const send = async () => {
-      if (!isBlocked && isSend) {
-        setIsBlocked(false);
-        try {
-          const result = await getResetPassword(
-            fields[nameFields.Password],
-            fields[nameFields.Code]
-          );
-
-          if (result.success) {
-            history.push(LOGIN_PATH);
-          }
-        } catch (error) {
-          const [errorSuccess, errorMessage] = (error as Error).message.split(
-            "==="
-          );
-          alert(errorMessage);
-          console.log(errorSuccess);
-          console.log(error);
-        }
-      }
-    };
-
-    send();
-  }, [isSend, isBlocked, fields, setIsSent, setIsBlocked, history]);
 
   return (
     <section className="login_container">
       <h2 className="text text_type_main-medium">Восстановление пароля</h2>
-      <form onSubmit={handleOnSendData}>
+      <form onSubmit={handleSubmit}>
         <div className="login_input_container">
           <Input
             type={isShowPassword ? "text" : "password"}
             placeholder={"Введите новый пароль"}
-            onChange={handleOnChange}
+            onChange={handleChange(nameFields.Password)}
             icon={isShowPassword ? "HideIcon" : "ShowIcon"}
-            value={fields[nameFields.Password]}
+            value={data[nameFields.Password]}
             name={nameFields.Password}
-            error={false}
             onIconClick={handleOnIconClick}
-            errorText={"Ошибка"}
+            error={!!errors[nameFields.Password]}
+            errorText={errors[nameFields.Password]}
           />
         </div>
         <div className="login_input_container">
           <Input
             type={"text"}
             placeholder={"Введите код из письма"}
-            onChange={handleOnChange}
-            value={fields[nameFields.Code]}
+            onChange={handleChange(nameFields.Code)}
+            value={data[nameFields.Code]}
             name={nameFields.Code}
-            error={false}
-            errorText={"Ошибка"}
+            error={!!errors[nameFields.Code]}
+            errorText={errors[nameFields.Code]}
           />
         </div>
         <button type="submit" style={{ display: "none" }}>
@@ -102,7 +94,7 @@ export default function ResetPassword() {
       </form>
 
       <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleOnSendData}>
+        <Button type="primary" size="medium" onClick={handleSubmit}>
           Сохранить
         </Button>
       </div>

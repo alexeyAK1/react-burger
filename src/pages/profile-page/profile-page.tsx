@@ -1,23 +1,23 @@
-import React from "react";
-import {
-  Link,
-  Route,
-  Switch,
-  useLocation,
-  useRouteMatch,
-} from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import React from "react";
 import { useDispatch } from "react-redux";
-
-import styles from "./profile-page.module.css";
-import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
-import { ProfileForm } from "../../components/forms";
-import { getLogoutFetch } from "../../services/user-slice";
-import { ORDERS_PATH, PROFILE_PATH } from "../../routes/constants-path";
 import {
-  variantsNextRouter,
-  variantsProfileButton,
-} from "../../components/forms/common/constants";
+    Link,
+    Route,
+    Switch,
+    useLocation,
+    useRouteMatch
+} from "react-router-dom";
+import { ProfileForm } from "../../components/forms";
+import {
+    variantsNextRouter,
+    variantsProfileButton
+} from "../../components/forms/common/animations-form";
+import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
+import { ORDERS_PATH, PROFILE_PATH } from "../../routes/constants-path";
+import { getLogoutFetch } from "../../services/user-slice";
+import styles from "./profile-page.module.css";
+
 
 const ORDER_HISTORY_PATH = PROFILE_PATH + ORDERS_PATH;
 
