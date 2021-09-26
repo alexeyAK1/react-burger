@@ -1,42 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-
 import {
   Button,
-  Input,
+  Input
 } from "@ya.praktikum/react-developer-burger-ui-components";
-
-import styles from "./profile.module.css";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { RootState } from "../../../services/store";
-import Loader from "../../ui/loader/loader";
-import { useInitFields } from "../hooks/use-init-fields";
 import { getUserFetch, updateUserFetch } from "../../../services/user-slice";
-import { variantsNextRouter } from "../common/constants";
+import Loader from "../../ui/loader/loader";
+import { variantsNextRouter } from "../common/animations-form";
+import { nameFields } from "../common/names-forms";
+import { requiredValidation, validations } from "../common/validate-form";
+import { useForm } from "../hooks/use-form";
+import styles from "./profile.module.css";
 
-enum nameFields {
-  Name = "name",
-  Login = "login",
-  Password = "password",
+interface IProfileForm {
+  [nameFields.Name]: string;
+  [nameFields.Login]: string;
+  [nameFields.Password]: string;
 }
 
 export default function Profile() {
   const dispatch = useDispatch();
   const [focusedName, setFocusedName] = useState("");
-  const {
-    isBlocked,
-    setIsBlocked,
-    fields,
-    setFields,
-    errors,
-    setErrors,
-    isSend,
-    setIsSent,
-    handleOnChange,
-  } = useInitFields(nameFields);
   const isLoading = useSelector((state: RootState) => state.user.isLoading);
   const user = useSelector((state: RootState) => state.user.user);
+  const { handleSubmit, handleChange, setData, data, errors } =
+    useForm<IProfileForm>({
+      initialValues: {
+        [nameFields.Name]: "",
+        [nameFields.Password]: "",
+        [nameFields.Login]: "",
+      },
+      validations: {
+        [nameFields.Name]: requiredValidation,
+        [nameFields.Password]: validations[nameFields.Password],
+        [nameFields.Login]: requiredValidation,
+      },
+      onSubmit: async () => {
+        if (!isLoading) {
+          await dispatch(
+            updateUserFetch({
+              name: data[nameFields.Name],
+              email: data[nameFields.Login],
+              password: data[nameFields.Password],
+            })
+          );
+        }
+      },
+    });
 
   const handleOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     setFocusedName(e.currentTarget.name);
@@ -52,42 +65,11 @@ export default function Profile() {
   const handleOnBlur = () => {
     setFocusedName("");
   };
-  const handleOnSendData = async (e: React.SyntheticEvent<Element, Event>) => {
+
+  const handleOnCancellation = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    e.stopPropagation();
 
-    await Object.keys(fields).forEach(async (name) => {
-      if (!fields[name].length) {
-        setErrors((state) => ({
-          ...state,
-          [name]: "Обязательно к заполнению",
-        }));
-        await setIsBlocked(true);
-      }
-    });
-
-    setIsSent(true);
-  };
-
-  useEffect(() => {
-    const send = async () => {
-      if (!isBlocked && isSend) {
-        setIsSent(false);
-        await dispatch(
-          updateUserFetch({
-            name: fields[nameFields.Name],
-            email: fields[nameFields.Login],
-            password: fields[nameFields.Password],
-          })
-        );
-      }
-    };
-
-    send();
-  }, [isSend, isBlocked, dispatch, fields, setIsSent]);
-
-  const handleOnCancellation = () => {
-    setFields((state) => ({
+    setData((state) => ({
       ...state,
       [nameFields.Name]: user.name,
       [nameFields.Login]: user.email,
@@ -101,13 +83,13 @@ export default function Profile() {
 
   useEffect(() => {
     if (user.name) {
-      setFields((state) => ({
+      setData((state) => ({
         ...state,
         [nameFields.Name]: user.name,
         [nameFields.Login]: user.email,
       }));
     }
-  }, [setFields, user]);
+  }, [setData, user]);
 
   return (
     <motion.section
@@ -128,16 +110,16 @@ export default function Profile() {
             exit="exit"
             animate="visible"
           >
-            <form onSubmit={handleOnSendData}>
+            <form onSubmit={handleSubmit}>
               <div className="login_input_container">
                 <Input
                   type={"text"}
                   placeholder={"Имя"}
-                  onChange={handleOnChange}
+                  onChange={handleChange(nameFields.Name)}
                   icon={
                     focusedName === nameFields.Name ? "CloseIcon" : "EditIcon"
                   }
-                  value={fields[nameFields.Name]}
+                  value={data[nameFields.Name]}
                   name={nameFields.Name}
                   error={!!errors[nameFields.Name]}
                   errorText={errors[nameFields.Name]}
@@ -150,11 +132,11 @@ export default function Profile() {
                 <Input
                   type={"text"}
                   placeholder={"Логин"}
-                  onChange={handleOnChange}
+                  onChange={handleChange(nameFields.Login)}
                   icon={
                     focusedName === nameFields.Login ? "CloseIcon" : "EditIcon"
                   }
-                  value={fields[nameFields.Login]}
+                  value={data[nameFields.Login]}
                   name={nameFields.Login}
                   error={!!errors[nameFields.Login]}
                   errorText={errors[nameFields.Login]}
@@ -167,13 +149,13 @@ export default function Profile() {
                 <Input
                   type={"password"}
                   placeholder={"Пароль"}
-                  onChange={handleOnChange}
+                  onChange={handleChange(nameFields.Password)}
                   icon={
                     focusedName === nameFields.Password
                       ? "CloseIcon"
                       : "EditIcon"
                   }
-                  value={fields[nameFields.Password]}
+                  value={data[nameFields.Password]}
                   name={nameFields.Password}
                   error={!!errors[nameFields.Password]}
                   errorText={errors[nameFields.Password]}
@@ -194,7 +176,7 @@ export default function Profile() {
                   Отмена
                 </Link>
               </div>
-              <Button type="primary" size="medium" onClick={handleOnSendData}>
+              <Button type="primary" size="medium" onClick={handleSubmit}>
                 Сохранить
               </Button>
             </div>

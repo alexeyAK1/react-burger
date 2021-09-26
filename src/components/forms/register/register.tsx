@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-
 import {
   Button,
   Input,
-  PasswordInput,
+  PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { getRegisterFetch, setError } from "../../../services/user-slice";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useInitFields } from "../hooks/use-init-fields";
-import { RootState } from "../../../services/store";
+import { Link } from "react-router-dom";
 import { LOGIN_PATH } from "../../../routes/constants-path";
+import { RootState } from "../../../services/store";
+import { getRegisterFetch, setError } from "../../../services/user-slice";
+import { requiredValidation, validations } from "../common/validate-form";
+import { useForm } from "../hooks/use-form";
+
 
 enum nameFields {
   Name = "name",
@@ -18,60 +19,40 @@ enum nameFields {
   Password = "password",
 }
 
+interface IRegisterForm {
+  [nameFields.Name]: string;
+  [nameFields.Email]: string;
+  [nameFields.Password]: string;
+}
+
 export default function Register() {
   const dispatch = useDispatch();
   const errorText = useSelector((state: RootState) => state.user.errorText);
-  const {
-    isBlocked,
-    setIsBlocked,
-    fields,
-    errors,
-    setErrors,
-    isSend,
-    setIsSent,
-    handleOnChange,
-  } = useInitFields(nameFields);
-
-  const handleOnSendData = async (e: React.SyntheticEvent<Element, Event>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    dispatch(setError(""));
-
-    Object.keys(fields).forEach((name) => {
-      if (!fields[name].length) {
-        setErrors((state) => ({
-          ...state,
-          [name]: "Обязательно к заполнению",
-        }));
-        setIsBlocked(true);
+  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const { handleSubmit, handleChange, data, errors } = useForm<IRegisterForm>({
+    initialValues: {
+      [nameFields.Name]: "",
+      [nameFields.Email]: "",
+      [nameFields.Password]: "",
+    },
+    validations: {
+      [nameFields.Name]: requiredValidation,
+      [nameFields.Email]: validations[nameFields.Email],
+      [nameFields.Password]: validations[nameFields.Password],
+    },
+    onSubmit: async () => {
+      if (!isLoading) {
+        dispatch(setError(""));
+        await dispatch(
+          getRegisterFetch({
+            email: data[nameFields.Email],
+            password: data[nameFields.Password],
+            name: data[nameFields.Name],
+          })
+        );
       }
-    });
-
-    setIsSent(true);
-  };
-
-  useEffect(() => {
-    const send = async () => {
-      if (!isBlocked && isSend) {
-        setIsSent(false);
-        try {
-          await dispatch(
-            getRegisterFetch({
-              email: fields[nameFields.Email],
-              password: fields[nameFields.Password],
-              name: fields[nameFields.Name],
-            })
-          );
-        } catch (error) {
-          console.log(error);
-          alert((error as Error).message);
-        }
-      }
-    };
-
-    send();
-  }, [isSend, isBlocked, dispatch, fields, setIsSent, setIsBlocked]);
+    },
+  });
 
   useEffect(() => {
     if (errorText) {
@@ -86,13 +67,13 @@ export default function Register() {
   return (
     <section className="login_container">
       <h2 className="text text_type_main-medium">Регистрация</h2>
-      <form onSubmit={handleOnSendData}>
+      <form onSubmit={handleSubmit}>
         <div className="login_input_container">
           <Input
             type={"text"}
             placeholder={"Имя"}
-            onChange={handleOnChange}
-            value={fields[nameFields.Name]}
+            onChange={handleChange(nameFields.Name)}
+            value={data[nameFields.Name]}
             name={nameFields.Name}
             error={!!errors[nameFields.Name]}
             errorText={errors[nameFields.Name]}
@@ -102,8 +83,8 @@ export default function Register() {
           <Input
             type={"email"}
             placeholder={"E-mail"}
-            onChange={handleOnChange}
-            value={fields[nameFields.Email]}
+            onChange={handleChange(nameFields.Email)}
+            value={data[nameFields.Email]}
             name={nameFields.Email}
             error={!!errors[nameFields.Email]}
             errorText={errors[nameFields.Email]}
@@ -111,8 +92,8 @@ export default function Register() {
         </div>
         <div className="login_input_container">
           <PasswordInput
-            onChange={handleOnChange}
-            value={fields[nameFields.Password]}
+            onChange={handleChange(nameFields.Password)}
+            value={data[nameFields.Password]}
             name={nameFields.Password}
           />
         </div>
@@ -121,7 +102,7 @@ export default function Register() {
         </button>
       </form>
       <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleOnSendData}>
+        <Button type="primary" size="medium" onClick={handleSubmit}>
           Зарегистрироваться
         </Button>
       </div>

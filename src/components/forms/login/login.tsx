@@ -1,80 +1,60 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-
 import {
   Button,
   Input,
-  PasswordInput,
+  PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useInitFields } from "../hooks/use-init-fields";
-import { getLoginFetch } from "../../../services/user-slice";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   FORGOT_PASSWORD_PATH,
-  REGISTER_PATH,
+  REGISTER_PATH
 } from "../../../routes/constants-path";
+import { RootState } from "../../../services/store";
+import { getLoginFetch } from "../../../services/user-slice";
+import { nameFields } from "../common/names-forms";
+import { validations } from "../common/validate-form";
+import { useForm } from "../hooks/use-form";
 
-enum nameFields {
-  Email = "email",
-  Password = "password",
+interface ILoginForm {
+  [nameFields.Email]: string;
+  [nameFields.Password]: string;
 }
 
 export default function Login() {
   const dispatch = useDispatch();
-  const {
-    isBlocked,
-    setIsBlocked,
-    fields,
-    errors,
-    setErrors,
-    isSend,
-    setIsSent,
-    handleOnChange,
-  } = useInitFields(nameFields);
-
-  const handleOnSendData = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    Object.keys(fields).forEach((name) => {
-      if (fields[name].length <= 0) {
-        setIsBlocked(true);
-        setErrors((state) => ({
-          ...state,
-          [name]: "Обязательно к заполнению",
-        }));
-      }
-    });
-
-    setIsSent(true);
-  };
-
-  useEffect(() => {
-    const send = async () => {
-      if (!isBlocked && isSend) {
-        setIsSent(false);
+  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const { handleSubmit, handleChange, data, errors } = useForm<ILoginForm>({
+    initialValues: {
+      [nameFields.Email]: "",
+      [nameFields.Password]: "",
+    },
+    validations: {
+      [nameFields.Email]: validations[nameFields.Email],
+      [nameFields.Password]: validations[nameFields.Password],
+    },
+    onSubmit: async () => {
+      if (!isLoading) {
         await dispatch(
           getLoginFetch({
-            email: fields[nameFields.Email],
-            password: fields[nameFields.Password],
+            email: data[nameFields.Email],
+            password: data[nameFields.Password],
           })
         );
       }
-    };
-
-    send();
-  }, [isSend, isBlocked, dispatch, fields, setIsSent]);
+    },
+  });
 
   return (
     <section className="login_container">
       <h2 className="text text_type_main-medium">Вход</h2>
-      <form onSubmit={handleOnSendData}>
+      <form onSubmit={handleSubmit}>
         <div className="login_input_container">
           <Input
             type={"email"}
             placeholder={"E-mail"}
-            onChange={handleOnChange}
-            value={fields[nameFields.Email]}
+            onChange={handleChange(nameFields.Email)}
+            value={data[nameFields.Email] || ""}
             name={nameFields.Email}
             error={!!errors[nameFields.Email]}
             errorText={errors[nameFields.Email]}
@@ -82,8 +62,8 @@ export default function Login() {
         </div>
         <div className="login_input_container">
           <PasswordInput
-            onChange={handleOnChange}
-            value={fields[nameFields.Password]}
+            onChange={handleChange(nameFields.Password)}
+            value={data[nameFields.Password] || ""}
             name={nameFields.Password}
           />
         </div>
@@ -93,7 +73,7 @@ export default function Login() {
       </form>
 
       <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleOnSendData}>
+        <Button type="primary" size="medium" onClick={handleSubmit}>
           Войти
         </Button>
       </div>
