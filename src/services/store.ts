@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import appReducer from "./app-slice";
-import ingredientReducer from "./ingredients-slice";
-import currentIngredientReducer from "./current-ingredient-slice";
 import constructorIngredientsReducer from "./constructor-ingredients-slice";
+import currentIngredientReducer from "./current-ingredient-slice";
+import ingredientReducer from "./ingredients-slice";
 import orderReducer from "./order-slice";
 import userReducer from "./user-slice";
 
@@ -15,6 +15,7 @@ const store = configureStore({
     order: orderReducer,
     user: userReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export type RootState = ReturnType<typeof store.getState>;

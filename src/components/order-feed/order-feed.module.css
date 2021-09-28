@@ -1,0 +1,6 @@
+.main_container{
+    height: 100%;
+}
+.gap60 {
+  gap: calc(var(--offset-base-size) * 15);
+}

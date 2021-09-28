@@ -1,0 +1,33 @@
+.main_container {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+.flex_container {
+  width: 640px;
+  padding-top: 122px;
+}
+.id {
+  text-align: center;
+  width: 100%;
+  margin-bottom: calc(var(--offset-base-size) * 10);
+}
+.status {
+  margin: 0px;
+  width: 0px;
+  padding-top: calc(var(--offset-base-size) * 3);
+  padding-bottom: calc(var(--offset-base-size) * 15);
+  color: var(--colors-interface-success);
+}
+.h3 {
+  padding-bottom: calc(var(--offset-base-size) * 6);
+}
+.bottom_container {
+  margin-top: calc(var(--offset-base-size) * 10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.date {
+  color: var(--text-inactive-color);
+}

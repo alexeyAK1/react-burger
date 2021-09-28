@@ -1,0 +1,11 @@
+.main_container {
+  display: flex;
+  align-items: center;
+  width: calc(100% - (var(--offset-base-size) * 6));
+  margin-bottom: calc(var(--offset-base-size) * 6);
+}
+.name {
+  flex: 1;
+  padding-left: calc(var(--offset-base-size) * 4);
+  padding-right: calc(var(--offset-base-size) * 4);
+}

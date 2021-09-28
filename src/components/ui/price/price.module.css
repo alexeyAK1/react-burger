@@ -1,0 +1,15 @@
+.price {
+    display: flex;
+    align-items: center;
+  }
+  .price p {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+  }
+  .price svg {
+    margin-left: 9px;
+    height: 22px;
+    width: 22px;
+  }

@@ -1,8 +1,8 @@
 .profile_page_container {
-  padding-top: calc(var(--offset-base-size) * 45);
   display: flex;
 }
 .profile_page_container_menu {
+  padding-top: calc(var(--offset-base-size) * 45);
   width: 320px;
   margin: 0;
   margin-right: calc(var(--offset-base-size) * 15);
@@ -19,7 +19,7 @@
   color: var(--text-inactive-color);
   text-decoration: none;
 }
-.profile_page_container_menu li p{
+.profile_page_container_menu li p {
   color: var(--text-inactive-color);
   text-decoration: none;
   margin: 0;
@@ -28,7 +28,4 @@
 .profile_page_container_menu li .menu_link.active,
 .profile_page_container_menu li .menu_link:hover {
   color: var(--text-primary-color);
-}
-.profile_page_container_content {
-    width: 480px;
 }

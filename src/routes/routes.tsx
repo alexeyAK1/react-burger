@@ -7,6 +7,7 @@ import MainAllLayouts from "../layouts/main-all-layouts/main-all-layouts";
 import { ILocationState } from "../models/routes";
 import {
   BurgerFactoryPage,
+  FeedPage,
   ForgotPasswordPage,
   IngredientPage,
   LoginPage,
@@ -15,13 +16,16 @@ import {
   RegisterPage,
   ResetPasswordPage
 } from "../pages";
+import OrderByIdPage from "../pages/order-by-id-page/order-by-id-page";
 import { setAppError } from "../services/app-slice";
 import { RootState } from "../services/store";
 import {
+  FEED_PATH,
   FORGOT_PASSWORD_PATH,
   INGREDIENTS_PATH,
   LOGIN_PATH,
   MAIN_PATH,
+  ORDERS_PATH,
   PROFILE_PATH,
   REGISTER_PATH,
   RESET_PASSWORD_PATH
@@ -43,7 +47,10 @@ export default function Routes() {
     dispatch(setAppError(null));
   }, [dispatch, location.pathname]);
 
-  const isPushAction = useMemo(() => history.action === "PUSH", [history.action]);
+  const isPushAction = useMemo(
+    () => history.action === "PUSH",
+    [history.action]
+  );
 
   const isModalIngredientBackgroundLocation = useMemo(
     () => (isPushAction && background ? background : location),
@@ -61,6 +68,12 @@ export default function Routes() {
             <Route path={MAIN_PATH} exact>
               <BurgerFactoryPage />
             </Route>
+            <Route path={`${FEED_PATH}/:id`}>
+              <OrderByIdPage />
+            </Route>
+            <Route path={FEED_PATH} exact>
+              <FeedPage />
+            </Route>
             <ProtectedFromAuthorizedRoute path={LOGIN_PATH}>
               <LoginPage />
             </ProtectedFromAuthorizedRoute>
@@ -73,6 +86,9 @@ export default function Routes() {
             <ProtectedFromAuthorizedRoute path={RESET_PASSWORD_PATH}>
               <ResetPasswordPage />
             </ProtectedFromAuthorizedRoute>
+            <ProtectedRoute path={`${PROFILE_PATH}${ORDERS_PATH}/:id`}>
+              <OrderByIdPage />
+            </ProtectedRoute>
             <ProtectedRoute path={PROFILE_PATH}>
               <ProfilePage />
             </ProtectedRoute>

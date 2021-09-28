@@ -6,3 +6,4 @@ export const RESET_PASSWORD_PATH = "/reset-password";
 export const PROFILE_PATH = "/profile";
 export const ORDERS_PATH = "/orders";
 export const INGREDIENTS_PATH = "/ingredients";
+export const FEED_PATH = "/feed";

@@ -3,21 +3,21 @@ import {
   createAsyncThunk,
   createSlice,
   PayloadAction,
-  ThunkDispatch,
+  ThunkDispatch
 } from "@reduxjs/toolkit";
 import { Api, errorAuthorized } from "../api/api";
-
 import {
   getLoginUser,
   getLogout,
   getRegisterUser,
   getUser,
-  updateUser,
+  updateUser
 } from "../api/auth";
 import { IRootStore, IUserState } from "../models/app-store";
 import { IRefreshResponse, IUserFields } from "../models/user";
 import { MAIN_PATH } from "../routes/constants-path";
 import { setErrorInAsyncThunk } from "./common";
+
 
 const api = Api.getInstance();
 
@@ -43,7 +43,9 @@ const setToken = (
 
 const deleteToken = (dispatch: ThunkDispatch<unknown, unknown, AnyAction>) => {
   api.logOut();
+
   dispatch(setRefreshToken(""));
+  console.log("delete ----", api.refreshToken);
 };
 
 export const getRegisterFetch = createAsyncThunk(
@@ -138,7 +140,10 @@ export const getLogoutFetch = createAsyncThunk(
         if (userResponse.success) {
           deleteToken(dispatch);
           dispatch(setUser({ email: "", name: "" }));
-          dispatch(setRefreshToken(api.refreshToken));
+          // dispatch(setRefreshToken(api.refreshToken));
+        }else{
+          deleteToken(dispatch);
+          dispatch(setUser({ email: "", name: "" }));
         }
       } catch (error) {
         setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);

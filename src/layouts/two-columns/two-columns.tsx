@@ -1,15 +1,19 @@
-import React from 'react';
+import React from "react";
+import styles from "./two-columns.module.css";
 
-import styles from './two-columns.module.css';
 
 interface IProps {
   children: React.ReactChild;
   style?: React.CSSProperties;
+  className?: string;
 }
 
-export default function TwoColumns({ children, style }: IProps) {
+export default function TwoColumns({ children, style, className }: IProps) {
   return (
-    <div className={styles.two_columns} style={style ? style : {}}>
+    <div
+      className={`${styles.two_columns} ${className ? className : ""}`}
+      style={style ? style : {}}
+    >
       {children}
     </div>
   );

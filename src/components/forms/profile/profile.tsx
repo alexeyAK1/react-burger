@@ -93,7 +93,7 @@ export default function Profile() {
 
   return (
     <motion.section
-      className="login_container"
+      className={`login_container ${styles.motion_container}`}
       variants={variantsNextRouter}
       initial="hidden"
       exit="exit"

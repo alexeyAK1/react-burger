@@ -7,6 +7,10 @@ body {
   font-family: "Jet Brains Mono";
 }
 
+h1 {
+  margin-top: calc(var(--offset-base-size)  * 10);
+}
+
 .burger_input_container .input__container {
   width: initial;
 }
