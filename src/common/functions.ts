@@ -12,32 +12,36 @@ export function setCookie(
   value: string | number,
   props?: { [key: string]: number | Date | any }
 ) {
-  props = props || {};
-  let exp = props.expires;
-  if (typeof exp == "number" && exp) {
-    const d = new Date();
-    d.setTime(d.getTime() + exp * 1000);
-    exp = props.expires = d;
+  props = {
+    path: "/",
+    ...props,
+  };
+
+  if (props.expires instanceof Date) {
+    props.expires = props.expires.toUTCString();
   }
-  if (exp && exp.toUTCString) {
-    props.expires = exp.toUTCString();
-  }
-  value = encodeURIComponent(value);
-  let updatedCookie = name + "=" + value;
-  for (const propName in props) {
-    updatedCookie += "; " + propName;
-    const propValue = props[propName];
-    if (propValue !== true) {
-      updatedCookie += "=" + propValue;
+
+  let updatedCookie =
+    encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in props) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = props[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
     }
   }
+
   document.cookie = updatedCookie;
 }
 export function getCookie(name: string) {
-  // eslint-disable-next-line no-useless-escape
-  const re = /([\.$?*|{}\(\)\[\]\\\/\+^])/g;
-  const matches = document.cookie.match(
-    new RegExp("(?:^|; )" + name.replace(re, "\\$1") + "=([^;]*)")
+  let matches = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" +
+        // eslint-disable-next-line no-useless-escape
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+        "=([^;]*)"
+    )
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }

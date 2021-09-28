@@ -2,7 +2,9 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import ErrorMessage from "../components/common/error-message/error-message";
-import IngredientDetailsModal from "../components/ingredient-details-modal/ingredient-details-modal";
+import DetailsModal from "../components/details-modal/details-modal";
+import IngredientDetailsById from "../components/ingredient-details-by-id/ingredient-details-by-id";
+import OrderById from "../components/order-by-id/order-by-id";
 import MainAllLayouts from "../layouts/main-all-layouts/main-all-layouts";
 import { ILocationState } from "../models/routes";
 import {
@@ -103,10 +105,32 @@ export default function Routes() {
             </Route>
           </Switch>
           {background && isPushAction && (
-            <Route
-              path={`${INGREDIENTS_PATH}/:id`}
-              children={<IngredientDetailsModal />}
-            />
+            <>
+              <Route
+                path={`${PROFILE_PATH}${ORDERS_PATH}/:id`}
+                children={
+                  <DetailsModal>
+                    <OrderById id={""} isShowTitle={false} />
+                  </DetailsModal>
+                }
+              />
+              <Route
+                path={`${FEED_PATH}/:id`}
+                children={
+                  <DetailsModal>
+                    <OrderById id={""} isShowTitle={false} />
+                  </DetailsModal>
+                }
+              />
+              <Route
+                path={`${INGREDIENTS_PATH}/:id`}
+                children={
+                  <DetailsModal title={"Детали ингредиента"}>
+                    <IngredientDetailsById id={""} />
+                  </DetailsModal>
+                }
+              />
+            </>
           )}
         </>
       )}

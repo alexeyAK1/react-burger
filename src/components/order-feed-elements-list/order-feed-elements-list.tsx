@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { IOrderFeedElement } from "../../models/order";
 import OrderFeedElement from "../order-feed-element/order-feed-element";
 
@@ -10,11 +10,15 @@ interface IProps {
 const OrderFeedElementsList: FC<IProps> = ({ orderFeedListElement }) => {
   const { path } = useRouteMatch();
   const history = useHistory();
+  const location = useLocation();
   const handleOnClick = useCallback(
     (idFeed: string) => {
-      history.push(`${path}/${idFeed}`);
+      history.push({
+        pathname: `${path}/${idFeed}`,
+        state: { background: location },
+      });
     },
-    [history, path]
+    [history, location, path]
   );
   return (
     <div>

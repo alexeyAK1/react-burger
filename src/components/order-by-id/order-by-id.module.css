@@ -5,7 +5,12 @@
 }
 .flex_container {
   width: 640px;
+}
+.flex_container_pt {
   padding-top: 122px;
+}
+.flex_container_pt_min {
+  padding-top: calc(var(--offset-base-size) * 4);
 }
 .id {
   text-align: center;

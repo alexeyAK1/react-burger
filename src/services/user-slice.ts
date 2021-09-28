@@ -45,7 +45,6 @@ const deleteToken = (dispatch: ThunkDispatch<unknown, unknown, AnyAction>) => {
   api.logOut();
 
   dispatch(setRefreshToken(""));
-  console.log("delete ----", api.refreshToken);
 };
 
 export const getRegisterFetch = createAsyncThunk(

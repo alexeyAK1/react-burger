@@ -1,10 +1,19 @@
-import React, { useEffect } from "react";
+import React, {
+  FC,
+  JSXElementConstructor,
+  ReactElement,
+  useEffect
+} from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToggleModal } from "../common/modal/hooks/use_toggle_modal";
 import Modal from "../common/modal/modal";
-import IngredientDetailsById from "../ingredient-details-by-id/ingredient-details-by-id";
 
-export default function IngredientDetailsModal() {
+interface IProps {
+  children: ReactElement<any, string | JSXElementConstructor<any>>;
+  title?: string;
+}
+
+const DetailsModal: FC<IProps> = ({ children, title }) => {
   const history = useHistory();
   const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();
   const { id } = useParams<{ id: string }>();
@@ -21,10 +30,16 @@ export default function IngredientDetailsModal() {
   return (
     <>
       {isOpenModal ? (
-        <Modal header={"Детали ингредиента"} onClose={handleOnCloseModal}>
-          <IngredientDetailsById id={id} />
+        <Modal
+          header={title ? title : `#${id}`}
+          classNameHeader={title ? "" : "text text_type_digits-default"}
+          onClose={handleOnCloseModal}
+        >
+          {React.cloneElement(children, { id })}
         </Modal>
       ) : null}
     </>
   );
-}
+};
+
+export default DetailsModal;

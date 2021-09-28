@@ -9,9 +9,10 @@ import styles from "./order-by-id.module.css";
 
 interface IProps {
   id: string;
+  isShowTitle?: boolean;
 }
 
-const OrderById: FC<IProps> = ({ id }) => {
+const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
   const [currentOrder, setCurrentOrder] = useState<IOrderFeedElement | null>();
   useEffect(() => {
     const current = orderData.find((item) => item._id === id);
@@ -25,10 +26,18 @@ const OrderById: FC<IProps> = ({ id }) => {
       {!currentOrder ? (
         <Loader />
       ) : (
-        <div className={styles.flex_container}>
-          <div
-            className={`text text_type_digits-default ${styles.id}`}
-          >{`#${id}`}</div>
+        <div
+          className={`${styles.flex_container} ${
+            isShowTitle
+              ? styles.flex_container_pt
+              : styles.flex_container_pt_min
+          }`}
+        >
+          {isShowTitle ? (
+            <div
+              className={`text text_type_digits-default ${styles.id}`}
+            >{`#${id}`}</div>
+          ) : null}
           <h2 className="text text_type_main-medium">{currentOrder.name}</h2>
           <p className={styles.status}>
             <span className="text text_type_main-default">

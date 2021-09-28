@@ -1,18 +1,19 @@
-import React, { ReactChild, MouseEvent, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import "animate.css";
-
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import React, { MouseEvent, ReactChild, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import ModalHeader from "./modal-header/modal-header";
 import ModalOverlay from "./modal-overlay/modal-overlay";
-
 import styles from "./modal.module.css";
+
+
 
 const modalRoot = document.getElementById("react-modals");
 
 interface IProps {
   children: ReactChild;
   header?: string;
+  classNameHeader?: string;
   isAnimated?: boolean;
   animateClassIn?: string;
   animateClassOut?: string;
@@ -28,6 +29,7 @@ const variants = {
 export default function Modal({
   children,
   header,
+  classNameHeader = "",
   isAnimated = true,
   animateTime = 0.5,
   onClose,
@@ -97,7 +99,9 @@ export default function Modal({
               }}
               className={`p-10 pb-15 ${styles.modal}`}
             >
-              <ModalHeader onClose={handleOnClose}>{header}</ModalHeader>
+              <ModalHeader onClose={handleOnClose} className={classNameHeader}>
+                {header}
+              </ModalHeader>
               <div className={styles.modal_body}>{children}</div>
             </motion.div>
           )}
