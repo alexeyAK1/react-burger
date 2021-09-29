@@ -1,5 +1,5 @@
 import { ICountIngredient, IIngredientsItem } from './ingredients';
-import { IOrder } from './order';
+import { IOrder, IOrdersFeedWithIngredients } from './order';
 import { IUserFields } from './user';
 
 export interface IRootStore {
@@ -35,6 +35,8 @@ export interface IConstructorIngredientState {
 export interface IOrderState {
   order: IOrder | null;
   isLoading: boolean;
+  orderFeed: IOrdersFeedWithIngredients | null;
+  orderFeedAll: IOrdersFeedWithIngredients | null;
 }
 export interface IUserState {
   user: IUserFields;

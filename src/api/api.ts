@@ -28,6 +28,7 @@ type TMethod = "GET" | "POST" | "PATCH";
 
 export const MAIN_URL = "https://norma.nomoreparties.space/api";
 export const REFRESH_TOKEN = "refresh_token";
+export const TOKEN = "token";
 
 export class Api {
   private static instance: Api;
@@ -37,12 +38,16 @@ export class Api {
 
   private constructor() {
     const refreshToken = getCookie(REFRESH_TOKEN);
+    const token = getCookie(TOKEN);
     this.localToken = "";
     this.localRefreshToken = "";
     this.localAbortController = null;
 
     if (refreshToken) {
       this.localRefreshToken = refreshToken;
+    }
+    if (token) {
+      this.localToken = token;
     }
   }
 
@@ -54,12 +59,15 @@ export class Api {
   }
 
   get token() {
-    return this.localToken;
+    const token = getCookie(TOKEN);
+
+    return this.localToken ? this.localToken : token ? token : "";
   }
 
   set token(token: string) {
     if (token) {
       const t = token.split("Bearer ")[1];
+      setCookie(TOKEN, t, { path: "/" });
       this.localToken = t;
     } else {
       this.localToken = "";
@@ -199,6 +207,7 @@ export class Api {
     if (userTokens) {
       const token = userTokens.accessToken.split("Bearer ")[1];
 
+      setCookie(TOKEN, token, { path: "/" });
       this.localToken = token;
       this.localRefreshToken = userTokens.refreshToken;
       setCookie(REFRESH_TOKEN, userTokens.refreshToken, { path: "/" });

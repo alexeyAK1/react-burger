@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { IIngredientImage } from "../../../models/ingredients";
+import { IIngredientsItem } from "../../../models/ingredients";
 import RoundPicture from "../round-picture/round-picture";
 import styles from "./row-round-pictures.module.css";
 
 interface IProps {
-  images: IIngredientImage[];
+  images: IIngredientsItem[];
 }
 
 const maxIndex = 6;
@@ -22,7 +22,7 @@ const RowRoundPictures: FC<IProps> = ({ images }) => {
         )}
       </div>
 
-      {images.length >= maxIndex ? (
+      {images.length >= maxIndex && images.length - maxIndex > 0 ? (
         <div className={`text text_type_main-default ${styles.another}`}>
           <p>{`+${images.length - maxIndex}`}</p>
         </div>

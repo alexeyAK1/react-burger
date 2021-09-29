@@ -20,12 +20,3 @@ export interface ICountIngredient {
   id: string;
   count: number;
 }
-
-export interface IIngredientImage {
-  name: string;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  count: number;
-  price: number;
-}

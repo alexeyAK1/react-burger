@@ -1,7 +1,15 @@
 import React, { FC, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getFormattedDateWithTime } from "../../common/functions";
 import ScrollContainer from "../../layouts/scroll-container/scroll-container";
-import { IOrderFeedElement } from "../../models/order";
-import orderData from "../../utils/feed";
+import { IOrderFeedElementWithIngredients } from "../../models/order";
+import {
+  wsOrderAllClose,
+  wsOrderAllConnectionStart,
+  wsOrderClose,
+  wsOrderConnectionStart
+} from "../../redux/action-types/wsActionCreators";
+import { RootState } from "../../services/store";
 import Loader from "../ui/loader/loader";
 import Price from "../ui/price/price";
 import OrderByIdIngredientsList from "./order-by-id-ingredients-list/order-by-id-ingredients-list";
@@ -13,13 +21,60 @@ interface IProps {
 }
 
 const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
-  const [currentOrder, setCurrentOrder] = useState<IOrderFeedElement | null>();
-  useEffect(() => {
-    const current = orderData.find((item) => item._id === id);
+  const dispatch = useDispatch();
+  const [currentOrder, setCurrentOrder] =
+    useState<IOrderFeedElementWithIngredients | null>(null);
+  const [price, setPrice] = useState(0);
+  const orderFeedAll = useSelector(
+    (state: RootState) => state.order.orderFeedAll
+  );
+  const ingredients = useSelector((state: RootState) => state.ingredients.ingredients);
+  const orderFeed = useSelector((state: RootState) => state.order.orderFeed);
 
-    setCurrentOrder(current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => {
+    if (orderFeedAll && ingredients) {
+      const currentOrderLocal = orderFeedAll.orders.find(
+        (orderItem) => orderItem.number === +id
+      );
+
+      if (currentOrderLocal) {
+        setCurrentOrder(currentOrderLocal);
+      }
+    } else {
+      dispatch(wsOrderAllConnectionStart());
+    }
+    return () => {
+      dispatch(wsOrderAllClose());
+    };
+  }, [dispatch, id, orderFeedAll, ingredients]);
+
+  useEffect(() => {
+    if (orderFeed && ingredients) {
+      const currentOrderLocal = orderFeed.orders.find(
+        (orderItem) => orderItem.number === +id
+      );
+
+      if (currentOrderLocal) {
+        setCurrentOrder(currentOrderLocal);
+      }
+    } else {
+      dispatch(wsOrderConnectionStart());
+    }
+    return () => {
+      dispatch(wsOrderClose());
+    };
+  }, [dispatch, id, orderFeed, ingredients]);
+
+  useEffect(() => {
+    if (currentOrder) {
+      const total = currentOrder.ingredients.reduce(
+        (calcTotal, { price }) => (calcTotal = calcTotal + +price),
+        0
+      );
+
+      setPrice(total);
+    }
+  }, [currentOrder]);
 
   return (
     <div className={styles.main_container}>
@@ -39,9 +94,21 @@ const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
             >{`#${id}`}</div>
           ) : null}
           <h2 className="text text_type_main-medium">{currentOrder.name}</h2>
-          <p className={styles.status}>
+          <p
+            className={`${styles.status} ${
+              currentOrder.status === "done"
+                ? styles.done_status
+                : currentOrder.status === "cancelled"
+                ? styles.canceled_status
+                : styles.prepared_status
+            }`}
+          >
             <span className="text text_type_main-default">
-              {currentOrder.status}
+              {currentOrder.status === "done"
+                ? "Выполнен"
+                : currentOrder.status === "cancelled"
+                ? "Отменен"
+                : "Готовиться"}
             </span>
           </p>
           <h3 className={`text text_type_main-medium ${styles.h3}`}>Состав:</h3>
@@ -50,9 +117,9 @@ const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
           </ScrollContainer>
           <div className={styles.bottom_container}>
             <div className={`text text_type_main-default ${styles.date}`}>
-              {currentOrder.data}
+              {getFormattedDateWithTime(currentOrder.createdAt)}
             </div>
-            <Price price={currentOrder.price.toLocaleString()} />
+            <Price price={price.toLocaleString()} />
           </div>
         </div>
       )}

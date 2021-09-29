@@ -1,4 +1,4 @@
-import { IIngredientImage } from "./ingredients";
+import { IIngredientsItem } from "./ingredients";
 
 export interface IOrder {
   name: string;
@@ -6,12 +6,39 @@ export interface IOrder {
   success: true;
 }
 
+// export interface IOrderFeedElement {
+//   _id: string;
+//   name: string;
+//   data: string;
+//   price: number;
+//   status: string;
+//   ingredients: IIngredientImage[];
+//   __v: number;
+// }
 export interface IOrderFeedElement {
+  ingredients: string[];
   _id: string;
-  name: string;
-  data: string;
-  price: number;
   status: string;
-  ingredients: IIngredientImage[];
-  __v: number;
+  name: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface IOrdersFeed {
+  orders: IOrderFeedElement[];
+  total: number;
+  totalToday: number;
+}
+
+export interface IOrdersFeedFetch extends IOrdersFeed {
+  success: boolean;
+}
+
+export interface IOrderFeedElementWithIngredients
+  extends Omit<IOrderFeedElement, "ingredients"> {
+  ingredients: IIngredientsItem[];
+}
+export interface IOrdersFeedWithIngredients
+  extends Omit<IOrdersFeed, "orders"> {
+  orders: IOrderFeedElementWithIngredients[];
 }

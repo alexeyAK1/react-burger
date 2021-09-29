@@ -10,6 +10,15 @@
 .main_container:not(:first-child) {
   margin-top: calc(var(--offset-base-size) * 4);
 }
+.done_status {
+  color: var(--text-primary-color);
+}
+.canceled_status {
+  color: var(--colors-interface-error);
+}
+.prepared_status {
+  color: var(--colors-interface-success);
+}
 .top_container {
   display: flex;
   align-items: center;

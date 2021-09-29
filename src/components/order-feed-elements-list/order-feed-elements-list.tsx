@@ -1,13 +1,14 @@
 import React, { FC, useCallback } from "react";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import { IOrderFeedElement } from "../../models/order";
+import { IOrderFeedElementWithIngredients } from "../../models/order";
 import OrderFeedElement from "../order-feed-element/order-feed-element";
 
 interface IProps {
-  orderFeedListElement: IOrderFeedElement[];
+  orderFeedListElement: IOrderFeedElementWithIngredients[];
+  showStatus?: boolean;
 }
 
-const OrderFeedElementsList: FC<IProps> = ({ orderFeedListElement }) => {
+const OrderFeedElementsList: FC<IProps> = ({ orderFeedListElement, showStatus = false }) => {
   const { path } = useRouteMatch();
   const history = useHistory();
   const location = useLocation();
@@ -20,12 +21,14 @@ const OrderFeedElementsList: FC<IProps> = ({ orderFeedListElement }) => {
     },
     [history, location, path]
   );
+
   return (
     <div>
       {orderFeedListElement.map((feedElement) => (
         <OrderFeedElement
           orderElement={feedElement}
           key={feedElement._id}
+          showStatus={showStatus}
           OnClick={handleOnClick}
         />
       ))}

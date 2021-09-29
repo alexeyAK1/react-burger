@@ -2,7 +2,7 @@ import {
   ILogoutResponse,
   IRefreshResponse,
   IUserDataResponse,
-  IUserResponse,
+  IUserResponse
 } from "../models/user";
 import { Api } from "./api";
 
@@ -56,9 +56,7 @@ export const updateUser = async (
     );
 
     if (userTokens) {
-      const token = userTokens.accessToken.split("Bearer ")[1];
-
-      api.token = token;
+      api.token = userTokens.accessToken;
       api.refreshToken = userTokens.refreshToken;
     } else {
       api.logOut();

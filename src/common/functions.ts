@@ -1,3 +1,17 @@
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+
+require("dayjs/locale/ru");
+
+dayjs.extend(relativeTime);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(utc);
+dayjs.locale("ru");
+
 export const getNElementArr = (n: number, element?: string) =>
   new Array(n).fill(element);
 
@@ -67,4 +81,24 @@ export function getAuthToken(res: Response): string | null {
   }
 
   return null;
+}
+
+export function getFormattedDate(date: string) {
+  const formatDate = dayjs(date).format("YYYY-MM-DD");
+
+  if (dayjs(formatDate).isToday()) {
+    return "Сегодня";
+  }
+  if (dayjs(formatDate).isYesterday()) {
+    return "Вчера";
+  }
+
+  return dayjs(formatDate).fromNow();
+}
+export function getFormattedDateWithTime(date: string) {
+  const firstPart = getFormattedDate(date);
+  const secondPart = dayjs(date).utc().local().format("HH:mm");
+  const lastPart = dayjs(date).utc().local().format("Z");
+
+  return `${firstPart}, ${secondPart} i-GMT${lastPart.split(":")[0]}`;
 }

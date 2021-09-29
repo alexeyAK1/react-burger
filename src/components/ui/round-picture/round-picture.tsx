@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { IIngredientImage } from "../../../models/ingredients";
+import { IIngredientsItem } from "../../../models/ingredients";
 import styles from "./round-picture.module.css";
 
 interface IProps {
-  image: IIngredientImage;
+  image: IIngredientsItem;
 }
 
 const RoundPicture: FC<IProps> = ({ image }) => {

@@ -24,6 +24,15 @@
   padding-bottom: calc(var(--offset-base-size) * 15);
   color: var(--colors-interface-success);
 }
+.done_status {
+  color: var(--text-primary-color);
+}
+.canceled_status {
+  color: var(--colors-interface-error);
+}
+.prepared_status {
+  color: var(--colors-interface-success);
+}
 .h3 {
   padding-bottom: calc(var(--offset-base-size) * 6);
 }
