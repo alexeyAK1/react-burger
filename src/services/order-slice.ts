@@ -57,16 +57,13 @@ const orderSlice = createSlice({
     },
   },
   extraReducers: {
-    // @ts-expect-error
-    [getOrderFetch.pending]: (state) => {
+    [getOrderFetch.pending.toString()]: (state) => {
       state.isLoading = true;
     },
-    // @ts-expect-error
-    [getOrderFetch.fulfilled]: (state) => {
+    [getOrderFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getOrderFetch.rejected]: (state, action: PayloadAction<Error>) => {
+    [getOrderFetch.rejected.toString()]: (state, action: PayloadAction<Error>) => {
       state.isLoading = false;
       state.order = null;
       console.log(action.payload);

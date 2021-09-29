@@ -244,44 +244,34 @@ const userSlice = createSlice({
     // [getRegisterFetch.pending]: (state) => {
     //   state.isLoading = true;
     // },
-    // @ts-expect-error
-    [getRegisterFetch.fulfilled]: (state) => {
+    [getRegisterFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getRegisterFetch.rejected]: (state) => {
+    [getRegisterFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLoginFetch.fulfilled]: (state) => {
+    [getLoginFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLoginFetch.rejected]: (state) => {
+    [getLoginFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLogoutFetch.fulfilled]: (state) => {
+    [getLogoutFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLogoutFetch.rejected]: (state) => {
+    [getLogoutFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getUserFetch.fulfilled]: (state) => {
+    [getUserFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getUserFetch.rejected]: (state) => {
+    [getUserFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [updateUserFetch.fulfilled]: (state) => {
+    [updateUserFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [updateUserFetch.rejected]: (state) => {
+    [updateUserFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
   },
