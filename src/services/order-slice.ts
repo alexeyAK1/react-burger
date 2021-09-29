@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getOrderData } from "../api/agent";
 import { getNElementArr } from "../common/functions";
-import { IOrderState, IRootStore } from "../models/app-store";
+import { IOrderState } from "../models/app-store";
 import { IOrder, IOrdersFeedWithIngredients } from "../models/order";
 import {
   setBun,
   setIngredientsInConstructor
 } from "./constructor-ingredients-slice";
 import { resetCountIngredients } from "./ingredients-slice";
+import { RootState } from "./store";
 
 const initialState: IOrderState = {
   order: null,
@@ -22,7 +23,7 @@ export const getOrderFetch = createAsyncThunk(
     try {
       const {
         constructorIngredients: { constructorIngredients, bun },
-      } = getState() as IRootStore;
+      } = getState() as RootState;
       const getIngredientIds = () =>
         constructorIngredients.map((item) => item._id);
       const ingredients = [

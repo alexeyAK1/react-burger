@@ -1,8 +1,7 @@
-import { AnyAction, Dispatch, Middleware, MiddlewareAPI } from "redux";
+import { AnyAction, Middleware, MiddlewareAPI } from "redux";
 import { Api } from "../../api/api";
 import { getRefreshToken } from "../../api/auth";
 import WS from "../../api/ws";
-import { IRootStore } from "../../models/app-store";
 import { IIngredientsItem } from "../../models/ingredients";
 import {
     IOrderFeedElement,
@@ -12,6 +11,7 @@ import {
     IOrdersFeedWithIngredients
 } from "../../models/order";
 import { setOrderFeed, setOrderFeedAll } from "../../services/order-slice";
+import { AppDispatch, RootState } from "../../services/store";
 import {
     WS_ORDER_ALL_CLOSE,
     WS_ORDER_ALL_CONNECTION_START,
@@ -28,8 +28,8 @@ const api = Api.getInstance();
 const sockets = WS.getInstance();
 
 export const socketMiddleware = (): Middleware<{}> => {
-  return (store: MiddlewareAPI<Dispatch, IRootStore>) => {
-    return (next: Dispatch) =>
+  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
+    return (next: AppDispatch) =>
       async <A extends AnyAction>(action: A) => {
         const { dispatch, getState } = store;
         const { type, payload } = action;

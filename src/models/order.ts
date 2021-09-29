@@ -6,15 +6,6 @@ export interface IOrder {
   success: true;
 }
 
-// export interface IOrderFeedElement {
-//   _id: string;
-//   name: string;
-//   data: string;
-//   price: number;
-//   status: string;
-//   ingredients: IIngredientImage[];
-//   __v: number;
-// }
 export interface IOrderFeedElement {
   ingredients: string[];
   _id: string;

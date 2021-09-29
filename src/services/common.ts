@@ -1,10 +1,10 @@
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   IConstructorIngredientState,
-  IIngredientsState,
+  IIngredientsState
 } from "../models/app-store";
 import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
 import { setAppError } from "./app-slice";
+import { AppDispatch } from "./store";
 
 export const calculateTotalPrice = (state: IConstructorIngredientState) => {
   const totalAddition = state.constructorIngredients.reduce(
@@ -69,7 +69,7 @@ export const getNewElementConstructor = (
 
 export const setErrorInAsyncThunk = (
   error: Error,
-  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+  dispatch: AppDispatch,
   rejectWithValue: (value: unknown) => any
 ) => {
   const sendError = {

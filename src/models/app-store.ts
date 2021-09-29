@@ -1,15 +1,6 @@
-import { ICountIngredient, IIngredientsItem } from './ingredients';
-import { IOrder, IOrdersFeedWithIngredients } from './order';
-import { IUserFields } from './user';
-
-export interface IRootStore {
-  app: IAppState;
-  ingredients: IIngredientsState;
-  currentIngredient: ICurrentIngredientState;
-  constructorIngredients: IConstructorIngredientState;
-  order: IOrderState;
-  user: IUserState;
-}
+import { ICountIngredient, IIngredientsItem } from "./ingredients";
+import { IOrder, IOrdersFeedWithIngredients } from "./order";
+import { IUserFields } from "./user";
 export interface IAppState {
   isLoading: boolean;
   error: Error | null;
