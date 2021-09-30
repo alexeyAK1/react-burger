@@ -1,5 +1,4 @@
 import {
-  Button,
   Input,
   PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -10,6 +9,7 @@ import { LOGIN_PATH } from "../../../routes/constants-path";
 import { RootState } from "../../../services/store";
 import { getRegisterFetch, setError } from "../../../services/user-slice";
 import { requiredValidation, validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 
 enum nameFields {
@@ -65,8 +65,11 @@ export default function Register() {
 
   return (
     <section className="login_container">
-      <h2 className="text text_type_main-medium">Регистрация</h2>
-      <form onSubmit={handleSubmit}>
+      <FormWrapper
+        onSubmit={handleSubmit}
+        title="Регистрация"
+        buttonName="Зарегистрироваться"
+      >
         <div className="login_input_container">
           <Input
             type={"text"}
@@ -96,12 +99,7 @@ export default function Register() {
             name={nameFields.Password}
           />
         </div>
-        <div className="login_button_container">
-          <Button type="primary" size="medium">
-            Зарегистрироваться
-          </Button>
-        </div>
-      </form>
+      </FormWrapper>
       <p className="text text_type_main-default">
         <span>Уже зарегистрированы?</span>
         <Link to={LOGIN_PATH}>Войти</Link>

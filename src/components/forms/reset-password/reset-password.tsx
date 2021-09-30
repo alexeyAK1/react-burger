@@ -1,5 +1,4 @@
 import {
-  Button,
   Input
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useState } from "react";
@@ -8,6 +7,7 @@ import { getResetPassword } from "../../../api/agent";
 import { LOGIN_PATH } from "../../../routes/constants-path";
 import { nameFields } from "../common/names-forms";
 import { requiredValidation, validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 
 interface IResetPasswordForm {
@@ -62,8 +62,11 @@ export default function ResetPassword() {
 
   return (
     <section className="login_container">
-      <h2 className="text text_type_main-medium">Восстановление пароля</h2>
-      <form onSubmit={handleSubmit}>
+      <FormWrapper
+        onSubmit={handleSubmit}
+        title="Восстановление пароля"
+        buttonName="Сохранить"
+      >
         <div className="login_input_container">
           <Input
             type={isShowPassword ? "text" : "password"}
@@ -88,12 +91,7 @@ export default function ResetPassword() {
             errorText={errors[nameFields.Code]}
           />
         </div>
-        <div className="login_button_container">
-          <Button type="primary" size="medium">
-            Сохранить
-          </Button>
-        </div>
-      </form>
+      </FormWrapper>
       <p className="text text_type_main-default">
         <span>Вспомнили пароль?</span>
         <Link to={LOGIN_PATH}>Войти</Link>

@@ -1,5 +1,4 @@
 import {
-  Button,
   Input,
   PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -14,6 +13,7 @@ import { RootState } from "../../../services/store";
 import { getLoginFetch } from "../../../services/user-slice";
 import { nameFields } from "../common/names-forms";
 import { validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 
 interface ILoginForm {
@@ -47,8 +47,7 @@ export default function Login() {
 
   return (
     <section className="login_container">
-      <h2 className="text text_type_main-medium">Вход</h2>
-      <form onSubmit={handleSubmit}>
+      <FormWrapper onSubmit={handleSubmit} title="Вход" buttonName="Войти">
         <div className="login_input_container">
           <Input
             type={"email"}
@@ -67,12 +66,7 @@ export default function Login() {
             name={nameFields.Password}
           />
         </div>
-        <div className="login_button_container">
-          <Button type="primary" size="medium">
-            Войти
-          </Button>
-        </div>
-      </form>
+      </FormWrapper>
 
       <p className="text text_type_main-default">
         <span>Вы — новый пользователь?</span>

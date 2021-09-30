@@ -12,6 +12,7 @@ import Loader from "../../ui/loader/loader";
 import { variantsNextRouter } from "../common/animations-form";
 import { nameFields } from "../common/names-forms";
 import { requiredValidation, validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 import styles from "./profile.module.css";
 
@@ -110,7 +111,7 @@ export default function Profile() {
             exit="exit"
             animate="visible"
           >
-            <form onSubmit={handleSubmit}>
+            <FormWrapper onSubmit={handleSubmit}>
               <div className="login_input_container">
                 <Input
                   type={"text"}
@@ -179,7 +180,7 @@ export default function Profile() {
                   Сохранить
                 </Button>
               </div>
-            </form>
+            </FormWrapper>
           </motion.div>
         )}
       </AnimatePresence>
