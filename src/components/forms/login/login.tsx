@@ -9,7 +9,7 @@ import {
   FORGOT_PASSWORD_PATH,
   REGISTER_PATH
 } from "../../../routes/constants-path";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { getLoginFetch } from "../../../services/user-slice";
 import { nameFields } from "../common/names-forms";
 import { validations } from "../common/validate-form";
@@ -23,7 +23,7 @@ interface ILoginForm {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
   const { handleSubmit, handleChange, data, errors } = useForm<ILoginForm>({
     initialValues: {
       [nameFields.Email]: "",

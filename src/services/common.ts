@@ -4,7 +4,7 @@ import {
 } from "../models/app-store";
 import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
 import { setAppError } from "./app-slice";
-import { AppDispatch } from "./store";
+import { TAppDispatch } from "./store";
 
 export const calculateTotalPrice = (state: IConstructorIngredientState) => {
   const totalAddition = state.constructorIngredients.reduce(
@@ -69,7 +69,7 @@ export const getNewElementConstructor = (
 
 export const setErrorInAsyncThunk = (
   error: Error,
-  dispatch: AppDispatch,
+  dispatch: TAppDispatch,
   rejectWithValue: (value: unknown) => any
 ) => {
   const sendError = {

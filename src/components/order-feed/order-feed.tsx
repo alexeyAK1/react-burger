@@ -8,7 +8,7 @@ import {
   wsOrderAllClose,
   wsOrderAllConnectionStart
 } from "../../redux/action-types/wsActionCreators";
-import { RootState } from "../../services/store";
+import { TRootState } from "../../services/store";
 import OrderFeedElementsList from "../order-feed-elements-list/order-feed-elements-list";
 import Loader from "../ui/loader/loader";
 import styles from "./order-feed.module.css";
@@ -26,7 +26,7 @@ export default function OrderFeed() {
   const [inTheWorkOrders, setInTheWorkOrders] = useState<string[]>([]);
 
   const orderFeedAll = useSelector(
-    (state: RootState) => state.order.orderFeedAll
+    (state: TRootState) => state.order.orderFeedAll
   );
 
   useEffect(() => {

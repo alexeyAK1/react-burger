@@ -9,7 +9,7 @@ import {
   wsOrderClose,
   wsOrderConnectionStart
 } from "../../redux/action-types/wsActionCreators";
-import { RootState } from "../../services/store";
+import { TRootState } from "../../services/store";
 import Loader from "../ui/loader/loader";
 import Price from "../ui/price/price";
 import OrderByIdIngredientsList from "./order-by-id-ingredients-list/order-by-id-ingredients-list";
@@ -26,10 +26,10 @@ const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
     useState<IOrderFeedElementWithIngredients | null>(null);
   const [price, setPrice] = useState(0);
   const orderFeedAll = useSelector(
-    (state: RootState) => state.order.orderFeedAll
+    (state: TRootState) => state.order.orderFeedAll
   );
-  const ingredients = useSelector((state: RootState) => state.ingredients.ingredients);
-  const orderFeed = useSelector((state: RootState) => state.order.orderFeed);
+  const ingredients = useSelector((state: TRootState) => state.ingredients.ingredients);
+  const orderFeed = useSelector((state: TRootState) => state.order.orderFeed);
 
   useEffect(() => {
     if (orderFeedAll && ingredients) {

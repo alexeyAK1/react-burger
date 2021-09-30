@@ -7,7 +7,7 @@ import {
   wsOrderClose,
   wsOrderConnectionStart
 } from "../../redux/action-types/wsActionCreators";
-import { RootState } from "../../services/store";
+import { TRootState } from "../../services/store";
 import { variantsNextRouter } from "../forms/common/animations-form";
 import OrderFeedElementsList from "../order-feed-elements-list/order-feed-elements-list";
 import Loader from "../ui/loader/loader";
@@ -17,7 +17,7 @@ const OrderFeedsListAnimation = () => {
   const [orderData, setOrderData] = useState<
     IOrderFeedElementWithIngredients[]
   >([]);
-  const orderFeed = useSelector((state: RootState) => state.order.orderFeed);
+  const orderFeed = useSelector((state: TRootState) => state.order.orderFeed);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(wsOrderConnectionStart());

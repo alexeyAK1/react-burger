@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { bunName, categoriesTypeArray } from "../../../common/constants";
 import ScrollContainer from "../../../layouts/scroll-container/scroll-container";
 import { TCategory } from "../../../models/ingredients";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { useForceMemoUpdate } from "./hooks/use-force-memo-update";
 import { useToggleRefs } from "./hooks/use-toggle-refs";
 import IngredientsList from "./ingredients-list/ingredients-list";
@@ -19,13 +19,13 @@ import TabNavByCategory from "./tab-nav-by-category/tab-nav-by-category";
 export default function BurgerIngredients() {
   const tabsRef = useRef<HTMLDivElement>(null);
   const ingredients = useSelector(
-    (state: RootState) => state.ingredients.ingredients
+    (state: TRootState) => state.ingredients.ingredients
   );
   const bun = useSelector(
-    (state: RootState) => state.constructorIngredients.bun
+    (state: TRootState) => state.constructorIngredients.bun
   );
   const countIngredients = useSelector(
-    (state: RootState) => state.ingredients.countIngredients
+    (state: TRootState) => state.ingredients.countIngredients
   );
   const [visibleList, setVisibleList] = useState<TCategory[]>([]);
   const [isClicked, setIsClicked] = useState(false);

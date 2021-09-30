@@ -17,7 +17,7 @@ import { IUserState } from "../models/app-store";
 import { IRefreshResponse, IUserFields } from "../models/user";
 import { MAIN_PATH } from "../routes/constants-path";
 import { setErrorInAsyncThunk } from "./common";
-import { RootState } from "./store";
+import { TRootState } from "./store";
 
 const api = Api.getInstance();
 
@@ -59,7 +59,7 @@ export const getRegisterFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as RootState;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -93,7 +93,7 @@ export const getLoginFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as RootState;
+    } = getState() as TRootState;
     if (!isLoading) {
       dispatch(setIsLoading(true));
       try {
@@ -128,7 +128,7 @@ export const getLogoutFetch = createAsyncThunk(
   async function (_, { rejectWithValue, dispatch, getState }) {
     const {
       user: { isLoading, refreshToken },
-    } = getState() as RootState;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -157,7 +157,7 @@ export const getUserFetch = createAsyncThunk(
   async function (_, { rejectWithValue, dispatch, getState }) {
     const {
       user: { isLoading },
-    } = getState() as RootState;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -201,7 +201,7 @@ export const updateUserFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as RootState;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));

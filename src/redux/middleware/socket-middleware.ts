@@ -4,21 +4,21 @@ import { getRefreshToken } from "../../api/auth";
 import WS from "../../api/ws";
 import { IIngredientsItem } from "../../models/ingredients";
 import {
-    IOrderFeedElement,
-    IOrderFeedElementWithIngredients,
-    IOrdersFeed,
-    IOrdersFeedFetch,
-    IOrdersFeedWithIngredients
+  IOrderFeedElement,
+  IOrderFeedElementWithIngredients,
+  IOrdersFeed,
+  IOrdersFeedFetch,
+  IOrdersFeedWithIngredients
 } from "../../models/order";
 import { setOrderFeed, setOrderFeedAll } from "../../services/order-slice";
-import { AppDispatch, RootState } from "../../services/store";
+import { TAppDispatch, TRootState } from "../../services/store";
 import {
-    WS_ORDER_ALL_CLOSE,
-    WS_ORDER_ALL_CONNECTION_START,
-    WS_ORDER_ALL_SEND_MESSAGE,
-    WS_ORDER_CLOSE,
-    WS_ORDER_CONNECTION_START,
-    WS_ORDER_SEND_MESSAGE
+  WS_ORDER_ALL_CLOSE,
+  WS_ORDER_ALL_CONNECTION_START,
+  WS_ORDER_ALL_SEND_MESSAGE,
+  WS_ORDER_CLOSE,
+  WS_ORDER_CONNECTION_START,
+  WS_ORDER_SEND_MESSAGE
 } from "../action-types/ws-action-types";
 
 const ws1 = "orders_all";
@@ -28,8 +28,8 @@ const api = Api.getInstance();
 const sockets = WS.getInstance();
 
 export const socketMiddleware = (): Middleware<{}> => {
-  return (store: MiddlewareAPI<AppDispatch, RootState>) => {
-    return (next: AppDispatch) =>
+  return (store: MiddlewareAPI<TAppDispatch, TRootState>) => {
+    return (next: TAppDispatch) =>
       async <A extends AnyAction>(action: A) => {
         const { dispatch, getState } = store;
         const { type, payload } = action;

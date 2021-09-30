@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { getUserFetch, updateUserFetch } from "../../../services/user-slice";
 import Loader from "../../ui/loader/loader";
 import { variantsNextRouter } from "../common/animations-form";
@@ -25,8 +25,8 @@ interface IProfileForm {
 export default function Profile() {
   const dispatch = useDispatch();
   const [focusedName, setFocusedName] = useState("");
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
-  const user = useSelector((state: RootState) => state.user.user);
+  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
+  const user = useSelector((state: TRootState) => state.user.user);
   const { handleSubmit, handleChange, setData, data, errors } =
     useForm<IProfileForm>({
       initialValues: {

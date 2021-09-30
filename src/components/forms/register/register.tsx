@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LOGIN_PATH } from "../../../routes/constants-path";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { getRegisterFetch, setError } from "../../../services/user-slice";
 import { requiredValidation, validations } from "../common/validate-form";
 import FormWrapper from "../form-wrapper/form-wrapper";
@@ -26,8 +26,8 @@ interface IRegisterForm {
 
 export default function Register() {
   const dispatch = useDispatch();
-  const errorText = useSelector((state: RootState) => state.user.errorText);
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const errorText = useSelector((state: TRootState) => state.user.errorText);
+  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
   const { handleSubmit, handleChange, data, errors } = useForm<IRegisterForm>({
     initialValues: {
       [nameFields.Name]: "",

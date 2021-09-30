@@ -1,22 +1,22 @@
 import React, { memo, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
-
-import styles from './burger-constructor.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 import ScrollContainer from '../../../layouts/scroll-container/scroll-container';
-import { RootState } from '../../../services/store';
-import { IIngredientsItem } from '../../../models/ingredients';
 import { ItemTypes } from '../../../models/drag-and-drop';
-import Bun from './bun/bun';
+import { IIngredientsItem } from '../../../models/ingredients';
 import {
   addIngredientInConstructor,
-  deleteIngredientFromConstructor,
+  deleteIngredientFromConstructor
 } from '../../../services/constructor-ingredients-slice';
+import { TRootState } from '../../../services/store';
+import Bun from './bun/bun';
+import styles from './burger-constructor.module.css';
 import ConstructorIngredientsList from './constructor-ingredients-list/constructor-ingredients-list';
 import Order from './order/order';
 
+
 function BurgerConstructor() {
-  const { bun, constructorIngredients } = useSelector((state: RootState) => ({
+  const { bun, constructorIngredients } = useSelector((state: TRootState) => ({
     bun: state.constructorIngredients.bun,
     constructorIngredients: state.constructorIngredients.constructorIngredients,
   }));

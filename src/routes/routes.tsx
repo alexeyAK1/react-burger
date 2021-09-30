@@ -20,7 +20,7 @@ import {
 } from "../pages";
 import OrderByIdPage from "../pages/order-by-id-page/order-by-id-page";
 import { setAppError } from "../services/app-slice";
-import { RootState } from "../services/store";
+import { TRootState } from "../services/store";
 import {
   FEED_PATH,
   FORGOT_PASSWORD_PATH,
@@ -39,7 +39,7 @@ export default function Routes() {
   const location = useLocation<ILocationState>();
   const history = useHistory();
   const dispatch = useDispatch();
-  const error = useSelector((state: RootState) => state.app.error);
+  const error = useSelector((state: TRootState) => state.app.error);
   const background = useMemo(
     () => location.state && location.state.background,
     [location.state]

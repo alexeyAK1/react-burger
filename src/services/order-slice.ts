@@ -8,7 +8,7 @@ import {
   setIngredientsInConstructor
 } from "./constructor-ingredients-slice";
 import { resetCountIngredients } from "./ingredients-slice";
-import { RootState } from "./store";
+import { TRootState } from "./store";
 
 const initialState: IOrderState = {
   order: null,
@@ -23,7 +23,7 @@ export const getOrderFetch = createAsyncThunk(
     try {
       const {
         constructorIngredients: { constructorIngredients, bun },
-      } = getState() as RootState;
+      } = getState() as TRootState;
       const getIngredientIds = () =>
         constructorIngredients.map((item) => item._id);
       const ingredients = [
