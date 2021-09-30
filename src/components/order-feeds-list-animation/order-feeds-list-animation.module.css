@@ -1,0 +1,8 @@
+.motion_container{
+    flex: 1;
+}
+.main_Container {
+  height: calc(100vh - var(--height-header) - (var(--offset-base-size) * 10));
+  width: 100%;
+  padding-top: calc(var(--offset-base-size) * 10);
+}

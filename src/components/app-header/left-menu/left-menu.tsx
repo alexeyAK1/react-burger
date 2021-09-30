@@ -1,11 +1,11 @@
-import React from 'react';
 import {
   BurgerIcon,
-  ListIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-
-import styles from './left-menu.module.css';
-import MenuButton from '../menu-button/menu-button';
+  ListIcon
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
+import { FEED_PATH } from "../../../routes/constants-path";
+import MenuButton from "../menu-button/menu-button";
+import styles from "./left-menu.module.css";
 
 export default function LeftMenu() {
   return (
@@ -13,7 +13,7 @@ export default function LeftMenu() {
       <MenuButton Icon={BurgerIcon} link="/">
         <span>Конструктор</span>
       </MenuButton>
-      <MenuButton Icon={ListIcon} link="#">
+      <MenuButton Icon={ListIcon} link={FEED_PATH}>
         <span>Лента заказов</span>
       </MenuButton>
     </menu>

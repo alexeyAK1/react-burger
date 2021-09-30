@@ -1,3 +1,17 @@
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
+
+require("dayjs/locale/ru");
+
+dayjs.extend(relativeTime);
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(utc);
+dayjs.locale("ru");
+
 export const getNElementArr = (n: number, element?: string) =>
   new Array(n).fill(element);
 
@@ -12,32 +26,36 @@ export function setCookie(
   value: string | number,
   props?: { [key: string]: number | Date | any }
 ) {
-  props = props || {};
-  let exp = props.expires;
-  if (typeof exp == "number" && exp) {
-    const d = new Date();
-    d.setTime(d.getTime() + exp * 1000);
-    exp = props.expires = d;
+  props = {
+    path: "/",
+    ...props,
+  };
+
+  if (props.expires instanceof Date) {
+    props.expires = props.expires.toUTCString();
   }
-  if (exp && exp.toUTCString) {
-    props.expires = exp.toUTCString();
-  }
-  value = encodeURIComponent(value);
-  let updatedCookie = name + "=" + value;
-  for (const propName in props) {
-    updatedCookie += "; " + propName;
-    const propValue = props[propName];
-    if (propValue !== true) {
-      updatedCookie += "=" + propValue;
+
+  let updatedCookie =
+    encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in props) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = props[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
     }
   }
+
   document.cookie = updatedCookie;
 }
 export function getCookie(name: string) {
-  // eslint-disable-next-line no-useless-escape
-  const re = /([\.$?*|{}\(\)\[\]\\\/\+^])/g;
-  const matches = document.cookie.match(
-    new RegExp("(?:^|; )" + name.replace(re, "\\$1") + "=([^;]*)")
+  let matches = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" +
+        // eslint-disable-next-line no-useless-escape
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+        "=([^;]*)"
+    )
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
@@ -63,4 +81,24 @@ export function getAuthToken(res: Response): string | null {
   }
 
   return null;
+}
+
+export function getFormattedDate(date: string) {
+  const formatDate = dayjs(date).format("YYYY-MM-DD");
+
+  if (dayjs(formatDate).isToday()) {
+    return "Сегодня";
+  }
+  if (dayjs(formatDate).isYesterday()) {
+    return "Вчера";
+  }
+
+  return dayjs(formatDate).fromNow();
+}
+export function getFormattedDateWithTime(date: string) {
+  const firstPart = getFormattedDate(date);
+  const secondPart = dayjs(date).utc().local().format("HH:mm");
+  const lastPart = dayjs(date).utc().local().format("Z");
+
+  return `${firstPart}, ${secondPart} i-GMT${lastPart.split(":")[0]}`;
 }

@@ -6,12 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { getUserFetch, updateUserFetch } from "../../../services/user-slice";
 import Loader from "../../ui/loader/loader";
 import { variantsNextRouter } from "../common/animations-form";
 import { nameFields } from "../common/names-forms";
 import { requiredValidation, validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 import styles from "./profile.module.css";
 
@@ -24,8 +25,8 @@ interface IProfileForm {
 export default function Profile() {
   const dispatch = useDispatch();
   const [focusedName, setFocusedName] = useState("");
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
-  const user = useSelector((state: RootState) => state.user.user);
+  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
+  const user = useSelector((state: TRootState) => state.user.user);
   const { handleSubmit, handleChange, setData, data, errors } =
     useForm<IProfileForm>({
       initialValues: {
@@ -93,7 +94,7 @@ export default function Profile() {
 
   return (
     <motion.section
-      className="login_container"
+      className={`login_container ${styles.motion_container}`}
       variants={variantsNextRouter}
       initial="hidden"
       exit="exit"
@@ -110,7 +111,7 @@ export default function Profile() {
             exit="exit"
             animate="visible"
           >
-            <form onSubmit={handleSubmit}>
+            <FormWrapper onSubmit={handleSubmit}>
               <div className="login_input_container">
                 <Input
                   type={"text"}
@@ -167,19 +168,19 @@ export default function Profile() {
               <button type="submit" style={{ display: "none" }}>
                 Submit
               </button>
-            </form>
-            <div
-              className={`login_input_container ${styles.buttons_container}`}
-            >
-              <div>
-                <Link to={"#"} onClick={handleOnCancellation}>
-                  Отмена
-                </Link>
+              <div
+                className={`login_input_container ${styles.buttons_container}`}
+              >
+                <div>
+                  <Link to={"#"} onClick={handleOnCancellation}>
+                    Отмена
+                  </Link>
+                </div>
+                <Button type="primary" size="medium">
+                  Сохранить
+                </Button>
               </div>
-              <Button type="primary" size="medium" onClick={handleSubmit}>
-                Сохранить
-              </Button>
-            </div>
+            </FormWrapper>
           </motion.div>
         )}
       </AnimatePresence>

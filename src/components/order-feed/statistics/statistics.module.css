@@ -1,0 +1,33 @@
+.status_table {
+  display: grid;
+  gap: calc(var(--offset-base-size) * 9);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
+ul {
+  margin: 0px;
+  padding: 0px;
+  padding-top: calc(var(--offset-base-size) * 6);
+}
+
+li {
+  list-style-type: none;
+}
+
+.ready li {
+  color: var(--colors-interface-success);
+}
+
+p{
+    padding: 0px;
+    margin: 0px;
+}
+
+.completed_block{
+    padding-top: calc(var(--offset-base-size) * 15);
+}

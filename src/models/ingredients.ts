@@ -1,4 +1,4 @@
-export type TCategory = 'bun' | 'sauce' | 'main';
+export type TCategory = "bun" | "sauce" | "main";
 
 export interface IIngredientsItem {
   _id: string;

@@ -6,7 +6,7 @@ import { ICountIngredient, IIngredientsItem } from "../models/ingredients";
 import { addOrDeleteCountIngredients, setErrorInAsyncThunk } from "./common";
 import {
   addIngredientInConstructor,
-  deleteIngredientFromConstructor,
+  deleteIngredientFromConstructor
 } from "./constructor-ingredients-slice";
 
 const initialState: IIngredientsState = {
@@ -40,20 +40,16 @@ const ingredientsSlice = createSlice({
     },
   },
   extraReducers: {
-    // @ts-expect-error
-    [getIngredientFetch.pending]: (state) => {
+    [getIngredientFetch.pending.toString()]: (state) => {
       state.isLoading = true;
     },
-    // @ts-expect-error
-    [getIngredientFetch.fulfilled]: (state) => {
+    [getIngredientFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getIngredientFetch.rejected]: (state) => {
+    [getIngredientFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [addIngredientInConstructor]: (
+    [addIngredientInConstructor.toString()]: (
       state: IIngredientsState,
       action: PayloadAction<IIngredientsItem>
     ) => {
@@ -65,8 +61,7 @@ const ingredientsSlice = createSlice({
         );
       }
     },
-    // @ts-expect-error
-    [deleteIngredientFromConstructor]: (
+    [deleteIngredientFromConstructor.toString()]: (
       state: IIngredientsState,
       action: PayloadAction<IIngredientsItem>
     ) => {

@@ -1,0 +1,8 @@
+.image {
+  display: block;
+  height: 64px;
+  width: 64px;
+  background: var(--background-alt);
+  border: solid 1px var(--colors-interface-accent);
+  border-radius: 50%;
+}

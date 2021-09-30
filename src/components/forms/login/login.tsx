@@ -1,5 +1,4 @@
 import {
-  Button,
   Input,
   PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -10,10 +9,11 @@ import {
   FORGOT_PASSWORD_PATH,
   REGISTER_PATH
 } from "../../../routes/constants-path";
-import { RootState } from "../../../services/store";
+import { TRootState } from "../../../services/store";
 import { getLoginFetch } from "../../../services/user-slice";
 import { nameFields } from "../common/names-forms";
 import { validations } from "../common/validate-form";
+import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
 
 interface ILoginForm {
@@ -23,7 +23,7 @@ interface ILoginForm {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: RootState) => state.user.isLoading);
+  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
   const { handleSubmit, handleChange, data, errors } = useForm<ILoginForm>({
     initialValues: {
       [nameFields.Email]: "",
@@ -47,8 +47,7 @@ export default function Login() {
 
   return (
     <section className="login_container">
-      <h2 className="text text_type_main-medium">Вход</h2>
-      <form onSubmit={handleSubmit}>
+      <FormWrapper onSubmit={handleSubmit} title="Вход" buttonName="Войти">
         <div className="login_input_container">
           <Input
             type={"email"}
@@ -67,16 +66,8 @@ export default function Login() {
             name={nameFields.Password}
           />
         </div>
-        <button type="submit" style={{ display: "none" }}>
-          Submit
-        </button>
-      </form>
+      </FormWrapper>
 
-      <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleSubmit}>
-          Войти
-        </Button>
-      </div>
       <p className="text text_type_main-default">
         <span>Вы — новый пользователь?</span>
         <Link to={REGISTER_PATH}>Зарегистрироваться</Link>

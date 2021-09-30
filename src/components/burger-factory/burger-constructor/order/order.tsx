@@ -1,36 +1,36 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-
 import {
   Button,
-  CurrencyIcon,
+  CurrencyIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
-
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Api } from "../../../../api/api";
+import { LOGIN_PATH } from "../../../../routes/constants-path";
 import { getOrderFetch } from "../../../../services/order-slice";
-import { RootState } from "../../../../services/store";
+import { TRootState } from "../../../../services/store";
 import { useToggleModal } from "../../../common/modal/hooks/use_toggle_modal";
 import Modal from "../../../common/modal/modal";
 import OrderDetails from "../../../order-details/order-details";
-
 import styles from "./order.module.css";
-import { useHistory } from "react-router-dom";
-import { LOGIN_PATH } from "../../../../routes/constants-path";
-import { Api } from "../../../../api/api";
+
+
+
 
 const api = Api.getInstance();
 
 export default function Order() {
   const nameButton = "Оформить заказ";
   const history = useHistory();
-  const isLoading = useSelector((state: RootState) => state.order.isLoading);
+  const isLoading = useSelector((state: TRootState) => state.order.isLoading);
   const totalSum = useSelector(
-    (state: RootState) => state.constructorIngredients.totalSum
+    (state: TRootState) => state.constructorIngredients.totalSum
   );
   const bun = useSelector(
-    (state: RootState) => state.constructorIngredients.bun
+    (state: TRootState) => state.constructorIngredients.bun
   );
   const refreshToken = useSelector(
-    (state: RootState) => state.user.refreshToken
+    (state: TRootState) => state.user.refreshToken
   );
   const dispatch = useDispatch();
   const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();

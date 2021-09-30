@@ -1,29 +1,29 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getOrderData } from "../api/agent";
 import { getNElementArr } from "../common/functions";
-import { IOrderState, IRootStore } from "../models/app-store";
-import { IOrder } from "../models/order";
+import { IOrderState } from "../models/app-store";
+import { IOrder, IOrdersFeedWithIngredients } from "../models/order";
 import {
   setBun,
-  setIngredientsInConstructor,
+  setIngredientsInConstructor
 } from "./constructor-ingredients-slice";
 import { resetCountIngredients } from "./ingredients-slice";
+import { TRootState } from "./store";
 
 const initialState: IOrderState = {
   order: null,
   isLoading: false,
+  orderFeed: null,
+  orderFeedAll: null,
 };
 
 export const getOrderFetch = createAsyncThunk(
   "order/getOrderFetch",
-  async function (
-    _,
-    { rejectWithValue, dispatch, getState }
-  ) {
+  async function (_, { rejectWithValue, dispatch, getState }) {
     try {
       const {
         constructorIngredients: { constructorIngredients, bun },
-      } = getState() as IRootStore;
+      } = getState() as TRootState;
       const getIngredientIds = () =>
         constructorIngredients.map((item) => item._id);
       const ingredients = [
@@ -50,18 +50,21 @@ const orderSlice = createSlice({
     setOrder(state, action: PayloadAction<IOrder | null>) {
       state.order = action.payload;
     },
+    setOrderFeed(state, action: PayloadAction<IOrdersFeedWithIngredients | null>) {
+      state.orderFeed = action.payload;
+    },
+    setOrderFeedAll(state, action: PayloadAction<IOrdersFeedWithIngredients | null>) {
+      state.orderFeedAll = action.payload;
+    },
   },
   extraReducers: {
-    // @ts-expect-error
-    [getOrderFetch.pending]: (state) => {
+    [getOrderFetch.pending.toString()]: (state) => {
       state.isLoading = true;
     },
-    // @ts-expect-error
-    [getOrderFetch.fulfilled]: (state) => {
+    [getOrderFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getOrderFetch.rejected]: (state, action: PayloadAction<Error>) => {
+    [getOrderFetch.rejected.toString()]: (state, action: PayloadAction<Error>) => {
       state.isLoading = false;
       state.order = null;
       console.log(action.payload);
@@ -72,3 +75,4 @@ const orderSlice = createSlice({
 export default orderSlice.reducer;
 
 const { setOrder } = orderSlice.actions;
+export const { setOrderFeed, setOrderFeedAll } = orderSlice.actions;

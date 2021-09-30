@@ -3,21 +3,21 @@ import {
   createAsyncThunk,
   createSlice,
   PayloadAction,
-  ThunkDispatch,
+  ThunkDispatch
 } from "@reduxjs/toolkit";
 import { Api, errorAuthorized } from "../api/api";
-
 import {
   getLoginUser,
   getLogout,
   getRegisterUser,
   getUser,
-  updateUser,
+  updateUser
 } from "../api/auth";
-import { IRootStore, IUserState } from "../models/app-store";
+import { IUserState } from "../models/app-store";
 import { IRefreshResponse, IUserFields } from "../models/user";
 import { MAIN_PATH } from "../routes/constants-path";
 import { setErrorInAsyncThunk } from "./common";
+import { TRootState } from "./store";
 
 const api = Api.getInstance();
 
@@ -43,6 +43,7 @@ const setToken = (
 
 const deleteToken = (dispatch: ThunkDispatch<unknown, unknown, AnyAction>) => {
   api.logOut();
+
   dispatch(setRefreshToken(""));
 };
 
@@ -58,7 +59,7 @@ export const getRegisterFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as IRootStore;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -92,7 +93,7 @@ export const getLoginFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as IRootStore;
+    } = getState() as TRootState;
     if (!isLoading) {
       dispatch(setIsLoading(true));
       try {
@@ -127,7 +128,7 @@ export const getLogoutFetch = createAsyncThunk(
   async function (_, { rejectWithValue, dispatch, getState }) {
     const {
       user: { isLoading, refreshToken },
-    } = getState() as IRootStore;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -138,7 +139,10 @@ export const getLogoutFetch = createAsyncThunk(
         if (userResponse.success) {
           deleteToken(dispatch);
           dispatch(setUser({ email: "", name: "" }));
-          dispatch(setRefreshToken(api.refreshToken));
+          // dispatch(setRefreshToken(api.refreshToken));
+        } else {
+          deleteToken(dispatch);
+          dispatch(setUser({ email: "", name: "" }));
         }
       } catch (error) {
         setErrorInAsyncThunk(error as Error, dispatch, rejectWithValue);
@@ -153,7 +157,7 @@ export const getUserFetch = createAsyncThunk(
   async function (_, { rejectWithValue, dispatch, getState }) {
     const {
       user: { isLoading },
-    } = getState() as IRootStore;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -197,7 +201,7 @@ export const updateUserFetch = createAsyncThunk(
   ) {
     const {
       user: { isLoading },
-    } = getState() as IRootStore;
+    } = getState() as TRootState;
 
     if (!isLoading) {
       dispatch(setIsLoading(true));
@@ -240,44 +244,34 @@ const userSlice = createSlice({
     // [getRegisterFetch.pending]: (state) => {
     //   state.isLoading = true;
     // },
-    // @ts-expect-error
-    [getRegisterFetch.fulfilled]: (state) => {
+    [getRegisterFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getRegisterFetch.rejected]: (state) => {
+    [getRegisterFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLoginFetch.fulfilled]: (state) => {
+    [getLoginFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLoginFetch.rejected]: (state) => {
+    [getLoginFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLogoutFetch.fulfilled]: (state) => {
+    [getLogoutFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getLogoutFetch.rejected]: (state) => {
+    [getLogoutFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getUserFetch.fulfilled]: (state) => {
+    [getUserFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [getUserFetch.rejected]: (state) => {
+    [getUserFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [updateUserFetch.fulfilled]: (state) => {
+    [updateUserFetch.fulfilled.toString()]: (state) => {
       state.isLoading = false;
     },
-    // @ts-expect-error
-    [updateUserFetch.rejected]: (state) => {
+    [updateUserFetch.rejected.toString()]: (state) => {
       state.isLoading = false;
     },
   },
