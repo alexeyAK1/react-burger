@@ -88,16 +88,12 @@ export default function ResetPassword() {
             errorText={errors[nameFields.Code]}
           />
         </div>
-        <button type="submit" style={{ display: "none" }}>
-          Submit
-        </button>
+        <div className="login_button_container">
+          <Button type="primary" size="medium">
+            Сохранить
+          </Button>
+        </div>
       </form>
-
-      <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleSubmit}>
-          Сохранить
-        </Button>
-      </div>
       <p className="text text_type_main-default">
         <span>Вспомнили пароль?</span>
         <Link to={LOGIN_PATH}>Войти</Link>

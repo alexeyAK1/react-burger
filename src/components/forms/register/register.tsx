@@ -12,7 +12,6 @@ import { getRegisterFetch, setError } from "../../../services/user-slice";
 import { requiredValidation, validations } from "../common/validate-form";
 import { useForm } from "../hooks/use-form";
 
-
 enum nameFields {
   Name = "name",
   Email = "email",
@@ -97,15 +96,12 @@ export default function Register() {
             name={nameFields.Password}
           />
         </div>
-        <button type="submit" style={{ display: "none" }}>
-          Submit
-        </button>
+        <div className="login_button_container">
+          <Button type="primary" size="medium">
+            Зарегистрироваться
+          </Button>
+        </div>
       </form>
-      <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleSubmit}>
-          Зарегистрироваться
-        </Button>
-      </div>
       <p className="text text_type_main-default">
         <span>Уже зарегистрированы?</span>
         <Link to={LOGIN_PATH}>Войти</Link>

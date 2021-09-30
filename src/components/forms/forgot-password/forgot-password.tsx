@@ -13,7 +13,6 @@ import { nameFields } from "../common/names-forms";
 import { validations } from "../common/validate-form";
 import { useForm } from "../hooks/use-form";
 
-
 interface IForgotPasswordForm {
   [nameFields.Email]: string;
 }
@@ -66,15 +65,12 @@ export default function ForgotPassword() {
             errorText={errors[nameFields.Email]}
           />
         </div>
-        <button type="submit" style={{ display: "none" }}>
-          Submit
-        </button>
+        <div className="login_button_container">
+          <Button type="primary" size="medium">
+            Восстановить
+          </Button>
+        </div>
       </form>
-      <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleSubmit}>
-          Восстановить
-        </Button>
-      </div>
       <p className="text text_type_main-default">
         <span>Вспомнили пароль?</span>
         <Link to={LOGIN_PATH}>Войти</Link>

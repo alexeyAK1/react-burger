@@ -67,16 +67,13 @@ export default function Login() {
             name={nameFields.Password}
           />
         </div>
-        <button type="submit" style={{ display: "none" }}>
-          Submit
-        </button>
+        <div className="login_button_container">
+          <Button type="primary" size="medium">
+            Войти
+          </Button>
+        </div>
       </form>
 
-      <div className="login_button_container">
-        <Button type="primary" size="medium" onClick={handleSubmit}>
-          Войти
-        </Button>
-      </div>
       <p className="text text_type_main-default">
         <span>Вы — новый пользователь?</span>
         <Link to={REGISTER_PATH}>Зарегистрироваться</Link>

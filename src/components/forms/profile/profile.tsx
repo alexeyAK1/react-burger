@@ -167,19 +167,19 @@ export default function Profile() {
               <button type="submit" style={{ display: "none" }}>
                 Submit
               </button>
-            </form>
-            <div
-              className={`login_input_container ${styles.buttons_container}`}
-            >
-              <div>
-                <Link to={"#"} onClick={handleOnCancellation}>
-                  Отмена
-                </Link>
+              <div
+                className={`login_input_container ${styles.buttons_container}`}
+              >
+                <div>
+                  <Link to={"#"} onClick={handleOnCancellation}>
+                    Отмена
+                  </Link>
+                </div>
+                <Button type="primary" size="medium">
+                  Сохранить
+                </Button>
               </div>
-              <Button type="primary" size="medium" onClick={handleSubmit}>
-                Сохранить
-              </Button>
-            </div>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>
