@@ -16,7 +16,7 @@ const FormWrapper: FC<IProps> = ({ onSubmit, title, buttonName, children }) => {
         {buttonName ? (
           <div className="login_button_container">
             <Button type="primary" size="medium">
-              Войти
+              {buttonName}
             </Button>
           </div>
         ) : null}
