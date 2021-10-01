@@ -8,7 +8,7 @@ import {
   wsOrderAllConnectionStart,
   wsOrderClose,
   wsOrderConnectionStart
-} from "../../redux/action-types/wsActionCreators";
+} from "../../redux/action-types/ws-action-creators";
 import { TRootState } from "../../services/store";
 import Loader from "../ui/loader/loader";
 import Price from "../ui/price/price";

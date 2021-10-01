@@ -6,7 +6,7 @@ import { IOrderFeedElementWithIngredients } from "../../models/order";
 import {
   wsOrderClose,
   wsOrderConnectionStart
-} from "../../redux/action-types/wsActionCreators";
+} from "../../redux/action-types/ws-action-creators";
 import { TRootState } from "../../services/store";
 import { variantsNextRouter } from "../forms/common/animations-form";
 import OrderFeedElementsList from "../order-feed-elements-list/order-feed-elements-list";
