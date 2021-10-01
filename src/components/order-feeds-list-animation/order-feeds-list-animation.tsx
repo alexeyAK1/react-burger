@@ -18,15 +18,18 @@ const OrderFeedsListAnimation = () => {
     IOrderFeedElementWithIngredients[]
   >([]);
   const orderFeed = useSelector((state: TRootState) => state.order.orderFeed);
+  const ingredients = useSelector((state: TRootState) => state.ingredients.ingredients);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(wsOrderConnectionStart());
+    if(ingredients){
+      dispatch(wsOrderConnectionStart());
+    }
 
     return () => {
       dispatch(wsOrderClose());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ingredients]);
   useEffect(() => {
     if (orderFeed) {
       setOrderData(orderFeed.orders);

@@ -8,29 +8,43 @@ import {
     IOrdersFeedFetch,
     IOrdersFeedWithIngredients
 } from "../../models/order";
-import { TRootState } from "../../services/store";
 
 export type TWsWorker = {
+  wsUrl: string;
   wsName: string;
-  getState: () => TRootState;
+  ingredients: IIngredientsItem[];
   onMessageCallBack: (orderFeed: IOrdersFeedWithIngredients) => void;
-  action?: AnyAction;
+  action: AnyAction;
+  typeWsStart: string;
   typeWsSend?: string;
   typeWsClose?: string;
   isInvertReturnedIngredients?: boolean;
+  wsStartCallBack?: () => void;
 };
 
 const sockets = WS.getInstance();
 
-export const wsWorker = <T extends IOrdersFeedFetch>({
+export const wsWorker = async <T extends IOrdersFeedFetch>({
+  wsUrl,
   wsName,
-  getState,
+  ingredients,
   onMessageCallBack,
   action,
+  typeWsStart,
   typeWsSend,
   typeWsClose,
-  isInvertReturnedIngredients=false,
+  isInvertReturnedIngredients = false,
+  wsStartCallBack,
 }: TWsWorker) => {
+  const { type, payload } = action;
+
+  if (type === typeWsStart) {
+    if (wsStartCallBack) {
+      await wsStartCallBack();
+    }
+    sockets.addSocket(wsName, wsUrl);
+  }
+
   if (sockets.getSocket(wsName)) {
     const socketItem = sockets.getSocket(wsName);
     socketItem!.onopen = (event) => {
@@ -40,22 +54,24 @@ export const wsWorker = <T extends IOrdersFeedFetch>({
       console.log(`${wsName}:ERROR`, event);
     };
     socketItem!.onmessage = (event) => {
-      getOnMessage<T>(event, socketItem!, getState, onMessageCallBack, isInvertReturnedIngredients);
+      getOnMessage<T>(
+        event,
+        socketItem!,
+        ingredients,
+        onMessageCallBack,
+        isInvertReturnedIngredients
+      );
     };
     socketItem!.onclose = (event) => {
       console.log(`${wsName}:CLOSE`, event);
     };
 
-    if (action) {
-      const { type, payload } = action;
-
-      if (typeWsSend && type === typeWsSend) {
-        const message = payload;
-        socketItem!.send(JSON.stringify(message));
-      }
-      if (typeWsClose && type === typeWsClose) {
-        sockets.closeSocket(wsName);
-      }
+    if (typeWsSend && type === typeWsSend) {
+      const message = payload;
+      socketItem!.send(JSON.stringify(message));
+    }
+    if (typeWsClose && type === typeWsClose) {
+      sockets.closeSocket(wsName);
     }
   }
 };
@@ -63,7 +79,7 @@ export const wsWorker = <T extends IOrdersFeedFetch>({
 const getOnMessage = <T extends IOrdersFeedFetch>(
   event: MessageEvent,
   socket: WebSocket,
-  getState: () => TRootState,
+  ingredients: IIngredientsItem[],
   callBack: (orderFeed: IOrdersFeedWithIngredients) => void,
   isReverse: boolean = false
 ) => {
@@ -73,7 +89,6 @@ const getOnMessage = <T extends IOrdersFeedFetch>(
   const { data } = event;
   const parsedData = JSON.parse(data) as T;
   if (parsedData.success) {
-    const ingredients = getState().ingredients.ingredients;
     const orderFeed = addIngredientsToFeed(parsedData, ingredients, isReverse);
 
     callBack(orderFeed);
