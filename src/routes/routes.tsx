@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import ErrorMessage from "../components/common/error-message/error-message";
 import DetailsModal from "../components/details-modal/details-modal";
+import { useDispatch, useSelector } from "../components/hooks";
 import IngredientDetailsById from "../components/ingredient-details-by-id/ingredient-details-by-id";
 import OrderById from "../components/order-by-id/order-by-id";
 import MainAllLayouts from "../layouts/main-all-layouts/main-all-layouts";
@@ -20,7 +20,6 @@ import {
 } from "../pages";
 import OrderByIdPage from "../pages/order-by-id-page/order-by-id-page";
 import { setAppError } from "../services/app-slice";
-import { TRootState } from "../services/store";
 import {
   FEED_PATH,
   FORGOT_PASSWORD_PATH,
@@ -39,7 +38,7 @@ export default function Routes() {
   const location = useLocation<ILocationState>();
   const history = useHistory();
   const dispatch = useDispatch();
-  const error = useSelector((state: TRootState) => state.app.error);
+  const error = useSelector((state) => state.app.error);
   const background = useMemo(
     () => location.state && location.state.background,
     [location.state]

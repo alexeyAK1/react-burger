@@ -1,14 +1,12 @@
-import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { TRootState } from '../../services/store';
-import Loader from '../ui/loader/loader';
-import styles from './order-details.module.css';
-
+import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
+import { useSelector } from "../hooks";
+import Loader from "../ui/loader/loader";
+import styles from "./order-details.module.css";
 
 export default function OrderDetails() {
-  const order = useSelector((state: TRootState) => state.order.order);
-  const isLoading = useSelector((state: TRootState) => state.order.isLoading);
+  const order = useSelector((state) => state.order.order);
+  const isLoading = useSelector((state) => state.order.isLoading);
 
   if (!isLoading && order) {
     const {

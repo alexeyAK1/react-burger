@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { variantsProfileButton } from "../../components/forms/common/animations-form";
+import { useDispatch } from "../../components/hooks";
 import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
 import { ORDERS_PATH, PROFILE_PATH } from "../../routes/constants-path";
 import ProfilePageRoutes from "../../routes/profile-page-routes";
