@@ -128,9 +128,7 @@ const addIngredientsToFeed = (
   ingredients: IIngredientsItem[],
   isReverse: boolean = false
 ): IOrdersFeedWithIngredients => {
-  const newOrders = ordersFeed.orders.reduce<
-    IOrderFeedElementWithIngredients[]
-  >(getOrdersWithIngredients(ingredients), []);
+  const newOrders = ordersFeed.orders.reduce<IOrderFeedElementWithIngredients[]>(getOrdersWithIngredients(ingredients), []);
 
   if (isReverse) {
     newOrders.reverse();
@@ -163,9 +161,7 @@ const getIngredientsById = (
   const newIngredients: IIngredientsItem[] = [];
 
   orderFeedItem.ingredients.forEach((ingredientId) => {
-    const newIngredientElement = ingredients.find(
-      (ingredient) => ingredient._id === ingredientId
-    );
+    const newIngredientElement = findIngredientItemById(ingredients, ingredientId);
 
     if (newIngredientElement) {
       newIngredients.push({ ...newIngredientElement });
@@ -173,4 +169,11 @@ const getIngredientsById = (
   });
 
   return newIngredients;
+};
+
+const findIngredientItemById = (
+  ingredients: IIngredientsItem[],
+  ingredientId: string
+) => {
+  return ingredients.find((ingredient) => ingredient._id === ingredientId);
 };
