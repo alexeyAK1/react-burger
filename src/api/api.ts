@@ -209,7 +209,7 @@ export class Api {
   }
 
   public async refreshTokenFetch() {
-    if (this.isLoadingRefreshToken) {
+    if (!this.isLoadingRefreshToken) {
       this.isLoadingRefreshToken = true;
       const userTokens = await this.postFetch<IRefreshResponse>(
         "/auth/token",
@@ -299,4 +299,19 @@ export class Api {
 
     return retObject;
   }
+
+  public waitFor(
+    condition: () => boolean,
+    cb: () => void,
+    delay?: number,
+  ){
+    if (!condition()) {
+      setTimeout(this.waitFor.bind(null, condition, cb, delay), delay || 100);
+    } else {
+      cb();
+    }
+  };
+
+  public waitForAsync = (condition: () => boolean, delay?: number) =>
+    new Promise<void>((resolve) => this.waitFor(condition, resolve, delay));
 }

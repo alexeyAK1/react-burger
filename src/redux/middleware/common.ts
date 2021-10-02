@@ -55,10 +55,21 @@ export const wsWorker = async <T extends IOrdersFeedFetch>({
         console.log(error);
       }
     }
-    sockets.addSocket(
-      wsName,
-      `${wsUrl}${protect ? `?token=${api.token}` : ""}`
-    );
+    if (api.isLoadingRefreshToken) {
+      await api.waitFor(
+        () => api.isLoadingRefreshToken,
+        () =>
+          sockets.addSocket(
+            wsName,
+            `${wsUrl}${protect ? `?token=${api.token}` : ""}`
+          )
+      );
+    } else {
+      sockets.addSocket(
+        wsName,
+        `${wsUrl}${protect ? `?token=${api.token}` : ""}`
+      );
+    }
   }
 
   if (sockets.getSocket(wsName)) {
