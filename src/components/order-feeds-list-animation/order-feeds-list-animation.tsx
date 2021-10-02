@@ -20,7 +20,7 @@ const OrderFeedsListAnimation = () => {
   const ingredients = useSelector((state) => state.ingredients.ingredients);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (ingredients) {
+    if (ingredients.length > 0) {
       dispatch(wsOrderConnectionStart());
     }
 
