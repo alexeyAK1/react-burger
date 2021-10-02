@@ -1,6 +1,4 @@
 import { AnyAction, Middleware, MiddlewareAPI } from "redux";
-import { Api } from "../../api/api";
-import { getRefreshToken } from "../../api/auth";
 import { IOrdersFeedWithIngredients } from "../../models/order";
 import { setOrderFeed, setOrderFeedAll } from "../../services/order-slice";
 import { TAppDispatch, TRootState } from "../../services/store";
@@ -13,8 +11,6 @@ import {
   WS_ORDER_SEND_MESSAGE
 } from "../action-types/ws-action-types";
 import { wsWorker } from "./common";
-
-const api = Api.getInstance();
 
 export const socketMiddleware = (): Middleware<{}> => {
   return (store: MiddlewareAPI<TAppDispatch, TRootState>) => {
@@ -38,16 +34,10 @@ export const socketMiddleware = (): Middleware<{}> => {
 
         wsWorker({
           typeWsStart: WS_ORDER_CONNECTION_START,
-          wsUrl: `wss://norma.nomoreparties.space/orders?token=${api.token}`,
-          wsStartCallBack: async () => {
-            try {
-              await getRefreshToken();
-            } catch (error) {
-              console.log(error);
-            }
-          },
+          wsUrl: `wss://norma.nomoreparties.space/orders`,
           wsName: "orders",
           action,
+          protect: true,
           ingredients,
           onMessageCallBack: (orderFeed: IOrdersFeedWithIngredients) => {
             dispatch(setOrderFeed(orderFeed));

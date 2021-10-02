@@ -1,7 +1,5 @@
 import {
-  ILogoutResponse,
-  IRefreshResponse,
-  IUserDataResponse,
+  ILogoutResponse, IUserDataResponse,
   IUserResponse
 } from "../models/user";
 import { Api } from "./api";
@@ -39,28 +37,16 @@ export const getUser = async () => {
 };
 
 export const updateUser = async (
-    email: string,
-    password: string,
-    name: string
-  ) => {
-    return await api.patchProtectedFetch<IUserDataResponse>(
-      LOCAL_URL + "/user",
-      JSON.stringify({ email, password, name })
-    );
-  };
+  email: string,
+  password: string,
+  name: string
+) => {
+  return await api.patchProtectedFetch<IUserDataResponse>(
+    LOCAL_URL + "/user",
+    JSON.stringify({ email, password, name })
+  );
+};
 
-  export const getRefreshToken = async () => {
-    const userTokens = await api.postFetch<IRefreshResponse>(
-      "/auth/token",
-      JSON.stringify({ token: api.refreshToken })
-    );
-
-    if (userTokens) {
-      api.token = userTokens.accessToken;
-      api.refreshToken = userTokens.refreshToken;
-    } else {
-      api.logOut();
-    }
-
-    return userTokens;
-  }
+export const getRefreshToken = async () => {
+  await api.refreshTokenFetch();
+};

@@ -1,13 +1,17 @@
 import { AnyAction } from "@reduxjs/toolkit";
+import { Api } from "../../api/api";
+import { getRefreshToken } from "../../api/auth";
 import WS from "../../api/ws";
 import { IIngredientsItem } from "../../models/ingredients";
 import {
-    IOrderFeedElement,
-    IOrderFeedElementWithIngredients,
-    IOrdersFeed,
-    IOrdersFeedFetch,
-    IOrdersFeedWithIngredients
+  IOrderFeedElement,
+  IOrderFeedElementWithIngredients,
+  IOrdersFeed,
+  IOrdersFeedFetch,
+  IOrdersFeedWithIngredients
 } from "../../models/order";
+
+const api = Api.getInstance();
 
 export type TWsWorker = {
   wsUrl: string;
@@ -16,6 +20,7 @@ export type TWsWorker = {
   onMessageCallBack: (orderFeed: IOrdersFeedWithIngredients) => void;
   action: AnyAction;
   typeWsStart: string;
+  protect?: boolean;
   typeWsSend?: string;
   typeWsClose?: string;
   isInvertReturnedIngredients?: boolean;
@@ -31,6 +36,7 @@ export const wsWorker = async <T extends IOrdersFeedFetch>({
   onMessageCallBack,
   action,
   typeWsStart,
+  protect = false,
   typeWsSend,
   typeWsClose,
   isInvertReturnedIngredients = false,
@@ -40,9 +46,19 @@ export const wsWorker = async <T extends IOrdersFeedFetch>({
 
   if (type === typeWsStart) {
     if (wsStartCallBack) {
-      await wsStartCallBack();
+      wsStartCallBack();
     }
-    sockets.addSocket(wsName, wsUrl);
+    if (protect) {
+      try {
+        await getRefreshToken();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    sockets.addSocket(
+      wsName,
+      `${wsUrl}${protect ? `?token=${api.token}` : ""}`
+    );
   }
 
   if (sockets.getSocket(wsName)) {
