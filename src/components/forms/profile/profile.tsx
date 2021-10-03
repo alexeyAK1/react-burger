@@ -4,10 +4,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { TRootState } from "../../../services/store";
 import { getUserFetch, updateUserFetch } from "../../../services/user-slice";
+import { useDispatch, useSelector } from "../../hooks";
 import Loader from "../../ui/loader/loader";
 import { variantsNextRouter } from "../common/animations-form";
 import { nameFields } from "../common/names-forms";
@@ -25,8 +24,8 @@ interface IProfileForm {
 export default function Profile() {
   const dispatch = useDispatch();
   const [focusedName, setFocusedName] = useState("");
-  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
-  const user = useSelector((state: TRootState) => state.user.user);
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const user = useSelector((state) => state.user.user);
   const { handleSubmit, handleChange, setData, data, errors } =
     useForm<IProfileForm>({
       initialValues: {

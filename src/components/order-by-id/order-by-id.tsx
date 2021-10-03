@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getFormattedDateWithTime } from "../../common/functions";
 import ScrollContainer from "../../layouts/scroll-container/scroll-container";
 import { IOrderFeedElementWithIngredients } from "../../models/order";
@@ -8,8 +7,8 @@ import {
   wsOrderAllConnectionStart,
   wsOrderClose,
   wsOrderConnectionStart
-} from "../../redux/action-types/wsActionCreators";
-import { TRootState } from "../../services/store";
+} from "../../redux/action-types/ws-action-creators";
+import { useDispatch, useSelector } from "../hooks";
 import Loader from "../ui/loader/loader";
 import Price from "../ui/price/price";
 import OrderByIdIngredientsList from "./order-by-id-ingredients-list/order-by-id-ingredients-list";
@@ -25,11 +24,9 @@ const OrderById: FC<IProps> = ({ id, isShowTitle = true }) => {
   const [currentOrder, setCurrentOrder] =
     useState<IOrderFeedElementWithIngredients | null>(null);
   const [price, setPrice] = useState(0);
-  const orderFeedAll = useSelector(
-    (state: TRootState) => state.order.orderFeedAll
-  );
-  const ingredients = useSelector((state: TRootState) => state.ingredients.ingredients);
-  const orderFeed = useSelector((state: TRootState) => state.order.orderFeed);
+  const orderFeedAll = useSelector((state) => state.order.orderFeedAll);
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const orderFeed = useSelector((state) => state.order.orderFeed);
 
   useEffect(() => {
     if (orderFeedAll && ingredients) {

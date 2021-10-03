@@ -23,3 +23,10 @@ export interface IUserDataResponse extends ISuccessResponse {
 export interface IUserResponse extends IRefreshResponse {
   user: IUserFields;
 }
+
+export interface IOwner {
+  createdAt: string;
+  email: string;
+  name: string;
+  updatedAt: string;
+}

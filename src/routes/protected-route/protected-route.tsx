@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-import { TRootState } from "../../services/store";
+import { useSelector } from "../../components/hooks";
 import { LOGIN_PATH } from "../constants-path";
 
 interface IProps extends RouteProps {
@@ -19,9 +18,7 @@ export default function ProtectedRoute({
   redirectTo = LOGIN_PATH,
   ...rest
 }: IProps) {
-  const refreshToken = useSelector(
-    (state: TRootState) => state.user.refreshToken
-  );
+  const refreshToken = useSelector((state) => state.user.refreshToken);
   const [isUserAuthorized, setIsUserAuthorized] = useState(!!refreshToken);
 
   useEffect(() => {

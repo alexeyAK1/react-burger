@@ -35,6 +35,7 @@ export class Api {
   private localToken: string;
   private localRefreshToken: string;
   private localAbortController: AbortController | null;
+  private isLoadingRefreshTokenLocal: boolean;
 
   private constructor() {
     const refreshToken = getCookie(REFRESH_TOKEN);
@@ -42,6 +43,7 @@ export class Api {
     this.localToken = "";
     this.localRefreshToken = "";
     this.localAbortController = null;
+    this.isLoadingRefreshTokenLocal = false;
 
     if (refreshToken) {
       this.localRefreshToken = refreshToken;
@@ -72,6 +74,14 @@ export class Api {
     } else {
       this.localToken = "";
     }
+  }
+
+  get isLoadingRefreshToken() {
+    return this.isLoadingRefreshTokenLocal;
+  }
+
+  set isLoadingRefreshToken(isLoading: boolean) {
+    this.isLoadingRefreshTokenLocal = isLoading;
   }
 
   get refreshToken() {
@@ -198,21 +208,25 @@ export class Api {
     );
   }
 
-  private async refreshTokenFetch() {
-    const userTokens = await this.postFetch<IRefreshResponse>(
-      "/auth/token",
-      JSON.stringify({ token: this.refreshToken })
-    );
+  public async refreshTokenFetch() {
+    if (!this.isLoadingRefreshToken) {
+      this.isLoadingRefreshToken = true;
+      const userTokens = await this.postFetch<IRefreshResponse>(
+        "/auth/token",
+        JSON.stringify({ token: this.refreshToken })
+      );
 
-    if (userTokens) {
-      const token = userTokens.accessToken.split("Bearer ")[1];
+      if (userTokens) {
+        const token = userTokens.accessToken.split("Bearer ")[1];
 
-      setCookie(TOKEN, token, { path: "/" });
-      this.localToken = token;
-      this.localRefreshToken = userTokens.refreshToken;
-      setCookie(REFRESH_TOKEN, userTokens.refreshToken, { path: "/" });
-    } else {
-      this.logOut();
+        setCookie(TOKEN, token, { path: "/" });
+        this.localToken = token;
+        this.localRefreshToken = userTokens.refreshToken;
+        setCookie(REFRESH_TOKEN, userTokens.refreshToken, { path: "/" });
+      } else {
+        this.logOut();
+      }
+      this.isLoadingRefreshToken = false;
     }
   }
 
@@ -285,4 +299,19 @@ export class Api {
 
     return retObject;
   }
+
+  public waitFor(
+    condition: () => boolean,
+    cb: () => void,
+    delay?: number,
+  ){
+    if (!condition()) {
+      setTimeout(this.waitFor.bind(null, condition, cb, delay), delay || 100);
+    } else {
+      cb();
+    }
+  };
+
+  public waitForAsync = (condition: () => boolean, delay?: number) =>
+    new Promise<void>((resolve) => this.waitFor(condition, resolve, delay));
 }

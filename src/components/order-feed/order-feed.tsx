@@ -1,14 +1,12 @@
-
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import ScrollContainer from "../../layouts/scroll-container/scroll-container";
 import TwoColumns from "../../layouts/two-columns/two-columns";
 import { IOrderFeedElementWithIngredients } from "../../models/order";
 import {
   wsOrderAllClose,
   wsOrderAllConnectionStart
-} from "../../redux/action-types/wsActionCreators";
-import { TRootState } from "../../services/store";
+} from "../../redux/action-types/ws-action-creators";
+import { useDispatch, useSelector } from "../hooks";
 import OrderFeedElementsList from "../order-feed-elements-list/order-feed-elements-list";
 import Loader from "../ui/loader/loader";
 import styles from "./order-feed.module.css";
@@ -25,9 +23,7 @@ export default function OrderFeed() {
   const [readyOrders, setReadyOrders] = useState<string[]>([]);
   const [inTheWorkOrders, setInTheWorkOrders] = useState<string[]>([]);
 
-  const orderFeedAll = useSelector(
-    (state: TRootState) => state.order.orderFeedAll
-  );
+  const orderFeedAll = useSelector((state) => state.order.orderFeedAll);
 
   useEffect(() => {
     dispatch(wsOrderAllConnectionStart());

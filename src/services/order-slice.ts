@@ -74,5 +74,4 @@ const orderSlice = createSlice({
 
 export default orderSlice.reducer;
 
-const { setOrder } = orderSlice.actions;
-export const { setOrderFeed, setOrderFeedAll } = orderSlice.actions;
+export const { setOrderFeed, setOrderFeedAll, setOrder } = orderSlice.actions;

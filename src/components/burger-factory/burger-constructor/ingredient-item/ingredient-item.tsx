@@ -5,10 +5,10 @@ import {
 import { motion } from "framer-motion";
 import React, { useEffect, useRef } from "react";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { useDispatch } from "react-redux";
 import { ItemTypes } from "../../../../models/drag-and-drop";
 import { IIngredientsItem } from "../../../../models/ingredients";
 import { swapCards } from "../../../../services/constructor-ingredients-slice";
+import { useDispatch } from "../../../hooks";
 import styles from "./ingredient-item.module.css";
 
 interface IProps {

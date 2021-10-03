@@ -3,11 +3,10 @@ import {
   PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LOGIN_PATH } from "../../../routes/constants-path";
-import { TRootState } from "../../../services/store";
 import { getRegisterFetch, setError } from "../../../services/user-slice";
+import { useDispatch, useSelector } from "../../hooks";
 import { requiredValidation, validations } from "../common/validate-form";
 import FormWrapper from "../form-wrapper/form-wrapper";
 import { useForm } from "../hooks/use-form";
@@ -26,8 +25,8 @@ interface IRegisterForm {
 
 export default function Register() {
   const dispatch = useDispatch();
-  const errorText = useSelector((state: TRootState) => state.user.errorText);
-  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
+  const errorText = useSelector((state) => state.user.errorText);
+  const isLoading = useSelector((state) => state.user.isLoading);
   const { handleSubmit, handleChange, data, errors } = useForm<IRegisterForm>({
     initialValues: {
       [nameFields.Name]: "",

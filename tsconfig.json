@@ -2,10 +2,12 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
+      "es5",
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "types": ["cypress", "@4tw/cypress-drag-drop"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,6 +23,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src", "**/*.ts"
   ]
 }

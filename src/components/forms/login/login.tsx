@@ -3,14 +3,13 @@ import {
   PasswordInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   FORGOT_PASSWORD_PATH,
   REGISTER_PATH
 } from "../../../routes/constants-path";
-import { TRootState } from "../../../services/store";
 import { getLoginFetch } from "../../../services/user-slice";
+import { useDispatch, useSelector } from "../../hooks";
 import { nameFields } from "../common/names-forms";
 import { validations } from "../common/validate-form";
 import FormWrapper from "../form-wrapper/form-wrapper";
@@ -23,7 +22,7 @@ interface ILoginForm {
 
 export default function Login() {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state: TRootState) => state.user.isLoading);
+  const isLoading = useSelector((state) => state.user.isLoading);
   const { handleSubmit, handleChange, data, errors } = useForm<ILoginForm>({
     initialValues: {
       [nameFields.Email]: "",

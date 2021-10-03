@@ -3,35 +3,27 @@ import {
   CurrencyIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Api } from "../../../../api/api";
 import { LOGIN_PATH } from "../../../../routes/constants-path";
 import { getOrderFetch } from "../../../../services/order-slice";
-import { TRootState } from "../../../../services/store";
 import { useToggleModal } from "../../../common/modal/hooks/use_toggle_modal";
 import Modal from "../../../common/modal/modal";
+import { useDispatch, useSelector } from "../../../hooks";
 import OrderDetails from "../../../order-details/order-details";
 import styles from "./order.module.css";
-
-
-
 
 const api = Api.getInstance();
 
 export default function Order() {
   const nameButton = "Оформить заказ";
   const history = useHistory();
-  const isLoading = useSelector((state: TRootState) => state.order.isLoading);
+  const isLoading = useSelector((state) => state.order.isLoading);
   const totalSum = useSelector(
-    (state: TRootState) => state.constructorIngredients.totalSum
+    (state) => state.constructorIngredients.totalSum
   );
-  const bun = useSelector(
-    (state: TRootState) => state.constructorIngredients.bun
-  );
-  const refreshToken = useSelector(
-    (state: TRootState) => state.user.refreshToken
-  );
+  const bun = useSelector((state) => state.constructorIngredients.bun);
+  const refreshToken = useSelector((state) => state.user.refreshToken);
   const dispatch = useDispatch();
   const { isOpenModal, onOpenModal, onCloseModal } = useToggleModal();
   const {

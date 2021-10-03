@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import ScrollContainer from "../../layouts/scroll-container/scroll-container";
 import { IOrderFeedElementWithIngredients } from "../../models/order";
 import {
   wsOrderClose,
   wsOrderConnectionStart
-} from "../../redux/action-types/wsActionCreators";
-import { TRootState } from "../../services/store";
+} from "../../redux/action-types/ws-action-creators";
 import { variantsNextRouter } from "../forms/common/animations-form";
+import { useDispatch, useSelector } from "../hooks";
 import OrderFeedElementsList from "../order-feed-elements-list/order-feed-elements-list";
 import Loader from "../ui/loader/loader";
 import styles from "./order-feeds-list-animation.module.css";
@@ -17,16 +16,19 @@ const OrderFeedsListAnimation = () => {
   const [orderData, setOrderData] = useState<
     IOrderFeedElementWithIngredients[]
   >([]);
-  const orderFeed = useSelector((state: TRootState) => state.order.orderFeed);
+  const orderFeed = useSelector((state) => state.order.orderFeed);
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(wsOrderConnectionStart());
+    if (ingredients.length > 0) {
+      dispatch(wsOrderConnectionStart());
+    }
 
     return () => {
       dispatch(wsOrderClose());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ingredients]);
   useEffect(() => {
     if (orderFeed) {
       setOrderData(orderFeed.orders);

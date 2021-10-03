@@ -1,9 +1,22 @@
 import { IIngredientsItem } from "./ingredients";
+import { IOwner } from "./user";
 
 export interface IOrder {
   name: string;
-  order: { number: number };
+  order: IOrderInOrder;
   success: true;
+}
+
+interface IOrderInOrder {
+  createdAt: string;
+  ingredients: IIngredientsItem[];
+  name: string;
+  number: number;
+  owner: IOwner;
+  price: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
 }
 
 export interface IOrderFeedElement {
