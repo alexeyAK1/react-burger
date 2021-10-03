@@ -27,7 +27,7 @@ describe("ingredients are correctly dragged to the constructor", function () {
     ).should("not.exist");
     cy.get(coastTotal).contains(0);
   });
-
+  //TODO: to cover the sending of the registered user's order with tests and not
   //   it("should show error modal", () => {
   //     cy.get(sendButtonSelector).click();
   //     // eslint-disable-next-line cypress/no-unnecessary-waiting
