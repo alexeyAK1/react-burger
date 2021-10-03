@@ -1,40 +1,11 @@
-import { IIngredientsItem } from "../../models/ingredients";
 import constructorIngredientsReducer, {
   addIngredientInConstructor,
   deleteIngredientFromConstructor,
   setBun
 } from "../constructor-ingredients-slice";
 import ingredientReducer from "../ingredients-slice";
+import { bunIngredient, notBanIngredient } from "./test-data";
 // import fetchMock from "fetch-mock";
-
-export const bunIngredient: IIngredientsItem = {
-  calories: 420,
-  carbohydrates: 53,
-  fat: 24,
-  image: "https://code.s3.yandex.net/react/code/bun-02.png",
-  image_large: "https://code.s3.yandex.net/react/code/bun-02-large.png",
-  image_mobile: "https://code.s3.yandex.net/react/code/bun-02-mobile.png",
-  name: "Краторная булка N-200i",
-  price: 1255,
-  proteins: 80,
-  type: "bun",
-  __v: 0,
-  _id: "60d3b41abdacab0026a733c6",
-};
-export const notBanIngredient: IIngredientsItem = {
-  calories: 643,
-  carbohydrates: 85,
-  fat: 26,
-  image: "https://code.s3.yandex.net/react/code/meat-03.png",
-  image_large: "https://code.s3.yandex.net/react/code/meat-03-large.png",
-  image_mobile: "https://code.s3.yandex.net/react/code/meat-03-mobile.png",
-  name: "Филе Люминесцентного тетраодонтимформа",
-  price: 988,
-  proteins: 44,
-  type: "main",
-  __v: 0,
-  _id: "60d3b41abdacab0026a733c8",
-};
 
 describe("constructor-ingredients-slice", () => {
   describe("addIngredientInConstructor", () => {
@@ -56,7 +27,7 @@ describe("constructor-ingredients-slice", () => {
         addIngredientInConstructor({ ...bunIngredient })
       );
       expect(state.bun).toEqual({ ...bunIngredient });
-      expect(state.totalSum).toBe(1255 * 2);
+      expect(state.totalSum).toBe(bunIngredient.price * 2);
       state = constructorIngredientsReducer(undefined, setBun(null));
       expect(state.bun).toBeNull();
       expect(state.totalSum).toBe(0);

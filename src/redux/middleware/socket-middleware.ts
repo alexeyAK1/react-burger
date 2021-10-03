@@ -10,7 +10,7 @@ import {
   WS_ORDER_CONNECTION_START,
   WS_ORDER_SEND_MESSAGE
 } from "../action-types/ws-action-types";
-import { wsWorker } from "./common";
+import { wsWorker } from "./ws-worker";
 
 export const socketMiddleware = (): Middleware<{}> => {
   return (store: MiddlewareAPI<TAppDispatch, TRootState>) => {

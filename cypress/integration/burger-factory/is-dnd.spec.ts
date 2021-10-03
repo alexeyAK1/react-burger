@@ -1,42 +1,14 @@
-export { };
-
-const bunsContainer = "[name^=bun]";
-const saucesContainer = "[name^=sauce]";
-const mainsContainer = "[name^=main]";
-const ingredientsContainer =
-  "[class^=ingredients-list_category_ingredients_container]";
-const getNIndexChildrenSelector = (classParent: string, index: number) =>
-  `${classParent} > :nth-child(${index})`;
-const bunElementSelector = getNIndexChildrenSelector(
-  `${bunsContainer} > ${ingredientsContainer}`,
-  1
-);
-const sauceElementSelector = getNIndexChildrenSelector(
-  `${saucesContainer} > ${ingredientsContainer}`,
-  1
-);
-const mainElementSelector = getNIndexChildrenSelector(
-  `${mainsContainer} > ${ingredientsContainer}`,
-  1
-);
-
-const constructorContainer =
-  "[class^=burger-constructor_burger_constructor_body]";
-const constructorBunTop = getNIndexChildrenSelector(
-  `${constructorContainer}`,
-  1
-);
-const constructorBunButton = getNIndexChildrenSelector(
-  `${constructorContainer}`,
-  3
-);
-const dropContainer =
-  "[class^=burger-constructor_burger_list_container] > [class^=scroll-container_scroll_container] > [class^=scroll-container_scroll_container_inner]";
-const countElements =
-  "[class*=ingredient-card_ingredient_count] > [class*=counter_counter] > p";
-const coastTotal =
-  "[class*=order_burger_constructor_footer] > [class*=order_total_container] > [class*=text_type_digits-medium]";
-// const sendButtonSelector = "[class^=button_button]";
+import { getNIndexChildrenSelector } from "../common/functions";
+import {
+    bunElementSelector,
+    coastTotal,
+    constructorBunButton,
+    constructorBunTop,
+    countElements,
+    dropContainer,
+    mainElementSelector,
+    sauceElementSelector
+} from "./constants";
 
 describe("ingredients are correctly dragged to the constructor", function () {
   let totalSum = 0;
@@ -55,7 +27,7 @@ describe("ingredients are correctly dragged to the constructor", function () {
     ).should("not.exist");
     cy.get(coastTotal).contains(0);
   });
-
+  //TODO: to cover the sending of the registered user's order with tests and not
   //   it("should show error modal", () => {
   //     cy.get(sendButtonSelector).click();
   //     // eslint-disable-next-line cypress/no-unnecessary-waiting
