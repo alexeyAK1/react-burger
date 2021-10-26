@@ -46,6 +46,8 @@ export default function MenuButton({
     }
   }, [isSelected]);
 
+  console.log('link', link);
+
   return (
     <NavLink
       to={{ pathname: link }}

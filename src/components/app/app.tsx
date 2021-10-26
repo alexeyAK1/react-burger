@@ -1,7 +1,7 @@
 import "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
 import "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
 import React, { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import Header from "../../layouts/header/header";
 import MainAllLayouts from "../../layouts/main-all-layouts/main-all-layouts";
 import RoutesRoot from "../../routes/routes";
