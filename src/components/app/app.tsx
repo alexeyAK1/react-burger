@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <ErrorBoundary>
-        <Router basename={`/${process.env.PUBLIC_URL}`}>
+        <Router >
           <Header>
             <AppHeader />
           </Header>
